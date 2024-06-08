@@ -1,0 +1,91 @@
+.grid-container {
+    display: flex;
+    justify-content: center;
+}
+
+#grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem;
+}
+
+#grid .grid-item {
+    flex: 1 0 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border: 2px solid var(--black);
+    border-radius: .5rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--black);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#grid .grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#grid .logo {
+    width: 100px;
+    height: auto;
+}
+
+#grid .symbol {
+    width: 40px;
+    height: auto;
+}
+
+#grid .grid-item .set-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+#grid .grid-item--card {
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    height: auto;
+    position: relative;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#grid .grid-item--card::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
+    mix-blend-mode: color-dodge;
+    opacity: 0;
+    border-radius: 30px;
+    overflow: hidden;
+    }
+
+#grid .grid-item--card[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
+    opacity: 1; 
+}
+
+.card-image {
+    display: block;
+}
+
+.loading {
+    width: 10rem;
+    display: block;
+    margin: 3rem auto;
+}

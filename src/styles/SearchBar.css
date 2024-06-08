@@ -1,0 +1,115 @@
+.search-wrapper {
+  background-color: var(--black);
+  width: 100%;
+}
+
+#search-container {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 2rem;
+  width: 80%;
+  margin: 0 auto;
+}
+
+#search-type-toggle {
+  display: flex;
+  gap: 1rem;
+}
+
+#search-type-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: var(--white);
+  font-family: Goldplay;
+  font-size: 1.6rem;
+}
+
+#search-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#search-group label {
+  font-family: Goldplay;
+  font-size: 1.6rem;
+  color: var(--white);
+}
+
+#search-bar {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem;
+  border: 2px solid var(--white);
+  border-radius: 5px;
+  font-family: Goldplay;
+  font-size: 1.6rem;
+  color: var(--black);
+  margin-left: 1rem;
+  box-shadow: 0 0 2px var(--white);
+  transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#search-bar:focus {
+  outline: none;
+  box-shadow: 0 0 7px var(--white);
+}
+
+#search-bar::placeholder {
+  color: var(--black);
+}
+
+#sort-options, #series-options, #search-by-dropdown {
+  width: 100%;
+  max-width: max-content;
+  padding: 1rem;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  font-family: Goldplay;
+  font-size: 1.6rem;
+  color: var(--black);
+  padding: 1rem 2.5rem 1rem 1rem;
+  background-color: var(--white);
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="black" d="M2 0L0 2h4L2 0zm0 5L0 3h4l-2 2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+}
+
+#search-container .back-button {
+  width: 100%;
+  max-width: max-content;
+  padding: 1rem;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  font-family: Goldplay;
+  font-size: 1.6rem;
+  color: var(--black);
+  background-color: var(--yellow);
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 4"><path fill="black" d="M0 2L2 0v4L0 2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: left .7em center;
+  background-size: .65em auto;
+  padding-left: 2rem;
+  cursor: pointer;
+}
+
+#search-container .toggle-button {
+  width: 100%;
+  height: auto;
+  max-width: max-content;
+  padding: 1rem;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  font-family: Goldplay;
+  font-size: 1.6rem;
+  color: var(--black);
+  background-color: var(--yellow);
+  appearance: none;
+  cursor: pointer;
+}

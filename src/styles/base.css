@@ -1,0 +1,19 @@
+:root {
+    font-size: 62.5%;
+    --yellow: rgb(255, 225, 101);
+    --yellow-transparent: rgba(255, 225, 101, .3);
+    --pink: rgb(84, 255, 141);
+    --white: rgb(244, 244, 245);
+    --subtext: rgb(157, 157, 158);
+    --black: rgba(0, 0, 0, 0.92)
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app {
+    overflow: hidden;
+}

@@ -1,0 +1,79 @@
+/********* HEADER *********/
+
+.header-wrap {
+    width: 100%;
+    z-index: 1000;
+    position: relative;
+}
+
+.header-wrap--secondary {
+    background-color: var(--black);
+    border-bottom: 1px solid var(--yellow-transparent);
+    padding: .5rem;
+}
+
+header {
+    display: flex;
+    font-size: 2rem;
+    padding: .5rem;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 85%;
+
+}
+
+header img {
+    height: 10rem;
+}
+
+nav ul {
+    display: flex;
+    list-style-type: none;
+    gap: 2rem;
+}
+
+nav ul a {
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+}
+
+nav ul li:nth-child(1) a {
+    color: var(--yellow);
+    background-color: rgb(255, 225, 101,0);
+    border: 2px solid var(--yellow);
+    transition: all 0.1s ease-in-out;
+}
+
+nav ul li:nth-child(1) a:hover {
+    color: var(--black);
+    background-color: var(--yellow);
+    border: 2px solid transparent;
+}
+
+nav ul li:nth-child(2) a {
+    color: var(--pink);
+    background-color: rgb(244, 244, 245,0);
+    border: 1px solid var(--pink);
+    transition: all 0.1s ease-in-out;
+}
+
+nav ul li:nth-child(2) a:hover {
+    color: var(--black);
+    background-color: var(--pink);
+    border: 1px solid transparent;
+}
+
+nav ul li:nth-child(3) a {
+    color: var(--white);
+    background-color: rgb(244, 244, 245,0);
+    border: 1px solid var(--white);
+    transition: all 0.1s ease-in-out;     
+}
+
+nav ul li:nth-child(3) a:hover {
+    color: var(--black);
+    background-color: var(--white);
+    border: 1px solid transparent;
+}
