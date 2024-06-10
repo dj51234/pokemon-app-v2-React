@@ -25,8 +25,6 @@ This app allows users to open packs and collect Pokémon cards in their profile.
    - Implement an autocomplete feature for the Pokémon search field to provide suggestions as users type.
    - Ensure the autocomplete does not affect the set search functionality.
 
-### Suggested Tasks
-
 3. **Profile and Collection Management**
    - Implement user profiles where users can save and manage their card collections.
    - Allow users to track their collection progress and see which cards they are missing.
