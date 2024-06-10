@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "downshift": "^9.0.6",
+    "firebase": "^10.12.2",
     "fuse.js": "^7.0.0",
     "jaro-winkler": "^0.2.8",
     "leven": "^4.0.0",

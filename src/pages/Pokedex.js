@@ -39,7 +39,6 @@ const PokedexPage = () => {
     });
 
     fetchAllPokemonNames().then(names => {
-      console.log('All Pokémon names:', names); // Log the names for verification
       setPokemonNames(names);
     }).catch(error => {
       console.error('Error fetching all Pokémon names:', error);
@@ -88,18 +87,16 @@ const PokedexPage = () => {
     setCards([]);
   };
 
-  const findBestMatches = (term, limit = 1) => {
+  const findBestMatches = (term, limit = 3) => {
     if (!pokemonNames.length) {
       console.error('Pokémon names list is empty.');
       return [];
     }
 
-    const matches = pokemonNames
-      .filter(name => !name.includes(' ') && !name.includes('-')) // Exclude names with spaces or hyphens
-      .map(name => ({
-        name,
-        distance: leven(term.toLowerCase(), name.toLowerCase())
-      }));
+    const matches = pokemonNames.map(name => ({
+      name,
+      distance: leven(term.toLowerCase(), name.toLowerCase())
+    }));
 
     matches.sort((a, b) => a.distance - b.distance);
 
@@ -167,57 +164,61 @@ const PokedexPage = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <Header secondary />
-      <SearchBar
-        sortSets={sortSets}
-        series={series}
-        setSelectedSeries={handleSeriesChange}
-        setSearchTerm={setSearchTerm}
-        handleBackToSets={handleBackToSets}
-        viewMode={viewMode}
-        handleReleaseDateSortChange={handleReleaseDateSortChange}
-        searchBy={searchBy}
-        handleToggleSearchBy={handleToggleSearchBy}
-        handleSearch={() => handleSearch(searchTerm)}
-      />
-      {isLoading ? ( // Conditional rendering for loading state
-        <img src={loadingGif} className='loading' alt="Loading" />
-      ) : (
-        <>
-          {noResults ? (
-            <div className="no-results">
-              No Pokémon found
-              {suggestedPokemon.length > 0 && (
-                <div>
-                  Did you mean 
-                  {suggestedPokemon.map((name, index) => (
-                    <span
-                      key={index}
-                      onClick={() => handleSuggestedPokemonClick(name)}
-                      style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px', fontWeight: '600'}}
-                    >
-                      {name}
-                      {index < suggestedPokemon.length - 1 ? ',' : ''}
-                    </span>
-                  ))}
-                  ?
-                </div>
-              )}
-            </div>
-          ) : (
-            <Grid
-              sets={displayedSets}
-              viewMode={viewMode}
-              cards={cards}
-              onSetClick={handleSetClick}
-            />
-          )}
-          <div className="footer-secondary">
-            <Footer />
+      <div className="content">
+        <SearchBar
+          sortSets={sortSets}
+          series={series}
+          setSelectedSeries={handleSeriesChange}
+          setSearchTerm={setSearchTerm}
+          handleBackToSets={handleBackToSets}
+          viewMode={viewMode}
+          handleReleaseDateSortChange={handleReleaseDateSortChange}
+          searchBy={searchBy}
+          handleToggleSearchBy={handleToggleSearchBy}
+          handleSearch={() => handleSearch(searchTerm)}
+        />
+        {isLoading ? ( // Conditional rendering for loading state
+          <div className="loading-container">
+            <img src={loadingGif} className='loading' alt="Loading" />
           </div>
-        </>
-      )}
+        ) : (
+          <>
+            {noResults ? (
+              <div className="no-results">
+                No Pokémon found
+                {suggestedPokemon.length > 0 && (
+                  <div>
+                    Did you mean 
+                    {suggestedPokemon.map((name, index) => (
+                      <span
+                        key={index}
+                        onClick={() => handleSuggestedPokemonClick(name)}
+                        style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px' }}
+                      >
+                        {name}
+                        {index < suggestedPokemon.length - 1 ? ',' : ''}
+                      </span>
+                    ))}
+                    ?
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Grid
+                sets={displayedSets}
+                viewMode={viewMode}
+                cards={cards}
+                onSetClick={handleSetClick}
+              />
+            )}
+          </>
+        )}
+      </div>
+      <div className="footer-secondary">
+        <Footer />
+      </div>
     </div>
   );
 };
