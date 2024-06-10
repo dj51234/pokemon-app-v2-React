@@ -33,7 +33,42 @@ export async function fetchRandomPokemonCards() {
 
     return randomCardData;
   } catch (error) {
-    console.error('Error fetching random Pokemon cards:', error);
+    console.error('Error fetching random Pokémon cards:', error);
     throw error;
+  }
+}
+
+export async function fetchPokemonCardsByName(name) {
+  try {
+    const response = await pokemon.card.where({ q: `name:${name}` });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Pokémon cards by name:', error);
+    throw error;
+  }
+}
+
+export async function fetchAllPokemonNames() {
+  let allPokemonNames = [];
+  let page = 1;
+  const pageSize = 250; // Max page size
+
+  try {
+    while (true) {
+      const response = await pokemon.card.where({ q: 'supertype:pokemon', pageSize, page });
+      const pageNames = response.data.map(card => card.name);
+      allPokemonNames = [...allPokemonNames, ...pageNames];
+
+      if (response.data.length < pageSize) {
+        break; // Exit loop if fewer cards than page size are returned, indicating the last page
+      }
+
+      page++;
+    }
+
+    return [...new Set(allPokemonNames)]; // Remove duplicates
+  } catch (error) {
+    console.error('Error fetching all Pokémon names:', error);
+    return [];
   }
 }

@@ -1,6 +1,19 @@
 footer {
     padding-block: 2rem;
     text-align: center;
-    background-color: var(--black);
     color: var(--white);
+    width: 100%;
+}
+
+.footer-primary footer {
+    position: fixed;
+    bottom: 0;
+    color: rgba(58, 183, 255, 0.2);
+}
+
+.footer-secondary footer {
+    background-color: var(--black);
+    position: relative;
+    bottom: 0;
+    z-index: 1000;
 }

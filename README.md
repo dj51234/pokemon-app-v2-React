@@ -1,70 +1,106 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Pokémon Card Collection App
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This app allows users to open packs and collect Pokémon cards in their profile. It currently features a hero page and a main browse page where users can search for Pokémon sets or specific Pokémon. The app aims to provide a comprehensive and engaging experience for Pokémon card collectors.
 
-### `npm start`
+## Current Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Hero page with an engaging introduction to the app
+- Browse page with search functionality for Pokémon sets and individual Pokémon
+- Recommendations for closest Pokémon matches in case of misspellings
+- Toggle between searching for sets and Pokémon
+- Display of Pokémon cards with holographic effects
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## To-Do List
 
-### `npm test`
+### Critical Tasks
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Re-evaluate Holographic Cards**
+   - Ensure that the app accurately identifies which cards are actually holographic. Currently, all promo cards show up as holo, but not all of them are holo.
+   - Implement a more accurate method for determining holographic status.
 
-### `npm run build`
+2. **Add Autocomplete for Pokémon Search**
+   - Implement an autocomplete feature for the Pokémon search field to provide suggestions as users type.
+   - Ensure the autocomplete does not affect the set search functionality.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Suggested Tasks
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Profile and Collection Management**
+   - Implement user profiles where users can save and manage their card collections.
+   - Allow users to track their collection progress and see which cards they are missing.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. **Pack Opening Simulation**
+   - Develop a feature where users can simulate opening packs and add cards to their collection.
+   - Include animations and sound effects to enhance the experience.
 
-### `npm run eject`
+5. **Trading System**
+   - Create a system that allows users to trade cards with each other.
+   - Implement a secure and fair trading mechanism.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+6. **Card Details and Statistics**
+   - Provide detailed information and statistics for each card, such as rarity, type, and set.
+   - Include high-resolution images and backstory for each card.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+7. **User Interface Enhancements**
+   - Improve the overall UI/UX design to make the app more user-friendly and visually appealing.
+   - Ensure the app is responsive and works well on various devices.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+8. **Performance Optimization**
+   - Optimize the app for faster loading times and smoother performance.
+   - Minimize the number of API calls and efficiently manage data fetching.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+9. **Testing and Bug Fixes**
+   - Conduct thorough testing to identify and fix bugs.
+   - Implement unit tests and end-to-end tests to ensure the app's reliability and stability.
 
-## Learn More
+10. **Documentation and Tutorials**
+    - Create comprehensive documentation for the app, including usage guides and API references.
+    - Develop tutorials and help sections to assist users in navigating and using the app effectively.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Installation and Setup
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/pokemon-card-app.git
+2. Install dependencies:
+   ```sh
+   cd pokemon-card-app
+   npm install
+3. Set up environment variables:
+   - Create a .env file in the root directory.
+   - Add your Pokémon TCG API key to the .env file (you can sign up for one [**HERE**](https://dev.pokemontcg.io/)):
+   ```sh
+   REACT_APP_API_KEY=your_api_key_here
+4. Run the app:
+   ```sh
+   npm start
+## Contribution Guidelines
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Commit your changes with descriptive messages.
+4. Push your branch to your forked repository.
+5. Create a pull request to the main repository.
 
-### Code Splitting
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This project is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) License.
 
-### Analyzing the Bundle Size
+### Summary
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+You are free to:
 
-### Making a Progressive Web App
+- **Share** — copy and redistribute the material in any medium or format
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Under the following terms:
 
-### Advanced Configuration
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **NonCommercial** — You may not use the material for commercial purposes.
+- **NoDerivatives** — If you remix, transform, or build upon the material, you may not distribute the modified material.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+View the full license [here](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode).
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

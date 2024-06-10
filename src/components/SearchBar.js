@@ -1,14 +1,21 @@
-// SearchBar.js
-import React, { useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import '../styles/SearchBar.css';
 
-const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries, viewMode, handleReleaseDateSortChange }) => {
-  const [searchBy, setSearchBy] = useState('set');
+const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries, viewMode, handleReleaseDateSortChange, searchBy, handleToggleSearchBy, handleSearch }) => {
+  const inputRef = useRef(null);
 
-  const handleToggleSearchBy = (value) => {
-    setSearchBy(value);
-    setSearchTerm(''); // Clear search term when toggling search by
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && searchBy === 'pokemon') {
+      handleSearch();
+    }
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      setSearchTerm('');
+    }
+  }, [searchBy, setSearchTerm]);
 
   return (
     <div className="search-wrapper">
@@ -18,7 +25,25 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
             <option value="set">Sets</option>
             <option value="pokemon">Pokémon</option>
           </select>
-          <input type="search" id="search-bar" placeholder={`Search by ${searchBy === 'set' ? 'Set' : 'Pokémon'}`} onChange={e => setSearchTerm(e.target.value)} />
+          <div className="search-input-container">
+            <input
+              type="search"
+              id="search-bar"
+              placeholder={`Search by ${searchBy === 'set' ? 'Set' : 'Pokémon'}`}
+              onChange={e => {
+                setSearchTerm(e.target.value);
+                if (searchBy === 'set') {
+                  // Trigger set search on input change
+                  setSearchTerm(e.target.value);
+                }
+              }}
+              onKeyDown={handleKeyDown} // Replace onKeyPress with onKeyDown
+              ref={inputRef} // Add ref here
+            />
+            {searchBy === 'pokemon' && (
+              <button onClick={handleSearch} className="search-button">Search</button>
+            )}
+          </div>
         </div>
         {searchBy === 'set' && (
           <>
@@ -27,14 +52,14 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>
-            <select id="series-options" defaultValue="" onChange={e => setSelectedSeries(e.target.value)}>
+            <select id="series-options" defaultValue="" onChange={setSelectedSeries}>
               <option value="" disabled>Filter By Series</option>
               <option value="all">All Series</option>
               {series.map((series, index) => <option key={index} value={series}>{series}</option>)}
             </select>
           </>
         )}
-        {viewMode === 'cards' && (
+        {searchBy === 'set' && viewMode === 'cards' && (
           <button onClick={handleBackToSets} className='back-button'>Back to Sets</button>
         )}
       </div>
@@ -42,6 +67,4 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
   );
 };
 
-
 export default SearchBar;
-

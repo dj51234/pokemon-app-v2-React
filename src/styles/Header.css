@@ -9,7 +9,6 @@
 .header-wrap--secondary {
     background-color: var(--black);
     border-bottom: 1px solid var(--yellow-transparent);
-    padding: .5rem;
 }
 
 header {

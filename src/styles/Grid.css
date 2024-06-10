@@ -53,35 +53,38 @@
     margin-top: 1rem;
 }
 
-#grid .grid-item--card {
-    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
-    height: auto;
+.card-wrapper {
     position: relative;
-    background-repeat: no-repeat;
-    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
 }
 
-#grid .grid-item--card::after {
+.card-wrapper::after {
     content: "";
     display: block;
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
-    top: 0;
+    top: 10px;
+    bottom: 10px;
     background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
     mix-blend-mode: color-dodge;
     opacity: 0;
-    border-radius: 30px;
+    pointer-events: none; /* Ensure it doesn't block interactions */
+    border-radius: 15px;
     overflow: hidden;
-    }
+}
 
-#grid .grid-item--card[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
+.card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
     opacity: 1; 
 }
 
 .card-image {
     display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: inherit; /* Inherit border radius if needed */
 }
 
 .loading {
@@ -89,3 +92,5 @@
     display: block;
     margin: 3rem auto;
 }
+
+  

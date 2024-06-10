@@ -6,7 +6,11 @@ import '../styles/Header.css';
 const Header = ({ secondary }) => (
   <div className={`header-wrap ${secondary ? 'header-wrap--secondary' : ''}`}>
     <header>
-      <div className="logo"><img src={logo} alt="Pokemon logo" /></div>
+      <div className="logo">
+        <Link to="/">
+          <img src={logo} alt="Pokemon logo" />
+        </Link>
+      </div>
       <nav>
         <ul>
           <li><a href="#">Sign Up</a></li>

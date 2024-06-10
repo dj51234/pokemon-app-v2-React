@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Tilt from 'react-parallax-tilt';
 import '../styles/Hero.css';
+import Footer from './Footer';
 
 const Hero = () => {
   return (
@@ -24,7 +25,11 @@ const Hero = () => {
             </Tilt>
         </section>
       </main>
+      <div className="footer-primary">
+        <Footer />
+      </div>
     </div>
+    
   );
 };
 
