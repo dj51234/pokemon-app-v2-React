@@ -24,8 +24,8 @@ main {
     align-items: center;
     justify-content: space-between;
     gap: 5rem;
-    padding: 10rem 5rem;
     perspective: 1000px;
+    height: calc(100vh - 11.6rem);
 }
 
 main section {

@@ -21,3 +21,7 @@ html, body {
 .app {
     overflow: hidden;
 }
+
+.auth-background {
+    background-color: var(--black);
+}

@@ -1,6 +1,7 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client'; // updated import for React 18
-import './index.css'; // Create a CSS file to include all your styles
+import './index.css';
 import App from './App';
 
 // Create a root.

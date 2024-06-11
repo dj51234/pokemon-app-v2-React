@@ -1,3 +1,4 @@
+// SearchBar.js
 import React, { useRef, useEffect } from 'react';
 import '../styles/SearchBar.css';
 
@@ -11,7 +12,7 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
   };
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current    ) {
       inputRef.current.value = '';
       setSearchTerm('');
     }
@@ -33,12 +34,11 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
               onChange={e => {
                 setSearchTerm(e.target.value);
                 if (searchBy === 'set') {
-                  // Trigger set search on input change
                   setSearchTerm(e.target.value);
                 }
               }}
-              onKeyDown={handleKeyDown} // Replace onKeyPress with onKeyDown
-              ref={inputRef} // Add ref here
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
             />
             {searchBy === 'pokemon' && (
               <button onClick={handleSearch} className="search-button">Search</button>
@@ -68,3 +68,4 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
 };
 
 export default SearchBar;
+

@@ -1,4 +1,3 @@
-// src/components/Header.js
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -6,9 +5,6 @@ import '../styles/Header.css';
 
 const Header = ({ secondary }) => {
   const location = useLocation();
-
-  // Check if the current path is /login or /register
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <div className={`header-wrap ${secondary ? 'header-wrap--secondary' : ''}`}>
@@ -20,10 +16,10 @@ const Header = ({ secondary }) => {
         </div>
         <nav>
           <ul>
-            <li><Link to="/signup">Sign Up</Link></li>
+            <li><Link to="/register">Register</Link></li>
             <li><Link to="/login">Login</Link></li>
-            {!isAuthPage && (
-              <li><Link to={secondary ? "/" : "/pokedex"}>{secondary ? 'Home' : 'Browse Cards'}</Link></li>
+            {location.pathname !== '/pokedex' && (
+              <li><Link to="/pokedex">Browse Cards</Link></li>
             )}
           </ul>
         </nav>

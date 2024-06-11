@@ -19,6 +19,7 @@ const PokedexPage = () => {
   const [selectedSet, setSelectedSet] = useState(null);
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoadingSets, setIsLoadingSets] = useState(true); // Loading state for sets
   const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('');
   const [searchBy, setSearchBy] = useState('set'); // 'set' or 'pokemon'
   const [noResults, setNoResults] = useState(false); // No results state
@@ -34,15 +35,27 @@ const PokedexPage = () => {
       setSets(updatedData);
       setOriginalSets(updatedData); // Save original sets data
       setSeries([...new Set(updatedData.map(set => set.series))]);
+      setIsLoadingSets(false); // Set loading state for sets to false
     }).catch(error => {
       console.error(error);
+      setIsLoadingSets(false); // Set loading state for sets to false even if there's an error
     });
 
-    fetchAllPokemonNames().then(names => {
-      setPokemonNames(names);
-    }).catch(error => {
-      console.error('Error fetching all Pokémon names:', error);
-    });
+    const fetchNames = async () => {
+      try {
+        const names = await fetchAllPokemonNames();
+        if (names.length > 0) {
+          setPokemonNames(names);
+          console.log('Fetched Pokémon names:', names); // Log the fetched names
+        } else {
+          console.error('No Pokémon names fetched');
+        }
+      } catch (error) {
+        console.error('Error fetching all Pokémon names:', error);
+      }
+    };
+
+    fetchNames();
   }, []); // Run only once when the component mounts
 
   useEffect(() => {
@@ -87,7 +100,7 @@ const PokedexPage = () => {
     setCards([]);
   };
 
-  const findBestMatches = (term, limit = 3) => {
+  const findBestMatches = (term, limit = 1) => {
     if (!pokemonNames.length) {
       console.error('Pokémon names list is empty.');
       return [];
@@ -179,9 +192,9 @@ const PokedexPage = () => {
           handleToggleSearchBy={handleToggleSearchBy}
           handleSearch={() => handleSearch(searchTerm)}
         />
-        {isLoading ? ( // Conditional rendering for loading state
+        {isLoading || isLoadingSets ? ( // Conditional rendering for loading state
           <div className="loading-container">
-            <img src={loadingGif} className='loading' alt="Loading" />
+            <img src={loadingGif} alt="Loading..." />
           </div>
         ) : (
           <>
@@ -195,7 +208,7 @@ const PokedexPage = () => {
                       <span
                         key={index}
                         onClick={() => handleSuggestedPokemonClick(name)}
-                        style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px' }}
+                        style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px', fontWeight: 500}}
                       >
                         {name}
                         {index < suggestedPokemon.length - 1 ? ',' : ''}
