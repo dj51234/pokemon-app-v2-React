@@ -1,15 +1,15 @@
+// src/pages/Register.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider } from '../js/firebase';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import '../styles/register.css';
+import '../styles/Register.css';
 import '../styles/google.css';
 import faceBookLogo from '../assets/facebook_icon.png';
 import googleLogo from '../assets/google_icon.png';
+import getErrorMessage from '../js/firebaseErrorMessages';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -28,27 +28,27 @@ const Register = () => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
   const handleGoogleSignUp = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
   const handleFacebookSignUp = async () => {
     try {
       await signInWithPopup(auth, facebookProvider);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
@@ -74,7 +74,7 @@ const Register = () => {
               required
             />
             <button type="submit">Register</button>
-            {error && <p>{error}</p>}
+            {error && <p className="error-message" style={{color: 'red'}}>{error}</p>}
           </form>
           <div className="auth-buttons">
             <button onClick={handleGoogleSignUp} className="google-sign-in">

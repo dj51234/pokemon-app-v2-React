@@ -1,15 +1,15 @@
+// src/pages/Login.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider } from '../js/firebase';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faFacebook } from '@fortawesome/free-brands-svg-icons';
-import '../styles/login.css';
+import '../styles/Login.css';
 import '../styles/google.css';
 import faceBookLogo from '../assets/facebook_icon.png';
 import googleLogo from '../assets/google_icon.png';
+import getErrorMessage from '../js/firebaseErrorMessages';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,27 +28,27 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
   const handleFacebookSignIn = async () => {
     try {
       await signInWithPopup(auth, facebookProvider);
-      navigate('/pokedex');
+      navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      setError(getErrorMessage(error.code));
     }
   };
 
@@ -74,16 +74,16 @@ const Login = () => {
               required
             />
             <button type="submit">Login</button>
-            {error && <p>{error}</p>}
+            {error && <p className="error-message" style={{color: 'red'}}>{error}</p>}
           </form>
           <div className="auth-buttons">
             <button onClick={handleGoogleSignIn} className="google-sign-in">
               <img src={googleLogo} alt="Google logo" className="icon-left google-icon" />
-              Sign up with Google
+              Sign in with Google
             </button>
             <button onClick={handleFacebookSignIn} className="facebook-sign-in">
               <img src={faceBookLogo} alt="Facebook logo" className="icon-left facebook-icon" />
-              Sign up with Facebook
+              Sign in with Facebook
             </button>
           </div>
         </div>

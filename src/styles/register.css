@@ -22,7 +22,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     text-align: center;
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
 }
 
 .register h2 {
@@ -72,3 +72,4 @@
     color: var(--subtext);
     font-size: 1.4rem;
 }
+

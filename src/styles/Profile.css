@@ -1,0 +1,78 @@
+/* src/styles/Profile.css */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .profile-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+  }
+  
+  .profile-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 1rem;
+    width: 100%;
+    max-width: 85%;
+    min-height: 100vh;
+  }
+  
+  .profile-grid-item {
+    background: url('../assets/bg.webp') no-repeat center center;
+    background-size: cover;
+    position: relative;
+    color: var(--white);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 150px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  
+  .profile-grid-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 1);
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0.8;
+  }
+  
+  .profile-grid-item:hover::before {
+    opacity: .95;
+  }
+  
+  .profile-grid-item h2 {
+    z-index: 2;
+  }
+  
+  /* Media queries for tablet and phone sizes */
+  @media screen and (max-width: 1024px) {
+    .profile-grid-container {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .profile-grid-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(6, 1fr);
+    }
+  }
+  
