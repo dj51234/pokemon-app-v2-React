@@ -1,8 +1,9 @@
 // src/pages/Register.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, facebookProvider } from '../js/firebase';
+import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
+import { auth, googleProvider, facebookProvider, firestore } from '../js/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Register.css';
@@ -14,6 +15,7 @@ import getErrorMessage from '../js/firebaseErrorMessages';
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -26,8 +28,21 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username) {
+      setError('Username is required');
+      return;
+    }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: username });
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: username,
+        bio: ''
+      });
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -36,7 +51,16 @@ const Register = () => {
 
   const handleGoogleSignUp = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      await updateProfile(user, { displayName: username });
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: username,
+        bio: ''
+      });
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -45,7 +69,16 @@ const Register = () => {
 
   const handleFacebookSignUp = async () => {
     try {
-      await signInWithPopup(auth, facebookProvider);
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      await updateProfile(user, { displayName: username });
+      const userDocRef = doc(firestore, 'users', user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: username,
+        bio: ''
+      });
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -59,6 +92,13 @@ const Register = () => {
         <div className="register">
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              required
+            />
             <input
               type="email"
               value={email}
@@ -74,7 +114,7 @@ const Register = () => {
               required
             />
             <button type="submit">Register</button>
-            {error && <p className="error-message" style={{color: 'red'}}>{error}</p>}
+            {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
           </form>
           <div className="auth-buttons">
             <button onClick={handleGoogleSignUp} className="google-sign-in">

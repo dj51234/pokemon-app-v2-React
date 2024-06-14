@@ -1,0 +1,6 @@
+// .firebaserc
+{
+  "projects": {
+    "default": "pokemon-app-d0237"
+  }
+}

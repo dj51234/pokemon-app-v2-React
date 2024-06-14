@@ -1,23 +1,18 @@
-/****** HERO SECTION ******/
-
+/* src/styles/Hero.css */
 .main-container {
-    
     position: relative;
-    height: 100vh;
-}
-
-.main-container::before {
-    content: "";
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  
+  #tsparticles {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(10, 10, 10);
-    z-index: 0;    
-}
-
-main {
+    z-index: 0;
+  }
+  
+  main {
     margin: 0 auto;
     width: 85%;
     display: flex;
@@ -26,95 +21,94 @@ main {
     gap: 5rem;
     perspective: 1000px;
     height: calc(100vh - 11.6rem);
-}
-
-main section {
+    z-index: 1;
+  }
+  
+  main section {
     flex: 1;
-}
-
-main .hero-text {
+  }
+  
+  main .hero-text {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-}
-
-main .hero-buttons {
+  }
+  
+  main .hero-buttons {
     display: flex;
     gap: 3rem;
-}
-
-main .hero-buttons a {
+  }
+  
+  main .hero-buttons a {
     text-decoration: none;
     padding: 1rem 2rem;
     border-radius: 1rem;
-}
-
-main .hero-buttons a:first-child {
+  }
+  
+  main .hero-buttons a:first-child {
     color: var(--yellow);
-    background-color: rgb(255, 225, 101,0);
+    background-color: rgb(255, 225, 101, 0);
     border: 2px solid var(--yellow);
     transition: all 0.1s ease-in-out;
-}
-
-main .hero-buttons a:first-child:hover {
+  }
+  
+  main .hero-buttons a:first-child:hover {
     color: var(--black);
     background-color: var(--yellow);
     border: 2px solid transparent;
-}
-
-
-main .hero-buttons a:nth-child(2) {
+  }
+  
+  main .hero-buttons a:nth-child(2) {
     color: var(--white);
-    background-color: rgb(244, 244, 245,0);
+    background-color: rgb(244, 244, 245, 0);
     border: 1px solid var(--white);
     transition: all 0.1s ease-in-out;
-}
-
-main .hero-buttons a:nth-child(2):hover {
-    color: rgb(0,0,0);
+  }
+  
+  main .hero-buttons a:nth-child(2):hover {
+    color: rgb(0, 0, 0);
     background-color: var(--white);
     border: 1px solid transparent;
-}
-
-main h2 {
+  }
+  
+  main h2 {
     font-size: 5rem;
     font-weight: 600;
     color: var(--white);
-}
-
-main p {
+  }
+  
+  main p {
     color: var(--subtext);
     font-size: 1.7rem;
     line-height: 2.5rem;
-}
-
-main span {
-    color:var(--yellow)
-}
-
-.hero-image {
+  }
+  
+  main span {
+    color: var(--yellow);
+  }
+  
+  .hero-image {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: calc(var(--s) * 100);
-}
-
-.pokemon-card {
+    z-index: 1;
+  }
+  
+  .pokemon-card {
     position: relative;
-    aspect-ratio: 3 / 4; /* Maintain the aspect ratio of the card */
-    overflow: hidden; /* Ensure holo effects do not overflow */
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
     background-image: url('https://images.pokemontcg.io/sv6/25_hires.png');
-    background-size: contain; /* Scale the image to fit the div */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     position: relative;
     perspective: 10000px;
     max-width: 400px;
-}
-
-
-.pokemon-card::after {
+  }
+  
+  .pokemon-card::after {
     content: "";
     position: absolute;
     left: 0;
@@ -126,7 +120,7 @@ main span {
     opacity: 1;
     pointer-events: none;
     background-size: cover;
-    clip-path: inset(2%); /* Ensure effects do not overflow */
-}
-
-
+    clip-path: inset(2%);
+  }
+  
+  

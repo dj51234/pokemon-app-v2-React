@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, facebookProvider } from '../js/firebase';
+import { auth, googleProvider, facebookProvider, firestore } from '../js/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Login.css';
@@ -27,8 +28,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/profile');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const userDocRef = doc(firestore, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        navigate('/profile');
+      } else {
+        setError('User data does not exist.');
+      }
     } catch (error) {
       setError(getErrorMessage(error.code));
     }
@@ -36,8 +44,15 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
-      navigate('/profile');
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const userDocRef = doc(firestore, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        navigate('/profile');
+      } else {
+        setError('User data does not exist.');
+      }
     } catch (error) {
       setError(getErrorMessage(error.code));
     }
@@ -45,8 +60,15 @@ const Login = () => {
 
   const handleFacebookSignIn = async () => {
     try {
-      await signInWithPopup(auth, facebookProvider);
-      navigate('/profile');
+      const result = await signInWithPopup(auth, facebookProvider);
+      const user = result.user;
+      const userDocRef = doc(firestore, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        navigate('/profile');
+      } else {
+        setError('User data does not exist.');
+      }
     } catch (error) {
       setError(getErrorMessage(error.code));
     }
@@ -74,7 +96,7 @@ const Login = () => {
               required
             />
             <button type="submit">Login</button>
-            {error && <p className="error-message" style={{color: 'red'}}>{error}</p>}
+            {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
           </form>
           <div className="auth-buttons">
             <button onClick={handleGoogleSignIn} className="google-sign-in">

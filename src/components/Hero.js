@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Tilt from 'react-parallax-tilt';
+import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
 import Footer from './Footer';
 
@@ -8,6 +9,7 @@ const Hero = () => {
   return (
     <div className="main-container">
       <Header />
+      <ParticlesBackground />
       <main>
         <section className="hero-text">
           <h2>Experience the <span>Magic of Pokémon</span> Card Pack Openings Online!</h2>
@@ -18,20 +20,18 @@ const Hero = () => {
           </div>
         </section>
         <section className="hero-image">
-            <Tilt tiltMaxAngleX={20} tiltMaxAngleY={20} transitionSpeed={1500}>
-                <div className="pokemon-card">
-                        <img src="https://images.pokemontcg.io/sv6/25_hires.png" alt="" style={{ visibility: 'hidden' }} />
-                </div>
-            </Tilt>
+          <Tilt tiltMaxAngleX={20} tiltMaxAngleY={20} transitionSpeed={1500}>
+            <div className="pokemon-card">
+              <img src="https://images.pokemontcg.io/sv6/25_hires.png" alt="" style={{ visibility: 'hidden' }} />
+            </div>
+          </Tilt>
         </section>
       </main>
       <div className="footer-primary">
         <Footer />
       </div>
     </div>
-    
   );
 };
 
 export default Hero;
-

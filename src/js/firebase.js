@@ -1,8 +1,10 @@
 // src/js/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { getAuth, GoogleAuthProvider, FacebookAuthProvider, connectAuthEmulator } from 'firebase/auth';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getDatabase, connectDatabaseEmulator } from 'firebase/database';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -25,5 +27,14 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 const storage = getStorage(app);
+const firestore = getFirestore(app);
+const database = getDatabase(app);
 
-export { auth, googleProvider, facebookProvider, storage };
+if (window.location.hostname === "localhost") {
+  connectAuthEmulator(auth, "http://localhost:9099");
+  connectFirestoreEmulator(firestore, "localhost", 8082);
+  connectDatabaseEmulator(database, "localhost", 9000);
+  connectStorageEmulator(storage, "localhost", 9199);
+}
+
+export { auth, googleProvider, facebookProvider, storage, firestore, database };

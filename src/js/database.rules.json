@@ -1,0 +1,7 @@
+{
+  // database.rules.json
+  "rules": {
+    ".read": false,
+    ".write": false
+  }
+}

@@ -1,41 +1,244 @@
 // src/pages/Profile.js
-import React from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
+import { AuthContext } from '../App';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Profile.css';
-import { auth } from '../js/firebase';
+import { auth, storage, firestore } from '../js/firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { updateProfile } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import loadingGif from '../assets/loading-gif.gif';
+
+const MAX_USERNAME_LENGTH = 50;
+const MAX_BIO_LENGTH = 200;
+const defaultBio = "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...";
 
 const Profile = () => {
+  const { currentUser } = useContext(AuthContext);
+  const [profileImage, setProfileImage] = useState(currentUser?.photoURL || '');
+  const [username, setUsername] = useState(currentUser?.displayName || '');
+  const [bio, setBio] = useState(defaultBio);
+  const [stats, setStats] = useState({ cards: 0, trades: 0 });
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState(username);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [newBio, setNewBio] = useState(bio);
+  const [loading, setLoading] = useState(true);  // Loading state
+  const usernameInputRef = useRef(null);
+
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/');
-    } catch (error) {
-      console.error('Error logging out:', error);
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const storageRef = ref(storage, `profileImages/${currentUser.uid}`);
+      await uploadBytes(storageRef, file);
+      const photoURL = await getDownloadURL(storageRef);
+      await updateProfile(currentUser, { photoURL });
+      setProfileImage(photoURL);
+      console.log('Uploaded Image URL:', photoURL);
     }
   };
 
+  const handleEditClick = () => {
+    setIsEditingUsername(true);
+  };
+
+  const handleUsernameChange = (e) => {
+    if (e.target.value.length <= MAX_USERNAME_LENGTH) {
+      setNewUsername(e.target.value);
+      adjustInputWidth(e.target);
+    }
+  };
+
+  const adjustInputWidth = (input) => {
+    input.style.width = `${input.value.length + 1}ch`;
+  };
+
+  const handleBioChange = (e) => {
+    if (e.target.value.length <= MAX_BIO_LENGTH) {
+      setNewBio(e.target.value);
+    }
+  };
+
+  const handleSaveUsernameClick = async () => {
+    try {
+      await updateProfile(currentUser, { displayName: newUsername });
+      setUsername(newUsername);
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      await setDoc(userDocRef, { displayName: newUsername }, { merge: true });
+      setIsEditingUsername(false);
+    } catch (error) {
+      console.error('Error saving username:', error);
+    }
+  };
+
+  const handleSaveBioClick = async () => {
+    try {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      await setDoc(userDocRef, { bio: newBio }, { merge: true });
+      setBio(newBio);
+      setIsEditingBio(false);
+    } catch (error) {
+      console.error('Error saving bio:', error);
+    }
+  };
+
+  const handleCancelUsernameClick = () => {
+    setNewUsername(username);
+    setIsEditingUsername(false);
+  };
+
+  const handleCancelBioClick = () => {
+    setNewBio(bio);
+    setIsEditingBio(false);
+  };
+
+  const handleUsernameKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSaveUsernameClick();
+    }
+  };
+
+  const handleBioKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSaveBioClick();
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser && currentUser.photoURL) {
+      setProfileImage(currentUser.photoURL);
+    }
+    if (currentUser && currentUser.displayName) {
+      setUsername(currentUser.displayName);
+    }
+
+    const fetchUserData = async () => {
+      try {
+        const userDocRef = doc(firestore, 'users', currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.bio) {
+            setBio(userData.bio);
+            setNewBio(userData.bio);
+          }
+          if (userData.displayName) {
+            setUsername(userData.displayName);
+            setNewUsername(userData.displayName);
+          }
+        }
+        setLoading(false); // Set loading to false once data is fetched
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setLoading(false); // Set loading to false even if there's an error
+      }
+    };
+
+    if (currentUser) {
+      fetchUserData();
+    } else {
+      setLoading(false); // Set loading to false if there's no current user
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (usernameInputRef.current) {
+      adjustInputWidth(usernameInputRef.current);
+    }
+  }, [newUsername]);
+
   return (
-    <div className="profile-container">
-      <Header secondary />
-      <div className="profile-content">
-        <div className="profile-grid-container">
-          <a href="/my-binder" className="profile-grid-item"><h2>Binder</h2></a>
-          <a href="/open-packs" className="profile-grid-item"><h2>Open Packs</h2></a>
-          <a href="/pokedex" className="profile-grid-item"><h2>Browse Cards</h2></a>
-          <a href="/trade" className="profile-grid-item"><h2>Trade</h2></a>
-          <a href="/settings" className="profile-grid-item"><h2>Settings</h2></a>
-          <a href="#logout" className="profile-grid-item" onClick={handleLogout}><h2>Log Out</h2></a>
-        </div>
+    <>
+      <Header secondary username={username} />
+      <div className="profile-container">
+        {loading ? (
+          <div className="loading-container">
+            <img src={loadingGif} alt="Loading..." />
+          </div>
+        ) : (
+          <div className="profile-content">
+            <div className="profile-header">
+              <div className={`profile-image-wrapper ${profileImage ? 'no-border' : ''}`}>
+                {profileImage ? (
+                  <img src={profileImage} alt="Profile" className="profile-image" />
+                ) : (
+                  <div className="default-image">{username.charAt(0)}</div>
+                )}
+                <input type="file" onChange={handleImageUpload} />
+              </div>
+              <div className="profile-details">
+                {isEditingUsername ? (
+                  <div className="username-edit">
+                    <input
+                      ref={usernameInputRef}
+                      type="text"
+                      value={newUsername}
+                      onChange={handleUsernameChange}
+                      onKeyDown={handleUsernameKeyDown}
+                      maxLength={MAX_USERNAME_LENGTH}
+                      style={{ width: 'auto' }}
+                    />
+                    <button onClick={handleSaveUsernameClick}>Save</button>
+                    <button onClick={handleCancelUsernameClick}>Cancel</button>
+                  </div>
+                ) : (
+                  <h2 onClick={handleEditClick}>
+                    {username}
+                  </h2>
+                )}
+                {isEditingBio ? (
+                  <div className="bio-edit">
+                    <textarea
+                      value={newBio}
+                      onChange={handleBioChange}
+                      onKeyDown={handleBioKeyDown}
+                      rows="4"
+                      maxLength={MAX_BIO_LENGTH}
+                    />
+                    <div className="bio-char-count">
+                      {newBio.length}/{MAX_BIO_LENGTH}
+                    </div>
+                    <button onClick={handleSaveBioClick}>Save</button>
+                    <button onClick={handleCancelBioClick}>Cancel</button>
+                  </div>
+                ) : (
+                  <div className="bio-container" onClick={() => setIsEditingBio(true)}>
+                    <p className="bio">
+                      {bio}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="profile-stats">
+              <div className="stat-item">
+                <h3>{stats.cards}</h3>
+                <p>Cards</p>
+              </div>
+              <div className="stat-item">
+                <h3>{stats.trades}</h3>
+                <p>Trades</p>
+              </div>
+            </div>
+            <div className="profile-messages">
+              <h3>Messages</h3>
+              {/* Messaging system UI here */}
+            </div>
+            <div className="profile-binder">
+              <h3>My Binder</h3>
+              {/* Binder preview UI here */}
+            </div>
+          </div>
+        )}
       </div>
       <div className="footer-secondary">
         <Footer />
       </div>
-    </div>
+    </>
   );
 };
 
