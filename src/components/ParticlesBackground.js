@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+// src/components/ParticlesBackground.js
+import React, { useEffect, useState, memo } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 
@@ -37,7 +38,7 @@ const ParticlesBackground = () => {
       },
       modes: {
         push: {
-          quantity: 12,
+          quantity: 4,
         },
         repulse: {
           distance: 100,
@@ -70,7 +71,7 @@ const ParticlesBackground = () => {
         density: {
           enable: true,
         },
-        value: 80,
+        value: 100,
       },
       opacity: {
         value: 0.5,
@@ -92,4 +93,4 @@ const ParticlesBackground = () => {
   return <></>;
 };
 
-export default ParticlesBackground;
+export default memo(ParticlesBackground);

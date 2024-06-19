@@ -6,13 +6,14 @@ import logo from '../assets/logo.png';
 import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
+import Sidebar from './Sidebar';
 
 const Header = ({ username, secondary }) => {
   const location = useLocation();
   const { currentUser } = useContext(AuthContext);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [initial, setInitial] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser && currentUser.displayName) {
@@ -21,10 +22,6 @@ const Header = ({ username, secondary }) => {
       setInitial(username.charAt(0).toUpperCase());
     }
   }, [currentUser, username]);
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
 
   const handleLogout = async () => {
     try {
@@ -38,15 +35,15 @@ const Header = ({ username, secondary }) => {
   const getProfileImage = () => {
     if (currentUser && currentUser.photoURL) {
       return (
-        <div className="nav-profile-image-wrapper">
-          <img src={currentUser.photoURL} alt="Profile" className="nav-profile-image" onClick={toggleDropdown} />
+        <div className="nav-profile-image-wrapper" onClick={() => setSidebarOpen(true)}>
+          <img src={currentUser.photoURL} alt="Profile" className="nav-profile-image" />
         </div>
       );
     }
     if (currentUser || username) {
       return (
-        <div className="nav-default-image-wrapper">
-          <div className="nav-default-image nav-profile-image" onClick={toggleDropdown}>
+        <div className="nav-default-image-wrapper" onClick={() => setSidebarOpen(true)}>
+          <div className="nav-default-image nav-profile-image">
             {initial}
           </div>
         </div>
@@ -70,25 +67,11 @@ const Header = ({ username, secondary }) => {
             {!currentUser && location.pathname !== '/pokedex' && (
               <li><Link to="/pokedex">Browse Cards</Link></li>
             )}
-            {currentUser && (
-              <div className="profile-dropdown">
-                {getProfileImage()}
-                {dropdownVisible && (
-                  <div className="dropdown-menu">
-                    <Link to="/profile">My Profile</Link>
-                    <Link to="/my-binder">My Binder</Link>
-                    <Link to="/open-packs">Open Packs</Link>
-                    <Link to="/pokedex">Browse Cards</Link>
-                    <Link to="/trade">Trade</Link>
-                    <Link to="/settings">Settings</Link>
-                    <a href="#logout" onClick={handleLogout}>Logout</a>
-                  </div>
-                )}
-              </div>
-            )}
+            {currentUser && getProfileImage()}
           </ul>
         </nav>
       </header>
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} handleLogout={handleLogout} />
     </div>
   );
 };

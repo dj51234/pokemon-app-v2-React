@@ -28,7 +28,8 @@ const PokedexPage = () => {
 
   useEffect(() => {
     fetchSetData().then(data => {
-      const updatedData = data.map(set => ({
+      const filteredData = data.filter(set => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id));
+      const updatedData = filteredData.map(set => ({
         ...set,
         cardIDs: Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
       }));
@@ -120,7 +121,9 @@ const PokedexPage = () => {
     if (searchBy === 'pokemon') {
       setIsLoading(true);
       try {
-        const cardData = await fetchPokemonCardsByName(term);
+        let cardData = await fetchPokemonCardsByName(term);
+        // Filter out cards from the excluded sets
+        cardData = cardData.filter(card => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id));
         setCards(cardData);
         setViewMode('cards');
         setIsLoading(false);

@@ -1,9 +1,9 @@
 // src/pages/Login.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider, firestore } from '../js/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../styles/Login.css';
@@ -13,7 +13,7 @@ import googleLogo from '../assets/google_icon.png';
 import getErrorMessage from '../js/firebaseErrorMessages';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState(''); // Can be either email or username
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -28,6 +28,23 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let email = identifier;
+
+      // Check if the identifier is an email or username
+      if (!identifier.includes('@')) {
+        // If it's a username, fetch the user by username (case-insensitive)
+        const usersCollection = collection(firestore, 'users');
+        const q = query(usersCollection, where('lowercaseUsername', '==', identifier.toLowerCase()));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0].data();
+          email = userDoc.email;
+        } else {
+          throw new Error('User data does not exist.');
+        }
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       const userDocRef = doc(firestore, 'users', user.uid);
@@ -38,7 +55,7 @@ const Login = () => {
         setError('User data does not exist.');
       }
     } catch (error) {
-      setError(getErrorMessage(error.code));
+      setError(getErrorMessage(error.code) || error.message);
     }
   };
 
@@ -82,10 +99,10 @@ const Login = () => {
           <h2>Login</h2>
           <form onSubmit={handleSubmit}>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="Email or Username"
               required
             />
             <input
@@ -108,6 +125,7 @@ const Login = () => {
               Sign in with Facebook
             </button>
           </div>
+          <p className='account-status'>Don't have an account? <Link to="/register">Register here</Link></p>
         </div>
       </div>
       <Footer />

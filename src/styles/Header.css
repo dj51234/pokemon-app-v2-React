@@ -13,11 +13,10 @@
   header {
     display: flex;
     font-size: 2rem;
-    padding: 0.5rem;
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
-    width: 85%;
+    max-width: 85%;
   }
   
   header img {
@@ -83,19 +82,18 @@
   }
   
   .nav-profile-image-wrapper, .nav-default-image-wrapper {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: white; */
     border: 1px solid black;
   }
   
   .nav-profile-image {
-    width: auto;
+    width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 50%;

@@ -21,8 +21,27 @@ html, body {
 
 .app {
     overflow: hidden;
+    color: var(--white);
 }
 
 .auth-background {
     background-color: var(--black);
+}
+
+.account-status {
+    margin: 1.3rem auto 0;
+}
+
+.account-status a {
+    color: rgb(41, 173, 250);
+    text-decoration: none;
+}
+
+.main-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }

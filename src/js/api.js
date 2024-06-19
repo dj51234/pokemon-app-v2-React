@@ -1,4 +1,3 @@
-// api.js
 import pokemon from 'pokemontcgsdk';
 
 pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
@@ -58,6 +57,40 @@ export async function fetchAllPokemonNames() {
     return names;
   } catch (error) {
     console.error('Error fetching Pokémon names from PokeAPI:', error);
+    return [];
+  }
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// New function for fetching sets for the PackSelection component
+export async function fetchSetsForPackSelection() {
+  try {
+    const twilightMasqueradeId = 'sv6'; // Twilight Masquerade set ID
+    const popularSetIds = ['base1', 'neo1', 'gym1']; // Example popular set IDs
+
+    // Fetch Twilight Masquerade set
+    const twilightMasquerade = await pokemon.set.find(twilightMasqueradeId);
+
+    // Fetch popular sets
+    const popularSets = await Promise.all(popularSetIds.map(id => pokemon.set.find(id)));
+
+    const sets = [twilightMasquerade, ...popularSets].map(set => ({
+      name: set.name,
+      id: set.id,
+      logo: set.images.logo,
+      releaseDate: set.releaseDate
+    }));
+
+    return sets;
+  } catch (error) {
+    console.error('Error fetching sets for pack selection:', error);
     return [];
   }
 }

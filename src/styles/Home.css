@@ -4,6 +4,39 @@ body {
     font-weight: 400;
     width: 100%;
 }
+  
+.main-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .pack-selection {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .pack-selection.shift-left {
+    transform: translateX(-100%);
+  }
+  
+  .pack-opening {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    right: -100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .pack-opening.show {
+    transform: translateX(-100%);
+  }
+  
+  
+  
 
 
 

@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Tilt from 'react-parallax-tilt';
+import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
-import Footer from './Footer';
 
 const Hero = () => {
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleStartCollection = (e) => {
+    e.preventDefault();
+    if (currentUser) {
+      navigate('/profile');
+    } else {
+      navigate('/register');
+    }
+  };
+
+  const handleNextPage = () => {
+    navigate('/next-page'); // Adjust this to navigate to the next desired page or section
+  };
+
   return (
     <div className="main-container">
       <Header />
@@ -15,7 +32,7 @@ const Hero = () => {
           <h2>Experience the <span>Magic of Pokémon</span> Card Pack Openings Online!</h2>
           <p>Open, Collect, and Trade Pokémon cards with fans worldwide. Join our community and relive the excitement! Dive into the nostalgia of opening packs and discovering rare finds. Participate in events and challenges to showcase your collection. Become a part of a thriving community of Pokémon enthusiasts. Your adventure awaits—start collecting today!</p>
           <div className="hero-buttons">
-            <a href="/">Start Your Collection</a>
+            <a href="/" onClick={handleStartCollection}>Start Your Collection</a>
             <a href="/">Learn More</a>
           </div>
         </section>
@@ -27,8 +44,10 @@ const Hero = () => {
           </Tilt>
         </section>
       </main>
-      <div className="footer-primary">
-        <Footer />
+      <div className="arrow" onClick={handleNextPage}>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
   );

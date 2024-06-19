@@ -8,10 +8,11 @@ import '../styles/Profile.css';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import loadingGif from '../assets/loading-gif.gif';
 
-const MAX_USERNAME_LENGTH = 50;
+const MAX_USERNAME_LENGTH = 16;
+const MIN_USERNAME_LENGTH = 8;
 const MAX_BIO_LENGTH = 200;
 const defaultBio = "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...";
 
@@ -26,6 +27,7 @@ const Profile = () => {
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [newBio, setNewBio] = useState(bio);
   const [loading, setLoading] = useState(true);  // Loading state
+  const [error, setError] = useState('');
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -40,6 +42,13 @@ const Profile = () => {
       setProfileImage(photoURL);
       console.log('Uploaded Image URL:', photoURL);
     }
+  };
+
+  const checkUsernameAvailability = async (username) => {
+    const usersCollection = collection(firestore, 'users');
+    const q = query(usersCollection, where('lowercaseUsername', '==', username.toLowerCase()));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty;
   };
 
   const handleEditClick = () => {
@@ -64,14 +73,26 @@ const Profile = () => {
   };
 
   const handleSaveUsernameClick = async () => {
+    setError('');  // Clear any previous errors
+    if (newUsername.length < MIN_USERNAME_LENGTH || newUsername.length > MAX_USERNAME_LENGTH) {
+      setError(`Username must be between ${MIN_USERNAME_LENGTH} and ${MAX_USERNAME_LENGTH} characters`);
+      return;
+    }
+    const isUsernameAvailable = await checkUsernameAvailability(newUsername);
+    if (!isUsernameAvailable) {
+      setError('Username is already taken');
+      return;
+    }
+
     try {
       await updateProfile(currentUser, { displayName: newUsername });
       setUsername(newUsername);
       const userDocRef = doc(firestore, 'users', currentUser.uid);
-      await setDoc(userDocRef, { displayName: newUsername }, { merge: true });
+      await setDoc(userDocRef, { displayName: newUsername, lowercaseUsername: newUsername.toLowerCase() }, { merge: true });
       setIsEditingUsername(false);
     } catch (error) {
       console.error('Error saving username:', error);
+      setError('Error saving username. Please try again.');
     }
   };
 
@@ -184,6 +205,7 @@ const Profile = () => {
                     />
                     <button onClick={handleSaveUsernameClick}>Save</button>
                     <button onClick={handleCancelUsernameClick}>Cancel</button>
+                    {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
                   </div>
                 ) : (
                   <h2 onClick={handleEditClick}>
