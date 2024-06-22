@@ -26,6 +26,8 @@
     "react-parallax-tilt": "^1.7.227",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-sticky": "^6.0.3",
+    "react-sticky-header": "^0.2.0",
     "react-tilt": "^1.0.2",
     "react-transition-group": "^4.4.5",
     "react-tsparticles": "^2.12.2",

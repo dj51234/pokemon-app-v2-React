@@ -1,8 +1,9 @@
+// src/components/PackSelection.js
 import React, { useState, useEffect } from 'react';
-import { fetchSetsForPackSelection } from '../js/api';
+import { fetchSetsForPackSelection, fetchRandomPokemonCards } from '../js/api';
 import '../styles/PackSelection.css';
 
-const PackSelection = ({ onSelect, show }) => {
+const PackSelection = ({ onSelect, show, onFetchCards }) => {
   const [sets, setSets] = useState([]);
   const twilightMasqueradeId = "sv6"; // Update with the actual set ID for Twilight Masquerade
 
@@ -20,6 +21,14 @@ const PackSelection = ({ onSelect, show }) => {
     getSets();
   }, []);
 
+  const handleClick = async (setId) => {
+    if (setId === twilightMasqueradeId) {
+      const cards = await fetchRandomPokemonCards();
+      onFetchCards(cards);
+    }
+    onSelect(setId);
+  };
+
   return (
     <div className={`pack-selection ${show ? 'shift-left' : ''}`}>
       <h2>Step 1: Select Your Pack</h2>
@@ -29,7 +38,7 @@ const PackSelection = ({ onSelect, show }) => {
             <div
               key={index}
               className={`set ${set.id === twilightMasqueradeId ? "highlighted" : ""}`}
-              onClick={() => set.id === twilightMasqueradeId && onSelect(set.id)}
+              onClick={() => handleClick(set.id)}
               style={set.id === twilightMasqueradeId ? { cursor: "pointer" } : { cursor: "default" }}
             >
               {set.id === twilightMasqueradeId && <div className="arrow-indicator"></div>}

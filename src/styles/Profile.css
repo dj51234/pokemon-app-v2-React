@@ -111,6 +111,7 @@ input[type="file"] {
   cursor: pointer;
   background-color: white;
   transition: background-color 0.3s ease;
+  padding-inline: .5rem;
 }
 
 .profile-details h2:hover {
@@ -165,6 +166,7 @@ input[type="file"] {
   margin-left: 0;
   transition: margin-left 0.3s ease;
   color: black;
+  padding-inline: .5rem;
 }
 
 .profile-stats {

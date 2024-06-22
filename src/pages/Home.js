@@ -7,10 +7,15 @@ import '../styles/Home.css';
 
 const Home = () => {
   const [showPackOpening, setShowPackOpening] = useState(false);
+  const [randomCards, setRandomCards] = useState([]);
 
   const handlePackSelect = (setId) => {
     console.log(`Selected pack: ${setId}`);
     setShowPackOpening(true);
+  };
+
+  const handleFetchCards = (cards) => {
+    setRandomCards(cards);
   };
 
   const handleBack = () => {
@@ -21,12 +26,11 @@ const Home = () => {
     <div className="app">
       <Hero />
       <div className="main-container">
-        <PackSelection onSelect={handlePackSelect} show={showPackOpening} />
-        <PackOpening onBack={handleBack} show={showPackOpening} />
+        <PackSelection onSelect={handlePackSelect} show={showPackOpening} onFetchCards={handleFetchCards} />
+        <PackOpening onBack={handleBack} show={showPackOpening} randomCards={randomCards} />
       </div>
     </div>
   );
 };
 
 export default Home;
-

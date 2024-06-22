@@ -1,3 +1,4 @@
+//  src/js/api.js
 import pokemon from 'pokemontcgsdk';
 
 pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
@@ -20,17 +21,28 @@ export async function fetchCardData(cardIDs) {
   }
 }
 
+async function fetchSetLength(setCode) {
+  try {
+    const setDetails = await pokemon.set.find(setCode);
+    return setDetails.printedTotal;
+  } catch (error) {
+    console.error('Error fetching set details:', error);
+    throw error;
+  }
+}
+
 export async function fetchRandomPokemonCards() {
   try {
-    const setCode = 'base1'; // Set code for base1 set
-    const numberOfCards = 5; // Number of random cards to fetch
+    const setCode = 'sv6'; // Set code for Twilight Masquerade set
+    const numberOfCards = 10; // Number of random cards to fetch
 
-    // Generate 5 random numbers between 1 and 102 (inclusive) for card indices
-    const randomCardIndices = Array.from({ length: numberOfCards }, () => Math.floor(Math.random() * 102) + 1);
+    // Fetch the length of the set
+    const totalCards = await fetchSetLength(setCode);
 
-    // Fetch card data for each random index
-    const randomCardData = await Promise.all(randomCardIndices.map(index => pokemon.card.find(`${setCode}-${index}`)));
-
+    // Generate random numbers based on the total number of cards in the set
+    const randomCardNumbers = Array.from({ length: numberOfCards }, () => Math.floor(Math.random() * totalCards) + 1);
+    // Fetch card data for each random card number
+    const randomCardData = await Promise.all(randomCardNumbers.map(number => pokemon.card.find(`${setCode}-${number}`)));
     return randomCardData;
   } catch (error) {
     console.error('Error fetching random Pokémon cards:', error);
