@@ -38,7 +38,7 @@ const Hero = () => {
         </section>
         <section className="hero-image">
           <Tilt tiltMaxAngleX={20} tiltMaxAngleY={20} transitionSpeed={1500}>
-            <div className="pokemon-card">
+            <div className="pokemon-card secret-rare">
               <img src="https://images.pokemontcg.io/sv6/25_hires.png" alt="" style={{ visibility: 'hidden' }} />
             </div>
           </Tilt>

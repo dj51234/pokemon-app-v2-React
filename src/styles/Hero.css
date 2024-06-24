@@ -29,12 +29,14 @@ main section {
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
+  flex: 1;
 }
 
 .hero-buttons {
   display: flex;
   gap: 3rem;
+  margin-top: 2rem;
 }
 
 .hero-buttons a {
@@ -87,16 +89,16 @@ main span {
 
 .hero-image {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   z-index: 1;
 }
 
 .pokemon-card {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 200000 / 278367;
   overflow: hidden;
-  background-image: url('https://images.pokemontcg.io/sv6/25_hires.png');
+  background-image: url('https://images.pokemontcg.io/xyp/XY124_hires.png');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -159,3 +161,4 @@ main span {
     transform: rotate(45deg) translate(20px, 20px);
   }
 }
+

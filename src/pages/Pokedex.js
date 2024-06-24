@@ -4,7 +4,7 @@ import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
 import Footer from '../components/Footer';
 import loadingGif from '../assets/loading-gif.gif';
-import { fetchSetData, fetchCardData, fetchRandomPokemonCards, fetchPokemonCardsByName, fetchAllPokemonNames } from '../js/api';
+import { fetchSetData, fetchCardData, fetchPokemonCardsByName, fetchAllPokemonNames, fetchRandomPokemonCardsForPokedex } from '../js/api'; // Added fetchRandomPokemonCardsForPokedex import
 import leven from 'leven';
 import '../styles/Grid.css';
 
@@ -15,16 +15,16 @@ const PokedexPage = () => {
   const [selectedSeries, setSelectedSeries] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [displayedSets, setDisplayedSets] = useState([]);
-  const [viewMode, setViewMode] = useState('sets'); // 'sets' or 'cards'
+  const [viewMode, setViewMode] = useState('sets');
   const [selectedSet, setSelectedSet] = useState(null);
   const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const [isLoadingSets, setIsLoadingSets] = useState(true); // Loading state for sets
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSets, setIsLoadingSets] = useState(true);
   const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('');
-  const [searchBy, setSearchBy] = useState('set'); // 'set' or 'pokemon'
-  const [noResults, setNoResults] = useState(false); // No results state
-  const [suggestedPokemon, setSuggestedPokemon] = useState([]); // Suggested Pokémon names
-  const [pokemonNames, setPokemonNames] = useState([]); // List of all Pokémon names
+  const [searchBy, setSearchBy] = useState('set');
+  const [noResults, setNoResults] = useState(false);
+  const [suggestedPokemon, setSuggestedPokemon] = useState([]);
+  const [pokemonNames, setPokemonNames] = useState([]);
 
   useEffect(() => {
     fetchSetData().then(data => {
@@ -34,30 +34,25 @@ const PokedexPage = () => {
         cardIDs: Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
       }));
       setSets(updatedData);
-      setOriginalSets(updatedData); // Save original sets data
+      setOriginalSets(updatedData);
       setSeries([...new Set(updatedData.map(set => set.series))]);
-      setIsLoadingSets(false); // Set loading state for sets to false
+      setIsLoadingSets(false);
     }).catch(error => {
       console.error(error);
-      setIsLoadingSets(false); // Set loading state for sets to false even if there's an error
+      setIsLoadingSets(false);
     });
 
     const fetchNames = async () => {
       try {
         const names = await fetchAllPokemonNames();
-        if (names.length > 0) {
-          setPokemonNames(names);
-          console.log('Fetched Pokémon names:', names); // Log the fetched names
-        } else {
-          console.error('No Pokémon names fetched');
-        }
+        setPokemonNames(names);
       } catch (error) {
         console.error('Error fetching all Pokémon names:', error);
       }
     };
 
     fetchNames();
-  }, []); // Run only once when the component mounts
+  }, []);
 
   useEffect(() => {
     if (searchBy === 'set') {
@@ -90,13 +85,11 @@ const PokedexPage = () => {
     const order = e.target.value;
     setReleaseDateSortOrder(order);
     sortSets(order);
-    // Set the view mode back to 'sets'
     setViewMode('sets');
   };
 
   const handleSeriesChange = (e) => {
     setSelectedSeries(e.target.value);
-    // Set the view mode back to 'sets'
     setViewMode('sets');
     setCards([]);
   };
@@ -122,7 +115,6 @@ const PokedexPage = () => {
       setIsLoading(true);
       try {
         let cardData = await fetchPokemonCardsByName(term);
-        // Filter out cards from the excluded sets
         cardData = cardData.filter(card => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id));
         setCards(cardData);
         setViewMode('cards');
@@ -143,12 +135,12 @@ const PokedexPage = () => {
   };
 
   const handleSetClick = async (set) => {
-    setIsLoading(true); // Set loading state
+    setIsLoading(true);
     const cardData = await fetchCardData(set.cardIDs);
     setCards(cardData);
     setSelectedSet(set);
     setViewMode('cards');
-    setIsLoading(false); // Turn off loading state after fetching card data
+    setIsLoading(false);
   };
 
   const handleBackToSets = () => {
@@ -159,19 +151,17 @@ const PokedexPage = () => {
 
   const handleToggleSearchBy = async (value) => {
     setSearchBy(value);
-    setSearchTerm(''); // Clear search term when toggling search by
-    setNoResults(false); // Clear no results state
-    setSuggestedPokemon([]); // Clear suggested Pokémon
+    setSearchTerm('');
+    setNoResults(false);
+    setSuggestedPokemon([]);
+    setCards([]);
     if (value === 'pokemon') {
       setIsLoading(true);
-      const randomPokemonCards = await fetchRandomPokemonCards();
+      const randomPokemonCards = await fetchRandomPokemonCardsForPokedex(5);
       setCards(randomPokemonCards);
-      setViewMode('cards');
       setIsLoading(false);
-    } else {
-      setViewMode('sets');
-      setCards([]);
     }
+    setViewMode(value === 'pokemon' ? 'cards' : 'sets');
   };
 
   const handleSuggestedPokemonClick = (name) => {
@@ -195,7 +185,7 @@ const PokedexPage = () => {
           handleToggleSearchBy={handleToggleSearchBy}
           handleSearch={() => handleSearch(searchTerm)}
         />
-        {isLoading || isLoadingSets ? ( // Conditional rendering for loading state
+        {isLoading || isLoadingSets ? (
           <div className="loading-container">
             <img src={loadingGif} alt="Loading..." />
           </div>

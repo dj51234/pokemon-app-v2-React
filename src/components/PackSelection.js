@@ -1,17 +1,16 @@
-// src/components/PackSelection.js
 import React, { useState, useEffect } from 'react';
 import { fetchSetsForPackSelection, fetchRandomPokemonCards } from '../js/api';
 import '../styles/PackSelection.css';
 
 const PackSelection = ({ onSelect, show, onFetchCards }) => {
   const [sets, setSets] = useState([]);
-  const twilightMasqueradeId = "sv6"; // Update with the actual set ID for Twilight Masquerade
+  const [highlightedSetId, setHighlightedSetId] = useState('sv6'); // Default to Twilight Masquerade
 
   useEffect(() => {
     const getSets = async () => {
       try {
         const setData = await fetchSetsForPackSelection();
-        const twilightMasquerade = setData.find(set => set.id === twilightMasqueradeId);
+        const twilightMasquerade = setData.find(set => set.id === 'sv6');
         const popularSets = setData.filter(set => ["base1", "neo1", "gym1"].includes(set.id));
         setSets([twilightMasquerade, ...popularSets]);
       } catch (error) {
@@ -21,11 +20,13 @@ const PackSelection = ({ onSelect, show, onFetchCards }) => {
     getSets();
   }, []);
 
+  const handleHover = (setId) => {
+    setHighlightedSetId(setId);
+  };
+
   const handleClick = async (setId) => {
-    if (setId === twilightMasqueradeId) {
-      const cards = await fetchRandomPokemonCards();
-      onFetchCards(cards);
-    }
+    const cards = await fetchRandomPokemonCards(setId);
+    onFetchCards(cards);
     onSelect(setId);
   };
 
@@ -37,11 +38,13 @@ const PackSelection = ({ onSelect, show, onFetchCards }) => {
           set ? (
             <div
               key={index}
-              className={`set ${set.id === twilightMasqueradeId ? "highlighted" : ""}`}
+              className={`set ${set.id === highlightedSetId ? "highlighted" : ""}`}
+              onMouseEnter={() => handleHover(set.id)}
               onClick={() => handleClick(set.id)}
-              style={set.id === twilightMasqueradeId ? { cursor: "pointer" } : { cursor: "default" }}
+              style={{ cursor: "pointer" }}
+              data-set-id={set.id}
             >
-              {set.id === twilightMasqueradeId && <div className="arrow-indicator"></div>}
+              {set.id === highlightedSetId && <div className="arrow-indicator"></div>}
               <img src={set.logo} alt={set.name} />
               <div className="set-text">
                 <h3>{set.name}</h3>

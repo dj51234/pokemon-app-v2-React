@@ -24,16 +24,15 @@ export async function fetchCardData(cardIDs) {
 async function fetchSetLength(setCode) {
   try {
     const setDetails = await pokemon.set.find(setCode);
-    return setDetails.printedTotal;
+    return setDetails.printedTotal; // Use printedTotal instead of totalCards
   } catch (error) {
     console.error('Error fetching set details:', error);
     throw error;
   }
 }
 
-export async function fetchRandomPokemonCards() {
+export async function fetchRandomPokemonCards(setCode) {
   try {
-    const setCode = 'sv6'; // Set code for Twilight Masquerade set
     const numberOfCards = 10; // Number of random cards to fetch
 
     // Fetch the length of the set
@@ -41,14 +40,17 @@ export async function fetchRandomPokemonCards() {
 
     // Generate random numbers based on the total number of cards in the set
     const randomCardNumbers = Array.from({ length: numberOfCards }, () => Math.floor(Math.random() * totalCards) + 1);
+
     // Fetch card data for each random card number
     const randomCardData = await Promise.all(randomCardNumbers.map(number => pokemon.card.find(`${setCode}-${number}`)));
+
     return randomCardData;
   } catch (error) {
     console.error('Error fetching random Pokémon cards:', error);
     throw error;
   }
 }
+
 
 export async function fetchPokemonCardsByName(name) {
   try {
@@ -104,5 +106,37 @@ export async function fetchSetsForPackSelection() {
   } catch (error) {
     console.error('Error fetching sets for pack selection:', error);
     return [];
+  }
+}
+
+export async function logRarities() {
+  try {
+    const rarities = await pokemon.rarity.all();
+    console.log('Rarities:', rarities);
+  } catch (error) {
+    console.error('Error fetching rarities:', error);
+  }
+}
+
+// Call the function on page load
+logRarities();
+
+export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
+  try {
+    const sets = await fetchSetData();
+    const allCardIDs = sets.flatMap(set => 
+      Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
+    );
+
+    const randomCardIDs = Array.from({ length: numberOfCards }, () =>
+      allCardIDs[Math.floor(Math.random() * allCardIDs.length)]
+    );
+
+    const randomCardData = await fetchCardData(randomCardIDs);
+
+    return randomCardData;
+  } catch (error) {
+    console.error('Error fetching random Pokémon cards for Pokedex:', error);
+    throw error;
   }
 }

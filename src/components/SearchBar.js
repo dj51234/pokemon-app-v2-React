@@ -1,4 +1,3 @@
-// SearchBar.js
 import React, { useRef, useEffect } from 'react';
 import '../styles/SearchBar.css';
 
@@ -12,7 +11,7 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
   };
 
   useEffect(() => {
-    if (inputRef.current    ) {
+    if (inputRef.current) {
       inputRef.current.value = '';
       setSearchTerm('');
     }
@@ -68,4 +67,3 @@ const SearchBar = ({ handleBackToSets, setSearchTerm, series, setSelectedSeries,
 };
 
 export default SearchBar;
-
