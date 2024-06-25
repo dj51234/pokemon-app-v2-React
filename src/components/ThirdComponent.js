@@ -1,12 +1,12 @@
-// src/components/ThirdComponent.js
 import React from 'react';
 import '../styles/ThirdComponent.css';
 
-const ThirdComponent = ({ show }) => {
+const ThirdComponent = ({ show, onBack }) => {
   return (
-    <div className={`third-component`}>
+    <div className={`third-component ${show ? 'show' : ''}`}>
       <div className="third-component-content">
-        <h2>Third Component</h2>
+        <h2>Step 3: Add To Binder</h2>
+        <button className="back-button" onClick={onBack}>Back to Pack Opening</button>
       </div>
     </div>
   );

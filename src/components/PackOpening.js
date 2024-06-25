@@ -1,9 +1,8 @@
-// src/components/PackOpening.js
 import React, { useState, useEffect } from 'react';
 import '../styles/PackOpening.css';
 import defaultImage from '../assets/default-image.png';
 
-const PackOpening = ({ show, randomCards, onBack }) => {
+const PackOpening = ({ show, randomCards, onBack, onNext }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
   const [animating, setAnimating] = useState(false);
@@ -68,6 +67,7 @@ const PackOpening = ({ show, randomCards, onBack }) => {
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
+        <h2>Step 2: Open Your Pack</h2>
         <div className="card-stack">
           {leftStack.map((card, index) => (
             <div
@@ -82,7 +82,10 @@ const PackOpening = ({ show, randomCards, onBack }) => {
             </div>
           ))}
         </div>
-        <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
+        <div className="pack-opening-buttons">
+          <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
+          <button className="next-button" onClick={onNext}>Next</button>
+        </div>
       </div>
     </div>
   );

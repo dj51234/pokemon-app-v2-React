@@ -1,17 +1,38 @@
-/* src/styles/ThirdComponent.css */
 .third-component {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 200%;
-  transition: transform 0.5s ease-in-out;
-  z-index: 100000;
-  color: white;
+  justify-content: center;
+}
+
+.third-component h2 {
+  font-size: 5rem;
+  font-weight: 600;
 }
 
 .third-component-content {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-button {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  color: var(--white);
+  background-color: var(--black);
+  border: 2px solid var(--yellow);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.back-button:hover {
+  background-color: var(--yellow);
+  color: var(--black);
+  transform: scale(1.05);
 }

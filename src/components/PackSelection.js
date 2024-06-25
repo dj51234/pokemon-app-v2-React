@@ -1,9 +1,8 @@
-// src/components/PackSelection.js
 import React, { useState, useEffect } from 'react';
 import { fetchSetsForPackSelection, fetchRandomPokemonCards } from '../js/api';
 import '../styles/PackSelection.css';
 
-const PackSelection = ({ onSelect, show, onFetchCards }) => {
+const PackSelection = ({ onSelect, show, onFetchCards, onNext }) => {
   const [sets, setSets] = useState([]);
   const [highlightedSetId, setHighlightedSetId] = useState('sv6'); // Default to Twilight Masquerade
 
@@ -29,10 +28,11 @@ const PackSelection = ({ onSelect, show, onFetchCards }) => {
     const cards = await fetchRandomPokemonCards(setId);
     onFetchCards(cards);
     onSelect(setId);
+    onNext();
   };
 
   return (
-    <div className={`pack-selection ${show ? 'shift-left' : ''}`}>
+    <div className={`pack-selection ${show ? 'show' : ''}`}>
       <h2>Step 1: Select Your Pack</h2>
       <div className="sets-container">
         {sets.map((set, index) => (
