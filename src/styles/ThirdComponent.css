@@ -15,12 +15,46 @@
   align-items: center;
 }
 
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.carousel-button {
+  background-color: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.carousel-button:hover {
+  background-color: var(--yellow);
+  color: var(--black);
+  transform: scale(1.05);
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-  width: 100%;
+  width: 80%;
   max-width: 1200px;
+  margin: 0 2rem;
+  transition: transform 0.5s ease;
+  position: relative;
+}
+
+.card-grid.slide-left {
+  transform: translateX(-100%);
+}
+
+.card-grid.slide-right {
+  transform: translateX(100%);
 }
 
 .card-item {

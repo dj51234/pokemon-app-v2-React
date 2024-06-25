@@ -90,7 +90,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         </div>
         <div className="pack-opening-buttons">
           <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
-          <button className="next-button" onClick={handleNextClick}>Next</button>
+          {allFlipped && <button className="next-button" onClick={handleNextClick}>Add to Binder</button>}
         </div>
       </div>
     </div>
