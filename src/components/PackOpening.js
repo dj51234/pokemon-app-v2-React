@@ -1,13 +1,14 @@
+// src/components/PackOpening.js
 import React, { useState, useEffect } from 'react';
 import '../styles/PackOpening.css';
 import defaultImage from '../assets/default-image.png';
 
-const PackOpening = ({ show, randomCards }) => {
+const PackOpening = ({ show, randomCards, onBack }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
   const [animating, setAnimating] = useState(false);
   const [allFlipped, setAllFlipped] = useState(false);
-  const [movingCard, setMovingCard] = useState(null); // Track which card is being moved
+  const [movingCard, setMovingCard] = useState(null);
 
   useEffect(() => {
     if (randomCards.length > 0) {
@@ -24,7 +25,6 @@ const PackOpening = ({ show, randomCards }) => {
     if (!allFlipped && cardsToShow.length > 0) {
       setAnimating(true);
 
-      // Flip all cards
       const updatedStack = newLeftStack.map((card, i) => {
         if (!card.flipped && cardsToShow.length > 0) {
           const randomCard = cardsToShow.pop();
@@ -39,7 +39,7 @@ const PackOpening = ({ show, randomCards }) => {
 
       setTimeout(() => {
         setAnimating(false);
-      }, 600); // Duration of the flip animation
+      }, 600);
     } else if (card.flipped) {
       setAnimating(true);
       setMovingCard(index);
@@ -50,13 +50,24 @@ const PackOpening = ({ show, randomCards }) => {
         setLeftStack(newLeftStack);
         setMovingCard(null);
         setAnimating(false);
-      }, 700); // Duration of the move to back animation
+      }, 700);
     }
+  };
+
+  const handleBackClick = () => {
+    // Set a delay to reset the state after the sliding animation has completed
+    setTimeout(() => {
+      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
+      setCardsToShow([]);
+      setAllFlipped(false);
+      setMovingCard(null);
+    }, 500); // Adjust the delay to match the animation duration
+    onBack();
   };
 
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
-      <div className='pack-opening-content'>
+      <div className="pack-opening-content">
         <div className="card-stack">
           {leftStack.map((card, index) => (
             <div
@@ -71,6 +82,7 @@ const PackOpening = ({ show, randomCards }) => {
             </div>
           ))}
         </div>
+        <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
       </div>
     </div>
   );

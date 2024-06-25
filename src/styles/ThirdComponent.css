@@ -1,0 +1,17 @@
+/* src/styles/ThirdComponent.css */
+.third-component {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 200%;
+  transition: transform 0.5s ease-in-out;
+  z-index: 100000;
+  color: white;
+}
+
+.third-component-content {
+  text-align: center;
+}

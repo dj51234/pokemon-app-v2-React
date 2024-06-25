@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import PackSelection from '../components/PackSelection';
 import PackOpening from '../components/PackOpening';
+import ThirdComponent from '../components/ThirdComponent';
 import '../styles/Home.css';
 
 const Home = () => {
@@ -28,6 +29,7 @@ const Home = () => {
       <div className="main-container">
         <PackSelection onSelect={handlePackSelect} show={showPackOpening} onFetchCards={handleFetchCards} />
         <PackOpening onBack={handleBack} show={showPackOpening} randomCards={randomCards} />
+        <ThirdComponent show={false} />
       </div>
     </div>
   );

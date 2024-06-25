@@ -1,4 +1,4 @@
-//  src/js/api.js
+// src/js/api.js
 import pokemon from 'pokemontcgsdk';
 
 pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
@@ -37,12 +37,22 @@ export async function fetchRandomPokemonCards(setCode) {
 
     // Fetch the length of the set
     const totalCards = await fetchSetLength(setCode);
+    console.log(`Total cards in set ${setCode}:`, totalCards);
 
-    // Generate random numbers based on the total number of cards in the set
-    const randomCardNumbers = Array.from({ length: numberOfCards }, () => Math.floor(Math.random() * totalCards) + 1);
+    // Use a Set to ensure unique random numbers
+    const uniqueCardNumbers = new Set();
+    while (uniqueCardNumbers.size < numberOfCards) {
+      const randomNum = Math.floor(Math.random() * totalCards) + 1;
+      uniqueCardNumbers.add(randomNum);
+      console.log(`Generated random number: ${randomNum}, Unique numbers so far:`, [...uniqueCardNumbers]);
+    }
 
-    // Fetch card data for each random card number
-    const randomCardData = await Promise.all(randomCardNumbers.map(number => pokemon.card.find(`${setCode}-${number}`)));
+    console.log(`Final set of unique card numbers:`, [...uniqueCardNumbers]);
+
+    // Convert Set to Array and fetch card data for each random card number
+    const randomCardData = await Promise.all([...uniqueCardNumbers].map(number => pokemon.card.find(`${setCode}-${number}`)));
+
+    console.log(`Fetched card data:`, randomCardData);
 
     return randomCardData;
   } catch (error) {
