@@ -8,6 +8,7 @@ import '../styles/Home.css';
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [randomCards, setRandomCards] = useState([]);
+  const [revealedCards, setRevealedCards] = useState([]);
 
   const handlePackSelect = (setId) => {
     console.log(`Selected pack: ${setId}`);
@@ -25,13 +26,17 @@ const Home = () => {
     setCurrentIndex(currentIndex + 1);
   };
 
+  const handleAddRevealedCards = (newCards) => {
+    setRevealedCards([...revealedCards, ...newCards]);
+  };
+
   return (
     <div className="app">
       <Hero />
       <div className="carousel-container" style={{ transform: `translateX(-${currentIndex * 100}vw)` }}>
         <PackSelection onSelect={handlePackSelect} show={currentIndex === 0} onFetchCards={handleFetchCards} onNext={handleNext} />
-        <PackOpening onBack={handleBack} show={currentIndex === 1} randomCards={randomCards} onNext={handleNext} />
-        <ThirdComponent show={currentIndex === 2} onBack={handleBack} />
+        <PackOpening onBack={handleBack} show={currentIndex === 1} randomCards={randomCards} onNext={handleNext} addRevealedCards={handleAddRevealedCards} />
+        <ThirdComponent show={currentIndex === 2} revealedCards={revealedCards} onBack={handleBack} />
       </div>
     </div>
   );

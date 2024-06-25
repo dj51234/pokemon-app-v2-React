@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/PackOpening.css';
 import defaultImage from '../assets/default-image.png';
 
-const PackOpening = ({ show, randomCards, onBack, onNext }) => {
+const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
   const [animating, setAnimating] = useState(false);
@@ -64,6 +64,12 @@ const PackOpening = ({ show, randomCards, onBack, onNext }) => {
     onBack();
   };
 
+  const handleNextClick = () => {
+    const newRevealedCards = leftStack.filter(card => card.flipped).map(card => ({ image: card.front }));
+    addRevealedCards(newRevealedCards);
+    onNext();
+  };
+
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
@@ -84,7 +90,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext }) => {
         </div>
         <div className="pack-opening-buttons">
           <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
-          <button className="next-button" onClick={onNext}>Next</button>
+          <button className="next-button" onClick={handleNextClick}>Next</button>
         </div>
       </div>
     </div>
