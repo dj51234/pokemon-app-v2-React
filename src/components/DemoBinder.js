@@ -1,9 +1,10 @@
+// src/components/DemoBinder.js
 import React, { useState } from 'react';
-import '../styles/ThirdComponent.css';
+import '../styles/DemoBinder.css';
 
 const CARDS_PER_PAGE = 12; // Number of cards to display per page
 
-const ThirdComponent = ({ show, revealedCards, onBack }) => {
+const DemoBinder = ({ show, revealedCards, onBack }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const totalPages = Math.ceil(revealedCards.length / CARDS_PER_PAGE);
@@ -22,8 +23,8 @@ const ThirdComponent = ({ show, revealedCards, onBack }) => {
   const currentCards = reversedCards.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE);
 
   return (
-    <div className={`third-component ${show ? 'show' : ''}`}>
-      <div className="third-component-content">
+    <div className={`demo-binder ${show ? 'show' : ''}`}>
+      <div className="demo-binder-content">
         <h2>Step 3: Build Your Binder</h2>
         <div className="carousel">
           <button className="carousel-button" onClick={handlePrevPage}>{"<"}</button>
@@ -42,4 +43,4 @@ const ThirdComponent = ({ show, revealedCards, onBack }) => {
   );
 };
 
-export default ThirdComponent;
+export default DemoBinder;

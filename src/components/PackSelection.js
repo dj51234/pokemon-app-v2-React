@@ -1,3 +1,4 @@
+// src/components/PackSelection.js
 import React, { useState, useEffect } from 'react';
 import { fetchSetsForPackSelection, fetchRandomPokemonCards } from '../js/api';
 import '../styles/PackSelection.css';

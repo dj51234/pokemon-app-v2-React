@@ -1,8 +1,9 @@
+// src/pages/Home.js
 import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import PackSelection from '../components/PackSelection';
 import PackOpening from '../components/PackOpening';
-import ThirdComponent from '../components/ThirdComponent';
+import DemoBinder from '../components/DemoBinder';
 import '../styles/Home.css';
 
 
@@ -38,7 +39,7 @@ const Home = () => {
       <div className="carousel-container" style={{ transform: `translateX(-${currentIndex * 100}vw)` }}>
         <PackSelection onSelect={handlePackSelect} show={currentIndex === 0} onFetchCards={handleFetchCards} onNext={handleNext} />
         <PackOpening onBack={handleBack} show={currentIndex === 1} randomCards={randomCards} onNext={handleNext} addRevealedCards={handleAddRevealedCards} />
-        <ThirdComponent show={currentIndex === 2} revealedCards={revealedCards} onBack={handleBack} />
+        <DemoBinder show={currentIndex === 2} revealedCards={revealedCards} onBack={handleBack} />
       </div>
     </div>
   );

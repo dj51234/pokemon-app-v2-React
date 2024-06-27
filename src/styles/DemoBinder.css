@@ -1,5 +1,5 @@
-/* src/styles/ThirdComponent.css */
-.third-component {
+/* src/styles/DemoBinder.css */
+.demo-binder {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -7,7 +7,7 @@
   justify-content: center;
 }
 
-.third-component-content {
+.demo-binder-content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-.third-component-content h2 {
+.demo-binder-content h2 {
   font-size: 5rem;
 
 }
