@@ -5,23 +5,35 @@ import Pokedex from './pages/Pokedex';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import { auth } from './js/firebase';
+import { auth, firestore } from './js/firebase';
 import './index.css';
+import { doc, getDoc } from 'firebase/firestore';
 
 export const AuthContext = React.createContext();
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [profileColor, setProfileColor] = useState('#ffffff'); // Default color
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged(async user => {
       setCurrentUser(user);
+      if (user) {
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          if (userData.profileColor) {
+            setProfileColor(userData.profileColor);
+          }
+        }
+      }
     });
     return () => unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser }}>
+    <AuthContext.Provider value={{ currentUser, profileColor }}>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

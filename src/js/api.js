@@ -150,3 +150,5 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
     throw error;
   }
 }
+
+

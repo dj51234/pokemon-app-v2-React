@@ -10,6 +10,7 @@ import '../styles/google.css';
 import faceBookLogo from '../assets/facebook_icon.png';
 import googleLogo from '../assets/google_icon.png';
 import getErrorMessage from '../js/firebaseErrorMessages';
+import { getRandomColor } from '../utils/colorUtils';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -66,6 +67,8 @@ const Register = () => {
       return;
     }
 
+    const randomColor = getRandomColor();
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -76,7 +79,8 @@ const Register = () => {
         email: user.email,
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: ''
+        bio: '',
+        profileColor: randomColor // Store the generated random color
       });
       navigate('/profile');
     } catch (error) {
@@ -101,7 +105,8 @@ const Register = () => {
         email: user.email,
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: ''
+        bio: '',
+        profileColor: getRandomColor() // Store the generated random color
       });
       navigate('/profile');
     } catch (error) {
@@ -126,7 +131,8 @@ const Register = () => {
         email: user.email,
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: ''
+        bio: '',
+        profileColor: getRandomColor() // Store the generated random color
       });
       navigate('/profile');
     } catch (error) {

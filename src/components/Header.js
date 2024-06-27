@@ -6,10 +6,11 @@ import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
 import Sidebar from './Sidebar';
+import { isLightColor } from '../utils/colorUtils';
 
-const Header = ({ username, secondary }) => {
+const Header = ({ secondary }) => {
   const location = useLocation();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, profileColor } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [initial, setInitial] = useState('');
   const navigate = useNavigate();
@@ -17,10 +18,8 @@ const Header = ({ username, secondary }) => {
   useEffect(() => {
     if (currentUser && currentUser.displayName) {
       setInitial(currentUser.displayName.charAt(0).toUpperCase());
-    } else if (username) {
-      setInitial(username.charAt(0).toUpperCase());
     }
-  }, [currentUser, username]);
+  }, [currentUser]);
 
   const handleLogout = async () => {
     try {
@@ -39,10 +38,11 @@ const Header = ({ username, secondary }) => {
         </div>
       );
     }
-    if (currentUser || username) {
+    if (currentUser) {
+      const textColor = isLightColor(profileColor) ? 'black' : 'white';
       return (
         <div className="nav-default-image-wrapper" onClick={() => setSidebarOpen(true)}>
-          <div className="nav-default-image nav-profile-image">
+          <div className="nav-default-image nav-profile-image" style={{ backgroundColor: profileColor, color: textColor }}>
             {initial}
           </div>
         </div>

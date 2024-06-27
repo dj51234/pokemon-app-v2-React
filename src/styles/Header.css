@@ -1,4 +1,4 @@
-/* Existing styles */
+/* src/styles/Header.css */
 
 .header-wrap {
   width: 100vw;
@@ -107,42 +107,9 @@ nav ul li:nth-child(3) a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  color: black;
   font-size: 2rem;
   height: 100%;
   width: 100%;
   border-radius: 50%;
-}
-
-.profile-dropdown {
-  position: relative;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 70%;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  min-width: 160px;
-  border-radius: 0.5rem;
-}
-
-.profile-dropdown:hover .dropdown-menu,
-.dropdown-menu:hover {
-  display: block;
-}
-
-.dropdown-menu a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-menu a:hover {
-  background-color: #f1f1f1;
+  text-transform: uppercase; /* Ensure letter is uppercase */
 }

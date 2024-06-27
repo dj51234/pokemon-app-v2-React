@@ -5,10 +5,12 @@ import PackOpening from '../components/PackOpening';
 import ThirdComponent from '../components/ThirdComponent';
 import '../styles/Home.css';
 
+
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [randomCards, setRandomCards] = useState([]);
   const [revealedCards, setRevealedCards] = useState([]);
+  
 
   const handlePackSelect = (setId) => {
     console.log(`Selected pack: ${setId}`);

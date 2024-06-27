@@ -15,6 +15,11 @@
   align-items: center;
 }
 
+.third-component-content h2 {
+  font-size: 5rem;
+
+}
+
 .carousel {
   display: flex;
   align-items: center;

@@ -7,7 +7,7 @@ import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
 
 const Hero = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, profileColor } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleStartCollection = (e) => {

@@ -8,10 +8,15 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const [animating, setAnimating] = useState(false);
   const [allFlipped, setAllFlipped] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
+  const [sendingToBinder, setSendingToBinder] = useState(false);
+  const [hideStack, setHideStack] = useState(false);
 
   useEffect(() => {
     if (randomCards.length > 0) {
       setCardsToShow(randomCards);
+      setHideStack(false); // Ensure the stack is visible when new cards are set
+      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
+      setAllFlipped(false);
     }
   }, [randomCards]);
 
@@ -54,27 +59,34 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   };
 
   const handleBackClick = () => {
-    // Set a delay to reset the state after the sliding animation has completed
     setTimeout(() => {
       setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
       setCardsToShow([]);
       setAllFlipped(false);
       setMovingCard(null);
+      setHideStack(false); // Ensure the stack is visible when going back
     }, 500); // Adjust the delay to match the animation duration
     onBack();
   };
 
   const handleNextClick = () => {
+    setSendingToBinder(true);
     const newRevealedCards = leftStack.filter(card => card.flipped).map(card => ({ image: card.front }));
     addRevealedCards(newRevealedCards);
-    onNext();
+
+    // Wait for the animation to complete before hiding the stack
+    setTimeout(() => {
+      setSendingToBinder(false);
+      setHideStack(true);
+      onNext();
+    }, 600); // Duration should match the CSS transition duration
   };
 
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
         <h2>Step 2: Open Your Pack</h2>
-        <div className="card-stack">
+        <div className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
           {leftStack.map((card, index) => (
             <div
               key={index}

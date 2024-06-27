@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
@@ -7,8 +7,10 @@ import loadingGif from '../assets/loading-gif.gif';
 import { fetchSetData, fetchCardData, fetchPokemonCardsByName, fetchAllPokemonNames, fetchRandomPokemonCardsForPokedex } from '../js/api'; // Added fetchRandomPokemonCardsForPokedex import
 import leven from 'leven';
 import '../styles/Grid.css';
+import { AuthContext } from '../App';
 
 const PokedexPage = () => {
+  const { profileColor } = useContext(AuthContext);
   const [sets, setSets] = useState([]);
   const [originalSets, setOriginalSets] = useState([]);
   const [series, setSeries] = useState([]);

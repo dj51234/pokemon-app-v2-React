@@ -1,8 +1,12 @@
-// src/components/Sidebar.js
 import React from 'react';
 import '../styles/Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
+  const handleLogoutClick = () => {
+    handleLogout();
+    toggleSidebar(false);
+  };
+
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-content">
@@ -14,7 +18,7 @@ const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
           <li><a className="menu-item" href="/pokedex">Browse Cards</a></li>
           <li><a className="menu-item" href="/trade">Trade</a></li>
           <li><a className="menu-item" href="/settings">Settings</a></li>
-          <li><a className="menu-item" onClick={handleLogout} href="#logout">Logout</a></li>
+          <li><a className="menu-item" onClick={handleLogoutClick} href="#logout">Logout</a></li>
         </ul>
       </div>
     </div>

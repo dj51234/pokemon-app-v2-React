@@ -1,4 +1,3 @@
-// src/pages/Profile.js
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
@@ -10,6 +9,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import loadingGif from '../assets/loading-gif.gif';
+import { isLightColor } from '../utils/colorUtils';
 
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
@@ -17,7 +17,7 @@ const MAX_BIO_LENGTH = 200;
 const defaultBio = "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...";
 
 const Profile = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, profileColor } = useContext(AuthContext);
   const [profileImage, setProfileImage] = useState(currentUser?.photoURL || '');
   const [username, setUsername] = useState(currentUser?.displayName || '');
   const [bio, setBio] = useState(defaultBio);
@@ -172,9 +172,11 @@ const Profile = () => {
     }
   }, [newUsername]);
 
+  const textColor = isLightColor(profileColor) ? 'black' : 'white';
+
   return (
     <>
-      <Header secondary username={username} />
+      <Header secondary />
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">
@@ -187,7 +189,9 @@ const Profile = () => {
                 {profileImage ? (
                   <img src={profileImage} alt="Profile" className="profile-image" />
                 ) : (
-                  <div className="default-image">{username.charAt(0)}</div>
+                  <div className="default-image" style={{ backgroundColor: profileColor, color: textColor }}>
+                    {username.charAt(0)}
+                  </div>
                 )}
                 <input type="file" onChange={handleImageUpload} />
               </div>
