@@ -28,61 +28,6 @@
   transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
 }
 
-.card-stack.pulse {
-  border: 5px solid var(--yellow);
-  border-radius: 17px;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 10px var(--yellow);
-  }
-  50% {
-    box-shadow: 0 0 20px var(--yellow);
-  }
-  100% {
-    box-shadow: 0 0 10px var(--yellow);
-  }
-}
-
-.card-stack.shake {
-  animation: shake 0.5s;
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translate(0, 0);
-  }
-  10% {
-    transform: translate(-10px, -10px);
-  }
-  20% {
-    transform: translate(10px, -10px);
-  }
-  30% {
-    transform: translate(-10px, 10px);
-  }
-  40% {
-    transform: translate(10px, 10px);
-  }
-  50% {
-    transform: translate(-10px, -10px);
-  }
-  60% {
-    transform: translate(10px, -10px);
-  }
-  70% {
-    transform: translate(-10px, 10px);
-  }
-  80% {
-    transform: translate(10px, 10px);
-  }
-  90% {
-    transform: translate(-10px, -10px);
-  }
-}
-
 .card-stack.move-to-binder {
   transform: translateX(100vw);
   opacity: 0;
@@ -181,32 +126,4 @@
   background-color: var(--yellow);
   color: var(--black);
   transform: scale(1.05);
-}
-
-.next-button:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  border-color: #999;
-}
-
-/* Particle explosion effect */
-@keyframes explode {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-
-.particle {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: var(--yellow);
-  border-radius: 50%;
-  animation: explode 0.5s forwards;
 }
