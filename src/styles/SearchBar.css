@@ -97,6 +97,7 @@
   background-size: .65em auto;
   padding-left: 2rem;
   cursor: pointer;
+  margin-top: 0;
 }
 
 #search-container .toggle-button {

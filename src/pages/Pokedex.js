@@ -4,7 +4,7 @@ import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
 import Footer from '../components/Footer';
 import loadingGif from '../assets/loading-gif.gif';
-import { fetchSetData, fetchCardData, fetchPokemonCardsByName, fetchAllPokemonNames, fetchRandomPokemonCardsForPokedex } from '../js/api'; // Added fetchRandomPokemonCardsForPokedex import
+import { fetchSetData, fetchCardData, fetchPokemonCardsByName, fetchAllPokemonNames, fetchRandomPokemonCardsForPokedex } from '../js/api';
 import leven from 'leven';
 import '../styles/Grid.css';
 import { AuthContext } from '../App';
@@ -96,6 +96,28 @@ const PokedexPage = () => {
     setCards([]);
   };
 
+  const specialCases = {
+    "farfetchd": "farfetch'd",
+    "sirfetchd": "sirfetch'd",
+    "ho oh": "ho-oh",
+    "mr mime": "mr. mime",
+    "mime jr": "mime jr.",
+    "porygon2": "porygon2",
+    "porygonz": "porygon-z",
+    "type null": "type: null",
+    "nidoran f": "nidoran♀",
+    "nidoran m": "nidoran♂",
+    "wo chien": "wo-chien",
+    "chi yu": "chi-yu",
+    "chien pao": "chien-pao",
+    "ting lu": "ting-lu",
+  };
+
+  const normalizeName = (name) => {
+    const lowerCaseName = name.toLowerCase().replace(/\s+/g, '');
+    return specialCases[lowerCaseName] || name;
+  };
+
   const findBestMatches = (term, limit = 1) => {
     if (!pokemonNames.length) {
       console.error('Pokémon names list is empty.');
@@ -116,7 +138,9 @@ const PokedexPage = () => {
     if (searchBy === 'pokemon') {
       setIsLoading(true);
       try {
-        let cardData = await fetchPokemonCardsByName(term);
+        const normalizedTerm = normalizeName(term);
+        const specialSearchTerm = specialCases[normalizedTerm] || term;
+        let cardData = await fetchPokemonCardsByName(specialSearchTerm);
         cardData = cardData.filter(card => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id));
         setCards(cardData);
         setViewMode('cards');
@@ -167,8 +191,9 @@ const PokedexPage = () => {
   };
 
   const handleSuggestedPokemonClick = (name) => {
-    setSearchTerm(name);
-    handleSearch(name);
+    const normalizedName = normalizeName(name);
+    setSearchTerm(normalizedName);
+    handleSearch(normalizedName);
   };
 
   return (

@@ -1,10 +1,9 @@
-// Grid.js
 import React from 'react';
 import GridItem from './GridItem';
 import CardItem from './CardItem';
 import '../styles/Grid.css';
 
-const Grid = ({ sets, viewMode, cards, onSetClick }) => (
+const Grid = ({ sets, viewMode, cards = [], onSetClick }) => (
   <div id="grid">
     {viewMode === 'sets' ? (
       sets.map(set => <GridItem key={set.id} set={set} onSetClick={onSetClick} />)

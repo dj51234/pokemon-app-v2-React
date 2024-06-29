@@ -25,7 +25,7 @@
     flex: 1;
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.5rem;
-    padding: 2rem;
+    padding: 5rem;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
     background-color: rgba(0, 0, 0, 0.8);
@@ -51,7 +51,7 @@
   }
   
   .set.highlighted:hover {
-    transform: scale(1.15); 
+    transform: scale(1.1); 
   }
   
   @keyframes pulse {

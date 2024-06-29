@@ -127,3 +127,14 @@
   color: var(--black);
   transform: scale(1.05);
 }
+
+.pack-opening-buttons .back-button.highlighted {
+    border: 3px solid var(--yellow);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px var(--yellow);
+    margin-right: 1rem;
+    animation: pulse 2s infinite;
+    transition: transform 0.3s ease-in-out;
+    background: var(--yellow);
+    color: var(--black);
+}

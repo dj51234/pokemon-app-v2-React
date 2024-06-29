@@ -61,10 +61,9 @@ export async function fetchRandomPokemonCards(setCode) {
   }
 }
 
-
 export async function fetchPokemonCardsByName(name) {
   try {
-    const response = await pokemon.card.where({ q: `name:${name}` });
+    const response = await pokemon.card.where({ q: `name:"${name}"` });
     return response.data;
   } catch (error) {
     console.error('Error fetching Pokémon cards by name:', error);
@@ -150,5 +149,3 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
     throw error;
   }
 }
-
-

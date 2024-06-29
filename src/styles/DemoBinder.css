@@ -1,4 +1,3 @@
-/* src/styles/DemoBinder.css */
 .demo-binder {
   width: 100vw;
   height: 100vh;
@@ -17,7 +16,6 @@
 
 .demo-binder-content h2 {
   font-size: 5rem;
-
 }
 
 .carousel {
@@ -66,6 +64,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 200px; /* Set a maximum width for card items */
 }
 
 .card-item img {

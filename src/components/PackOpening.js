@@ -10,6 +10,8 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const [movingCard, setMovingCard] = useState(null);
   const [sendingToBinder, setSendingToBinder] = useState(false);
   const [hideStack, setHideStack] = useState(false);
+  const [highlightBackButton, setHighlightBackButton] = useState(false); // New state
+  const [hideNextButton, setHideNextButton] = useState(false); // New state
 
   useEffect(() => {
     if (randomCards.length > 0) {
@@ -17,6 +19,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       setHideStack(false); // Ensure the stack is visible when new cards are set
       setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
       setAllFlipped(false);
+      setHideNextButton(false); // Show the Add to Binder button when new cards are set
     }
   }, [randomCards]);
 
@@ -65,6 +68,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       setAllFlipped(false);
       setMovingCard(null);
       setHideStack(false); // Ensure the stack is visible when going back
+      setHighlightBackButton(false); // Remove highlight when going back
     }, 500); // Adjust the delay to match the animation duration
     onBack();
   };
@@ -78,6 +82,8 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     setTimeout(() => {
       setSendingToBinder(false);
       setHideStack(true);
+      setHighlightBackButton(true); // Highlight the button when adding to binder
+      setHideNextButton(true); // Hide the Add to Binder button after clicking
       onNext();
     }, 600); // Duration should match the CSS transition duration
   };
@@ -101,8 +107,8 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           ))}
         </div>
         <div className="pack-opening-buttons">
-          <button className="back-button" onClick={handleBackClick}>Back to Pack Selection</button>
-          {allFlipped && <button className="next-button" onClick={handleNextClick}>Add to Binder</button>}
+          <button className={`back-button ${highlightBackButton ? 'highlighted' : ''}`} onClick={handleBackClick}>Open New Pack</button>
+          {allFlipped && !hideNextButton && <button className="next-button" onClick={handleNextClick}>Add to Binder</button>}
         </div>
       </div>
     </div>
