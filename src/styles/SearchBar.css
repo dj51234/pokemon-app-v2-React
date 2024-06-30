@@ -80,6 +80,10 @@
   background-size: .65em auto, 100%;
 }
 
+#sort-options {
+  margin-left: -25px;
+}
+
 #search-container .back-button {
   width: 100%;
   max-width: max-content;

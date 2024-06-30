@@ -1,8 +1,5 @@
-.main-container {
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-}
+/* src/styles/Hero.css */
+
 
 #tsparticles {
   position: absolute;
@@ -29,7 +26,7 @@ main section {
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
   flex: 1;
 }
 
@@ -43,6 +40,7 @@ main section {
   text-decoration: none;
   padding: 1rem 2rem;
   border-radius: 1rem;
+  font-size: 2rem;
 }
 
 .hero-buttons a:first-child {
@@ -72,15 +70,16 @@ main section {
 }
 
 main h2 {
-  font-size: 5rem;
+  font-size: 5.5rem;
   font-weight: 600;
   color: var(--white);
 }
 
 main p {
   color: var(--subtext);
-  font-size: 1.7rem;
-  line-height: 2.5rem;
+  font-size: 2rem;
+  line-height: 3rem;
+  max-width: 90%;
 }
 
 main span {
@@ -89,7 +88,7 @@ main span {
 
 .hero-image {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   z-index: 1;
 }
@@ -131,8 +130,8 @@ main span {
 
 .arrow span {
   display: block;
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 2rem;
+  height: 2rem;
   border-bottom: 5px solid var(--yellow);
   border-right: 5px solid var(--yellow);
   transform: rotate(45deg);
@@ -162,3 +161,93 @@ main span {
   }
 }
 
+@media screen and (max-width: 1300px) {
+  main h2 {
+    font-size: 4.5rem;
+
+  }
+  main p {
+    font-size: 1.8rem;
+  }
+}
+/* Media Queries for Mobile Styles */
+@media screen and (max-width: 1200px) {
+  .hero-image {
+    display: none;
+  }
+
+  .pokemon-card {
+    max-width: 300px; /* Shrink card size as viewport shrinks */
+    width: 100%; /* Ensure width scales properly */
+  }
+  
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+  
+  main p {
+    max-width: 100%;
+  }
+
+}
+
+@media screen and (max-width: 850px) {
+  .arrow {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .pokemon-card {
+    max-width: 200px; /* Shrink card size further on smaller screens */
+    width: 100%; /* Ensure width scales properly */
+  }
+  main h2 {
+    font-size: 4.5rem;
+  
+  }
+  main p {
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  main h2 {
+    font-size: 3rem;
+  }
+
+  main p {
+    font-size: 1.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media screen and (max-width: 400px) {
+  main h2 {
+    font-size: 3rem;
+  }
+
+  main p {
+    font-size: 1.5rem;
+  }
+
+  .hero-text {
+    gap: 1rem;
+  }
+
+  .hero-buttons a {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+  }
+
+  .hero-buttons a:nth-child(2)  {
+    display: none;
+  }
+}

@@ -6,12 +6,14 @@ import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
 import Sidebar from './Sidebar';
+import HamburgerMenuSidebar from './HamburgerMenuSidebar';
 import { isLightColor } from '../utils/colorUtils';
 
 const Header = ({ secondary }) => {
   const location = useLocation();
   const { currentUser, profileColor } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [hamburgerSidebarOpen, setHamburgerSidebarOpen] = useState(false);
   const [initial, setInitial] = useState('');
   const navigate = useNavigate();
 
@@ -51,6 +53,10 @@ const Header = ({ secondary }) => {
     return null;
   };
 
+  const toggleHamburgerMenu = () => {
+    setHamburgerSidebarOpen(!hamburgerSidebarOpen);
+  };
+
   return (
     <div className={`header-wrap ${secondary ? 'header-wrap--secondary' : ''}`}>
       <header>
@@ -60,17 +66,27 @@ const Header = ({ secondary }) => {
           </Link>
         </div>
         <nav>
-          <ul>
-            {!currentUser && <li><Link to="/register">Register</Link></li>}
-            {!currentUser && <li><Link to="/login">Login</Link></li>}
-            {!currentUser && location.pathname !== '/pokedex' && (
-              <li><Link to="/pokedex">Browse Cards</Link></li>
-            )}
-            {currentUser && getProfileImage()}
-          </ul>
+          {!currentUser && (
+            <>
+              <ul className="nav-links">
+                <li><Link to="/register">Register</Link></li>
+                <li><Link to="/login">Login</Link></li>
+                {location.pathname !== '/pokedex' && (
+                  <li><Link to="/pokedex">Browse Cards</Link></li>
+                )}
+              </ul>
+              <div className="hamburger" onClick={toggleHamburgerMenu}>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </>
+          )}
+          {currentUser && getProfileImage()}
         </nav>
       </header>
       <Sidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} handleLogout={handleLogout} />
+      <HamburgerMenuSidebar isOpen={hamburgerSidebarOpen} toggleSidebar={setHamburgerSidebarOpen} />
     </div>
   );
 };

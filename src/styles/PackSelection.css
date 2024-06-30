@@ -3,7 +3,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 5rem;
+    gap: 7rem;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -81,8 +81,8 @@
     display: block;
     top: -3.9rem;
     left: 50%;
-    width: 1.3vw;
-    height: 1.3vw;
+    width: 1.3rem;
+    height: 1.3rem;
     border-bottom: 5px solid var(--yellow);
     border-right: 5px solid var(--yellow);
     animation: bounce 2s infinite;
@@ -96,6 +96,32 @@
     }
     50% {
       transform: translateX(-50%) translateY(-10px) rotate(45deg);
+    }
+  }
+
+  @media screen and (max-width: 1350px) {
+    .set:not(.highlighted) {
+      display: none;
+    }
+    .pack-selection h2 {
+      font-size: 4rem;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .pack-selection h2 {
+      font-size: 2.8rem;
+    }
+
+    .pack-selection {
+      gap: 10rem;
+    }
+
+    .set.highlighted {
+      margin-right: 0;
+    }
+    .set {
+      padding: 2rem;
     }
   }
   

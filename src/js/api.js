@@ -132,15 +132,21 @@ logRarities();
 
 export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
   try {
+    // Fetch all sets
     const sets = await fetchSetData();
-    const allCardIDs = sets.flatMap(set => 
-      Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
-    );
 
+    // Select a random set
+    const randomSet = sets[Math.floor(Math.random() * sets.length)];
+
+    // Get the IDs of all cards in the selected set
+    const cardIDs = Array.from({ length: randomSet.printedTotal }, (_, i) => `${randomSet.id}-${i + 1}`);
+
+    // Select random card IDs from the set
     const randomCardIDs = Array.from({ length: numberOfCards }, () =>
-      allCardIDs[Math.floor(Math.random() * allCardIDs.length)]
+      cardIDs[Math.floor(Math.random() * cardIDs.length)]
     );
 
+    // Fetch data for the selected random card IDs
     const randomCardData = await fetchCardData(randomCardIDs);
 
     return randomCardData;
@@ -149,3 +155,4 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
     throw error;
   }
 }
+

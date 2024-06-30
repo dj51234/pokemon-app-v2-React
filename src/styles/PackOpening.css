@@ -138,3 +138,23 @@
     background: var(--yellow);
     color: var(--black);
 }
+
+@media screen and (max-width: 1200px) {
+  .pack-opening h2 {
+    font-size: 4rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pack-opening h2 {
+    font-size: 3rem;
+  }
+
+  .pack-opening-content {
+    gap: 4rem;
+  }
+
+  .card-stack {
+    min-width: 200px;
+  }
+}

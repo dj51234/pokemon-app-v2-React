@@ -1,3 +1,4 @@
+/* src/styles/Home.css */
 body {
   font-family: Goldplay, sans-serif;
   font-size: 1.6rem;
@@ -10,13 +11,9 @@ body {
   width: 300vw; /* Three slides */
   height: 100vh;
   transition: transform 0.5s ease-in-out;
+
 }
 
 .app {
   overflow: hidden;
-}
-
-.main-container {
-  background-color: #070707;
-  border-block: 1px solid rgba(255, 255, 255, 0.11);
 }

@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/DemoBinder.css';
 
-const CARDS_PER_PAGE = 12; // Number of cards to display per page
+const getCardsPerPage = (width) => {
+  if (width <= 480) return 1;
+  if (width <= 768) return 2;
+  if (width <= 1200) return 4;
+  return 12;
+};
 
 const DemoBinder = ({ show, revealedCards, onBack }) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [cardsPerPage, setCardsPerPage] = useState(getCardsPerPage(window.innerWidth));
 
-  const totalPages = Math.ceil(revealedCards.length / CARDS_PER_PAGE);
+  useEffect(() => {
+    const handleResize = () => {
+      setCardsPerPage(getCardsPerPage(window.innerWidth));
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const totalPages = Math.ceil(revealedCards.length / cardsPerPage);
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => (prevPage > 0 ? prevPage - 1 : totalPages - 1));
@@ -19,7 +36,7 @@ const DemoBinder = ({ show, revealedCards, onBack }) => {
   // Reverse the order of revealedCards
   const reversedCards = [...revealedCards].reverse();
 
-  const currentCards = reversedCards.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE);
+  const currentCards = reversedCards.slice(currentPage * cardsPerPage, (currentPage + 1) * cardsPerPage);
 
   return (
     <div className={`demo-binder ${show ? 'show' : ''}`}>

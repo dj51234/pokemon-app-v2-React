@@ -113,3 +113,52 @@ nav ul li:nth-child(3) a:hover {
   border-radius: 50%;
   text-transform: uppercase; /* Ensure letter is uppercase */
 }
+
+/* src/styles/Header.css */
+
+/* Mobileb */
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--white);
+  margin: 5px 0;
+  transition: 0.4s;
+}
+
+@media screen and (max-width: 1200px) {
+  nav ul {
+    display: none;
+  }
+
+  nav ul.nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: var(--black);
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1201px) {
+  nav ul {
+    display: flex;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
