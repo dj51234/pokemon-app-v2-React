@@ -1,4 +1,3 @@
-// src/pages/Pokedex.js
 import React, { useEffect, useState, useContext } from 'react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
@@ -23,7 +22,7 @@ const PokedexPage = () => {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
-  const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('');
+  const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('asc'); // Default to ascending order
   const [searchBy, setSearchBy] = useState('set');
   const [noResults, setNoResults] = useState(false);
   const [suggestedPokemon, setSuggestedPokemon] = useState([]);
@@ -32,7 +31,8 @@ const PokedexPage = () => {
   useEffect(() => {
     fetchSetData().then(data => {
       const filteredData = data.filter(set => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id));
-      const updatedData = filteredData.map(set => ({
+      const sortedData = filteredData.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+      const updatedData = sortedData.map(set => ({
         ...set,
         cardIDs: Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
       }));
@@ -89,12 +89,13 @@ const PokedexPage = () => {
     setReleaseDateSortOrder(order);
     sortSets(order);
     setViewMode('sets');
+    setCards([]); // Clear cards when switching to sets view
   };
 
   const handleSeriesChange = (e) => {
     setSelectedSeries(e.target.value);
     setViewMode('sets');
-    setCards([]);
+    setCards([]); // Clear cards when switching to sets view
   };
 
   const specialCases = {
@@ -187,6 +188,8 @@ const PokedexPage = () => {
       const randomPokemonCards = await fetchRandomPokemonCardsForPokedex(5);
       setCards(randomPokemonCards);
       setIsLoading(false);
+    } else {
+      setCards([]); // Clear cards when switching to sets view
     }
     setViewMode(value === 'pokemon' ? 'cards' : 'sets');
   };

@@ -1,0 +1,34 @@
+/* src/styles/Dropdown.css */
+.dropdown-container {
+    position: relative;
+    padding-block: 1rem;
+  }
+  
+  .dropdown-toggle {
+    background-color: #141414;
+    color: var(--yellow);
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-size: 2rem;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--white);
+    border: 1px solid var(--black);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  @media (min-width: 1201px) {
+    .dropdown-container {
+      display: none;
+    }
+  }
+  

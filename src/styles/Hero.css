@@ -10,7 +10,7 @@
 
 main {
   margin: 0 auto;
-  max-width: 80%;
+  max-width: 75%;
   height: calc(100% - 106px - 1.5vw);
   display: flex;
   align-items: center;
@@ -251,4 +251,11 @@ main span {
   .hero-buttons a:nth-child(2)  {
     display: none;
   }
+}
+
+@media screen and (min-width: 2000px) {
+  main {
+    max-width: 65%;
+  }
+  
 }

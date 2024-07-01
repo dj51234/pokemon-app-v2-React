@@ -1,6 +1,8 @@
 .search-wrapper {
   background-color: var(--black);
   width: 100%;
+  position: relative;
+  height: auto;
 }
 
 #search-container {
@@ -8,7 +10,7 @@
   align-items: center;
   padding: 2rem 0;
   gap: 2rem;
-  max-width: 85%;
+  max-width: 75%;
   margin: 0 auto;
 }
 
@@ -31,6 +33,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  position: relative;
+  width: 100%;
 }
 
 #search-group label {
@@ -40,8 +44,8 @@
 }
 
 #search-bar {
-  width: 100%;
-  max-width: 500px;
+  width: calc(100% - 80px); /* Adjust width to fit buttons */
+  padding-right: 160px; /* Make space for the buttons */
   padding: 1rem;
   border: 2px solid var(--white);
   border-radius: 5px;
@@ -72,7 +76,7 @@
   font-size: 1.6rem;
   color: var(--black);
   padding: 1rem 2.5rem 1rem 1rem;
-  background-color: var(--white);
+  background-color: white;
   appearance: none;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="black" d="M2 0L0 2h4L2 0zm0 5L0 3h4l-2 2z"/></svg>');
   background-repeat: no-repeat;
@@ -81,7 +85,7 @@
 }
 
 #sort-options {
-  margin-left: -25px;
+  margin-left: -65px;
 }
 
 #search-container .back-button {
@@ -119,7 +123,6 @@
   cursor: pointer;
 }
 
-/* Add to SearchBar.css */
 .search-input-container {
   position: relative;
   display: inline-block;
@@ -127,16 +130,16 @@
 }
 
 #search-bar {
-  width: calc(100% - 40px); /* Adjust width to fit button */
-  padding-right: 80px; /* Make space for the button */
+  width: calc(100% - 80px); /* Adjust width to fit button */
+  padding-right: 160px; /* Make space for the button */
 }
 
 .search-button {
   position: absolute;
-  right: 3rem;
+  right: 0;
   top: 0;
   height: 100%;
-  width: 60px; /* Adjust width to fit your design */
+  width: 80px; /* Adjust width to fit your design */
   border: none;
   background: none;
   cursor: pointer;
@@ -151,6 +154,46 @@
   border-radius: 0 5px 5px 0;
 }
 
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw; /* Full width of the viewport */
+  background-color: var(--black); /* Match the color of the search bar */
+  color: var(--white);
+  z-index: 1000;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+}
+
+.dropdown-menu.visible {
+  max-height: max-content; /* Adjust this value based on the content height */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-category {
+  font-weight: bold;
+  color: grey;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--white);
+}
+
+.dropdown-item:hover {
+  background-color: var(--yellow);
+  color: var(--black);
+}
+
 .no-results {
   font-size: 3.6rem;
   color: var(--black);
@@ -159,3 +202,66 @@
   height: 100vh;
 }
 
+@media screen and (max-width: 1200px) {
+  #sort-options,
+  #series-options {
+    display: none;
+  }
+  #search-bar {
+    width: 100%;
+    padding-right: 0; /* Make space for the button */
+  }
+  .search-button {
+    right: -1rem;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  #search-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  #search-bar {
+    width: 100%;
+    padding-right: 80px; /* Adjust padding to fit the button */
+    margin-left: 0;
+  }
+
+  #search-group {
+    flex-direction:column;
+  }
+
+  #search-by-dropdown {
+    max-width: 100%;
+  }
+
+  .search-button {
+    position: static;
+    width: 100%;
+    height: 4rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    display: block;
+  }
+
+  .back-button {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 1rem;
+  }
+}
+
+@media screen and (min-width: 1201px) {
+  #sort-options,
+  #series-options {
+    display: inline-block;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  #search-container {
+    max-width: 65%;
+  }
+}
