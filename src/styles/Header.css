@@ -132,6 +132,16 @@ nav ul li:nth-child(3) a:hover {
   transition: 0.4s;
 }
 
+@media screen and (min-width: 1201px) {
+  nav ul {
+    display: flex;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   nav ul {
     display: none;
@@ -151,17 +161,18 @@ nav ul li:nth-child(3) a:hover {
   .hamburger {
     display: block;
   }
-}
 
-@media screen and (min-width: 1201px) {
-  nav ul {
-    display: flex;
-  }
-
-  .hamburger {
-    display: none;
+  header img {
+    height: 8rem;
   }
 }
+
+@media screen and (max-width: 500px) {
+  header img {
+    height: 6rem;
+  }
+}
+
 
 @media screen and (min-width: 2000px) {
   header {
