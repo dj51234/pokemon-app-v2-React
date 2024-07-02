@@ -39,7 +39,6 @@ html, body {
 
 .main-container {
     position: relative;
-    height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -54,29 +53,9 @@ html, body {
     justify-content: center;
 }
 
-@media screen and (orientation: landscape) {
+@media screen and (min-width: 1080px) {
     .main-container {
-        height: auto;
-    }
-    
-}
-
-@media screen and (orientation: portrait) {
-    .main-container {
-        height: auto;
+        height: 100vh;
     } 
 }
 
-/* iPad in portrait and landscape modes */
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-    .main-container {
-      height: auto;
-    }
-  }
-  
-  /* iPad Pro 12.9-inch in portrait and landscape modes */
-  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
-    .main-container {
-      height: auto;
-    }
-  }

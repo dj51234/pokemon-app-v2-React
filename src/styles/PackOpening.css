@@ -163,16 +163,6 @@
   }
 }
 
-@media screen and (orientation: landscape) {
-  .pack-opening {
-    margin-block: 25rem;
-  }
-
-  .card-stack {
-    min-width: 250px;
-  }
-}
-
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .pack-opening {
     margin-block: 0rem;
@@ -184,6 +174,12 @@
 @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
   .pack-opening {
     margin-block: 0rem;
-  
+  }
+}
+
+/* Mobile devices in landscape mode */
+@media only screen and (max-width: 915px) and (orientation: landscape) {
+  .card-stack {
+    min-width: 200px;
   }
 }

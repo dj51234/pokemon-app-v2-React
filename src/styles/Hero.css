@@ -190,7 +190,7 @@ main span {
   }
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1200px) {
   .arrow {
       display: none;
   }
@@ -201,9 +201,12 @@ main span {
       max-width: 200px;
       width: 100%;
   }
+
+
   main h2 {
       font-size: 4.5rem;
   }
+
   main p {
       font-size: 1.8rem;
   }
@@ -244,47 +247,6 @@ main span {
 @media screen and (min-width: 2000px) {
   main {
       max-width: 65%;
-  }
-}
-
-/* Media Queries for Landscape Mode */
-
-@media screen and (orientation: landscape) {
-  main {
-      flex-direction: row;
-      align-items: flex-start;
-  }
-  .hero-text {
-      flex: 1;
-      margin-top: 5rem;
-  }
-  .hero-buttons {
-      flex-direction: row;
-      justify-content: center;
-      margin-top: 1rem;
-  }
-  .hero-buttons a {
-      font-size: 1.5rem;
-      padding: 0.8rem 1.5rem;
-  }
-  main h2 {
-      font-size: 4rem;
-  }
-  main p {
-      font-size: 1.5rem;
-  }
-  .pokemon-card {
-      max-width: 200px;
-  }
-  .hero-image {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      display: none;
-  }
-  .arrow {
-    display: none;
   }
 }
 
