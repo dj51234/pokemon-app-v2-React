@@ -165,11 +165,21 @@ nav ul li:nth-child(3) a:hover {
   header img {
     height: 8rem;
   }
+
+  .nav-profile-image-wrapper, .nav-default-image-wrapper {
+    width: 55px;
+    height: 55px;
+  }
 }
 
 @media screen and (max-width: 500px) {
   header img {
     height: 6rem;
+  }
+
+  .nav-profile-image-wrapper, .nav-default-image-wrapper {
+    width: 45px;
+    height: 45px;
   }
 }
 

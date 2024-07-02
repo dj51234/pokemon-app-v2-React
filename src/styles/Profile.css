@@ -181,3 +181,25 @@ input[type="file"] {
 .profile-messages, .profile-binder {
   margin-top: 2rem;
 }
+
+@media screen and (max-width: 550px) {
+  .profile-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .profile-details {
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  .username-edit {
+    flex-direction:column;
+  }
+
+  .username-edit button {
+    width: 100%;
+  }
+}

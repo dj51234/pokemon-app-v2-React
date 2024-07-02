@@ -1,3 +1,4 @@
+/* src/styles/DemoBinder.css */
 .demo-binder {
   width: 100vw;
   height: 100vh;
@@ -109,6 +110,10 @@
   .card-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
+
+  .demo-binder .back-button {
+    width: inherit;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -117,6 +122,44 @@
   }
 
   .demo-binder-content h2 {
+    font-size: 2.8rem;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  }
+
+  .demo-binder-content h2 {
     font-size: 3rem;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .demo-binder {
+    margin-block: 25rem;
+  }
+}
+
+
+@media screen and (orientation: portrait) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .demo-binder {
+    margin-block: 0rem;
+    height: auto;
+  }
+}
+
+/* iPad Pro 12.9-inch in portrait and landscape modes */
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+  .demo-binder {
+    margin-block: 0rem;
+  
   }
 }

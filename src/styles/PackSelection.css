@@ -1,3 +1,4 @@
+/* src/styles/PackSelection.css */
 .pack-selection {
     width: 100vw;
     height: 100vh;
@@ -124,4 +125,30 @@
       padding: 2rem;
     }
   }
+
+  @media screen and (orientation: landscape) {
+    .pack-selection {
+      margin-block: 15rem;
+      min-height: 100%;
+    }
+    .set {
+      width: 300px;
+    }
+  }
+
+  /* iPad in portrait and landscape modes */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .pack-selection {
+    margin-block: 15rem;
+    height: auto;
+  }
+}
+
+/* iPad Pro 12.9-inch in portrait and landscape modes */
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+  .pack-selection {
+    margin-block: 0rem;
+    height: auto;
+  }
+}
   

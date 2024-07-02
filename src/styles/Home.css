@@ -9,9 +9,8 @@ body {
 .carousel-container {
   display: flex;
   width: 300vw; /* Three slides */
-  height: 100vh;
+  min-height: 100vh;
   transition: transform 0.5s ease-in-out;
-
 }
 
 .app {

@@ -53,3 +53,30 @@ html, body {
     flex-direction: column;
     justify-content: center;
 }
+
+@media screen and (orientation: landscape) {
+    .main-container {
+        height: auto;
+    }
+    
+}
+
+@media screen and (orientation: portrait) {
+    .main-container {
+        height: auto;
+    } 
+}
+
+/* iPad in portrait and landscape modes */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .main-container {
+      height: auto;
+    }
+  }
+  
+  /* iPad Pro 12.9-inch in portrait and landscape modes */
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) {
+    .main-container {
+      height: auto;
+    }
+  }
