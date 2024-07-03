@@ -1,5 +1,3 @@
-/* src/styles/SearchPage.css */
-
 .search-page {
     display: flex;
     flex-direction: column;
@@ -9,30 +7,119 @@
     min-height: 100vh;
 }
 
+.series-container {
+    max-width: 95%;
+    margin: 3rem auto;
+}
+
+.series-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
 .sets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
-    margin-top: 2rem;
 }
 
-.set-card {
+.set-card,
+.card-item {
     padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
+    border: 2px solid var(--black);
+    border-radius: .5rem;
     background-color: #fff;
     text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.set-card h3 {
+.set-card:hover,
+.card-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.set-card h3,
+.card-item h3 {
     margin: 0;
     font-size: 1.25rem;
     color: #333;
 }
 
-.set-card p {
+.set-card p,
+.card-item p {
     margin: 0.5rem 0;
     font-size: 1rem;
     color: #666;
 }
-  
+
+.card-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.card-wrapper::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    bottom: 10px;
+    background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
+    mix-blend-mode: color-dodge;
+    opacity: 0;
+    pointer-events: none; /* Ensure it doesn't block interactions */
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
+    opacity: 1; 
+}
+
+.card-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: inherit; /* Inherit border radius if needed */
+}
+
+.loading-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loading {
+    width: 10rem;
+    display: block;
+}
+
+.no-results {
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-secondary {
+    margin-top: auto;
+}

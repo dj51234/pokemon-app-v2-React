@@ -130,7 +130,7 @@ export async function logRarities() {
 // Call the function on page load
 logRarities();
 
-export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 5) {
+export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 10) {
   try {
     // Fetch all sets
     const sets = await fetchSetData();

@@ -1,130 +1,120 @@
 #grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    max-width: 85%;
-    margin: 3rem auto;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  max-width: 75%;
+  margin: 2rem auto;
+}
+
+.cards-grid {
+  max-width: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 3rem auto;
 }
 
 #grid .grid-item {
-    flex: 1 0 20%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem;
-    border: 2px solid var(--black);
-    border-radius: .5rem;
-    text-align: center;
-    text-decoration: none;
-    color: var(--black);
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border: 2px solid var(--black);
+  border-radius: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--black);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 #grid .grid-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 #grid .logo {
-    width: 100px;
-    height: auto;
+  width: 100px;
+  height: auto;
 }
 
 #grid .symbol {
-    width: 40px;
-    height: auto;
+  width: 40px;
+  height: auto;
 }
 
 #grid .grid-item .set-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .card-wrapper {
-    position: relative;
-    display: inline-block;
-    max-width: 100%;
-    max-height: 100%;
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .card-wrapper::after {
-    content: "";
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 10px;
-    bottom: 10px;
-    background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
-    mix-blend-mode: color-dodge;
-    opacity: 0;
-    pointer-events: none; /* Ensure it doesn't block interactions */
-    border-radius: 15px;
-    overflow: hidden;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
+  mix-blend-mode: color-dodge;
+  opacity: 0;
+  pointer-events: none; /* Ensure it doesn't block interactions */
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 .card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
-    opacity: 1; 
+  opacity: 1; 
 }
 
 .card-image {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    border-radius: inherit; /* Inherit border radius if needed */
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: inherit; /* Inherit border radius if needed */
 }
 
 .loading-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .loading {
-    width: 10rem;
-    display: block;
+  width: 10rem;
+  display: block;
 }
 
-@media screen and (max-width: 1300px) {
-    #grid .grid-item {
-        flex: 1 0 32.5%;
-    }  
-}
-
-@media screen and (max-width: 760px) {
-    #grid .grid-item {
-        flex: 1 0 49%;
-    }  
-}
-
-@media screen and (max-width: 760px) {
-    #grid .grid-item {
-        flex: 1 0 49%;
-    }  
-}
-
-@media screen and (min-width: 2000px) {
-    #grid {
-        max-width: 75%;
-    }
-}
-@media screen and (min-width: 2100px) {
-    #grid .grid-item {
-        flex: 1 0 19%;
-    }  
+.series-title-main {
+  width: 75%;
+  margin: 2rem auto 1rem;
+  color: #333;
+  font-size: 3rem;
 }

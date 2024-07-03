@@ -22,7 +22,7 @@ const PokedexPage = () => {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingSets, setIsLoadingSets] = useState(true);
-  const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('asc'); // Default to ascending order
+  const [releaseDateSortOrder, setReleaseDateSortOrder] = useState('asc');
   const [searchBy, setSearchBy] = useState('set');
   const [noResults, setNoResults] = useState(false);
   const [suggestedPokemon, setSuggestedPokemon] = useState([]);
@@ -73,6 +73,12 @@ const PokedexPage = () => {
       setDisplayedSets(filteredSets);
     }
   }, [searchTerm, sets, searchBy]);
+
+  useEffect(() => {
+    if (viewMode === 'sets') {
+      setCards([]);
+    }
+  }, [viewMode]);
 
   const sortSets = (order) => {
     const sortedSets = [...sets];
@@ -200,6 +206,18 @@ const PokedexPage = () => {
     handleSearch(normalizedName);
   };
 
+  const groupSetsBySeries = (sets) => {
+    return sets.reduce((acc, set) => {
+      if (!acc[set.series]) {
+        acc[set.series] = [];
+      }
+      acc[set.series].push(set);
+      return acc;
+    }, {});
+  };
+
+  const seriesSets = groupSetsBySeries(displayedSets);
+
   return (
     <div className="container">
       <Header secondary />
@@ -221,36 +239,45 @@ const PokedexPage = () => {
             <img src={loadingGif} alt="Loading..." />
           </div>
         ) : (
-          <>
-            {noResults ? (
-              <div className="no-results">
-                No Pokémon found
-                {suggestedPokemon.length > 0 && (
-                  <div>
-                    Did you mean 
-                    {suggestedPokemon.map((name, index) => (
-                      <span
-                        key={index}
-                        onClick={() => handleSuggestedPokemonClick(name)}
-                        style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px', fontWeight: 500}}
-                      >
-                        {name}
-                        {index < suggestedPokemon.length - 1 ? ',' : ''}
-                      </span>
-                    ))}
-                    ?
-                  </div>
-                )}
+          viewMode === 'sets' ? (
+            Object.keys(seriesSets).map(seriesName => (
+              <div key={seriesName}>
+                <h2 className="series-title-main">{seriesName}</h2>
+                <Grid
+                  sets={seriesSets[seriesName]}
+                  viewMode={viewMode}
+                  onSetClick={handleSetClick}
+                />
               </div>
-            ) : (
-              <Grid
-                sets={displayedSets}
-                viewMode={viewMode}
-                cards={cards}
-                onSetClick={handleSetClick}
-              />
-            )}
-          </>
+            ))
+          ) : noResults ? (
+            <div className="no-results">
+              No Pokémon found
+              {suggestedPokemon.length > 0 && (
+                <div>
+                  Did you mean 
+                  {suggestedPokemon.map((name, index) => (
+                    <span
+                      key={index}
+                      onClick={() => handleSuggestedPokemonClick(name)}
+                      style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px', fontWeight: 500}}
+                    >
+                      {name}
+                      {index < suggestedPokemon.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                  ?
+                </div>
+              )}
+            </div>
+          ) : (
+            <Grid
+              sets={displayedSets}
+              viewMode={viewMode}
+              cards={cards}
+              onSetClick={handleSetClick}
+            />
+          )
         )}
       </div>
       <div className="footer-secondary">
