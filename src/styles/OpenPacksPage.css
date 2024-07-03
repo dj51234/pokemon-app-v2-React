@@ -1,0 +1,88 @@
+/* src/styles/OpenPacksPage.css */
+.open-packs-page {
+  max-width: 75%;
+  margin: 0 auto;
+}
+
+.open-packs-page-container {
+  margin: 3rem auto;
+}
+
+.open-packs-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Set a more reasonable min-width */
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+.series-title {
+  color: #333;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+.open-packs-page-grid-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border: 2px solid var(--black);
+  border-radius: .5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--black);
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.open-packs-page-grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.open-packs-page-grid-item .logo {
+  width: 100px;
+  height: auto;
+}
+
+.open-packs-page-grid-item .symbol {
+  width: 40px;
+  height: auto;
+}
+
+.open-packs-page-grid-item .set-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 1400px) {
+  .open-packs-page-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust min-width for medium screens */
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .open-packs-page-grid {
+    grid-template-columns: 1fr; /* Each item takes up the whole row */
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .open-packs-page {
+    max-width: 65%;
+  }
+}

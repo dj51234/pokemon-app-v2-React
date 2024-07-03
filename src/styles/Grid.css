@@ -1,14 +1,10 @@
-.grid-container {
-    display: flex;
-    justify-content: center;
-}
-
 #grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
-    margin: 2rem;
+    max-width: 85%;
+    margin: 3rem auto;
 }
 
 #grid .grid-item {
@@ -120,6 +116,12 @@
     #grid .grid-item {
         flex: 1 0 49%;
     }  
+}
+
+@media screen and (min-width: 2000px) {
+    #grid {
+        max-width: 75%;
+    }
 }
 @media screen and (min-width: 2100px) {
     #grid .grid-item {

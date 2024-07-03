@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
@@ -12,12 +13,12 @@ const Sidebar = ({ isOpen, toggleSidebar, handleLogout }) => {
       <div className="sidebar-content">
         <button className="close-btn" onClick={() => toggleSidebar(false)}>×</button>
         <ul className="menu-item-container">
-          <li><a className="menu-item" href="/profile">My Profile</a></li>
-          <li><a className="menu-item" href="/my-binder">My Binder</a></li>
-          <li><a className="menu-item" href="/open-packs">Open Packs</a></li>
-          <li><a className="menu-item" href="/pokedex">Browse Cards</a></li>
-          <li><a className="menu-item" href="/trade">Trade</a></li>
-          <li><a className="menu-item" href="/settings">Settings</a></li>
+          <li><Link className="menu-item" to="/profile">My Profile</Link></li>
+          <li><Link className="menu-item" to="/my-binder">My Binder</Link></li>
+          <li><Link className="menu-item" to="/open-packs">Open Packs</Link></li>
+          <li><Link className="menu-item" to="/pokedex">Browse Cards</Link></li>
+          <li><Link className="menu-item" to="/trade">Trade</Link></li>
+          <li><Link className="menu-item" to="/settings">Settings</Link></li>
           <li><a className="menu-item" onClick={handleLogoutClick} href="#logout">Logout</a></li>
         </ul>
       </div>

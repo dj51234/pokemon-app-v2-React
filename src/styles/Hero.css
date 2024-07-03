@@ -7,26 +7,21 @@
   z-index: 0;
 }
 
-main {
-  margin: 0 auto;
-  max-width: 75%;
-  height: calc(100% - 106px - 1.5vw);
-  display: flex;
-  align-items: center;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 5rem;
-  perspective: 1000px;
+  align-items: center;
+  max-width: 75%;
+  margin: 3rem auto;
+  height: calc(100% - 106px - 1.5vw);
   z-index: 1;
-}
-
-main section {
-  flex: 1;
 }
 
 .hero-text {
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  flex: 1;
 }
 
 .hero-buttons {
@@ -68,20 +63,20 @@ main section {
   border: 1px solid transparent;
 }
 
-main h2 {
+.hero-grid h2 {
   font-size: 5.5rem;
   font-weight: 600;
   color: var(--white);
 }
 
-main p {
+.hero-grid p {
   color: var(--subtext);
   font-size: 2rem;
   line-height: 3rem;
   max-width: 90%;
 }
 
-main span {
+.hero-grid span {
   color: var(--yellow);
 }
 
@@ -163,15 +158,18 @@ main span {
 /* Media Queries for Vertical Mode */
 
 @media screen and (max-width: 1300px) {
-  main h2 {
+  .hero-grid h2 {
       font-size: 4.5rem;
   }
-  main p {
+  .hero-grid p {
       font-size: 1.8rem;
   }
 }
 
 @media screen and (max-width: 1200px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
   .hero-image {
       display: none;
   }
@@ -185,15 +183,13 @@ main span {
   .hero-buttons {
       justify-content: center;
   }
-  main p {
+  .hero-grid p {
       max-width: 100%;
   }
-}
-
-@media screen and (max-width: 1200px) {
   .arrow {
       display: none;
   }
+  
 }
 
 @media screen and (max-width: 768px) {
@@ -202,21 +198,24 @@ main span {
       width: 100%;
   }
 
-
-  main h2 {
+  .hero-grid h2 {
       font-size: 4.5rem;
   }
 
-  main p {
+  .hero-grid p {
       font-size: 1.8rem;
   }
 }
 
 @media screen and (max-width: 480px) {
-  main h2 {
+  .hero-grid {
+      grid-template-columns: 1fr; /* Stack text and image vertically */
+      text-align: center;
+  }
+  .hero-grid h2 {
       font-size: 3rem;
   }
-  main p {
+  .hero-grid p {
       font-size: 1.5rem;
   }
   .hero-buttons {
@@ -226,10 +225,10 @@ main span {
 }
 
 @media screen and (max-width: 400px) {
-  main h2 {
+  .hero-grid h2 {
       font-size: 3rem;
   }
-  main p {
+  .hero-grid p {
       font-size: 1.5rem;
   }
   .hero-text {
@@ -245,13 +244,7 @@ main span {
 }
 
 @media screen and (min-width: 2000px) {
-  main {
+  .hero-grid {
       max-width: 65%;
-  }
-}
-
-@media screen and (orientation: portrait) {
-  main {
-    margin-top: 10rem;
   }
 }

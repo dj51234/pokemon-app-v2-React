@@ -3,8 +3,9 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 85%;
+  width: 75%;
   margin: 0 auto;
+  color: var(--black);
 }
 
 .profile-content {
@@ -201,5 +202,12 @@ input[type="file"] {
 
   .username-edit button {
     width: 100%;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .profile-container {
+    width: 65%;
+
   }
 }

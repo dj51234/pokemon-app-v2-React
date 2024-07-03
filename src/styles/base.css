@@ -42,7 +42,7 @@ html, body {
     width: 100vw;
     display: flex;
     flex-direction: column;
-
+    height: 100vh;
 }
 
 .main-container--cta {
@@ -53,9 +53,4 @@ html, body {
     justify-content: center;
 }
 
-@media screen and (min-width: 1080px) {
-    .main-container {
-        height: 100vh;
-    } 
-}
 
