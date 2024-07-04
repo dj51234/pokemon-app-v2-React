@@ -14,7 +14,7 @@
   align-items: center;
   max-width: 75%;
   margin: 3rem auto;
-  height: calc(100% - 106px - 1.5vw);
+  height: 100%;
   z-index: 1;
 }
 
@@ -64,15 +64,15 @@
 }
 
 .hero-grid h2 {
-  font-size: 5.5rem;
+  font-size: clamp(5rem, 2.5vw + 1rem, 4.5vw + 1rem);
   font-weight: 600;
   color: var(--white);
 }
 
 .hero-grid p {
   color: var(--subtext);
-  font-size: 2rem;
-  line-height: 3rem;
+  font-size: clamp(2rem, .7vw + 1rem, 1.2vw + 1rem);
+  line-height: clamp(3rem, 1.3vw + 1rem, 1.5vw + 1rem);
   max-width: 90%;
 }
 
@@ -157,14 +157,14 @@
 
 /* Media Queries for Vertical Mode */
 
-@media screen and (max-width: 1300px) {
+/* @media screen and (max-width: 1300px) {
   .hero-grid h2 {
       font-size: 4.5rem;
   }
   .hero-grid p {
       font-size: 1.8rem;
   }
-}
+} */
 
 @media screen and (max-width: 1200px) {
   .hero-grid {
@@ -198,13 +198,13 @@
       width: 100%;
   }
 
-  .hero-grid h2 {
+  /* .hero-grid h2 {
       font-size: 4.5rem;
   }
 
   .hero-grid p {
       font-size: 1.8rem;
-  }
+  } */
 }
 
 @media screen and (max-width: 480px) {
@@ -212,12 +212,12 @@
       grid-template-columns: 1fr; /* Stack text and image vertically */
       text-align: center;
   }
-  .hero-grid h2 {
+  /* .hero-grid h2 {
       font-size: 3rem;
   }
   .hero-grid p {
       font-size: 1.5rem;
-  }
+  } */
   .hero-buttons {
       flex-direction: column;
       align-items: center;
@@ -225,12 +225,12 @@
 }
 
 @media screen and (max-width: 400px) {
-  .hero-grid h2 {
+  /* .hero-grid h2 {
       font-size: 3rem;
   }
   .hero-grid p {
       font-size: 1.5rem;
-  }
+  } */
   .hero-text {
       gap: 1rem;
   }

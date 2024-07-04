@@ -280,9 +280,7 @@ const PokedexPage = () => {
           )
         )}
       </div>
-      <div className="footer-secondary">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

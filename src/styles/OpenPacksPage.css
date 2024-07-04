@@ -1,7 +1,7 @@
-/* src/styles/OpenPacksPage.css */
 .open-packs-page {
   max-width: 75%;
   margin: 0 auto;
+  min-height: 100vh;
 }
 
 .open-packs-page-container {
@@ -17,7 +17,7 @@
 
 .loading {
   text-align: center;
-  margin-top: 50px;
+  margin: 50px auto;
   font-size: 18px;
   color: #666;
 }
@@ -39,14 +39,12 @@
   text-align: center;
   text-decoration: none;
   color: var(--black);
+  background-color: #fff;
   margin-bottom: 1rem;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.open-packs-page-grid-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: relative; /* Add relative positioning to the grid item */
+  transition: border 0.5s ease-in-out, transform 0.3s ease-in-out, z-index 0s ease 0.5s; /* Add transition for border and transform */
 }
 
 .open-packs-page-grid-item .logo {
@@ -57,6 +55,7 @@
 .open-packs-page-grid-item .symbol {
   width: 40px;
   height: auto;
+  position: relative; /* Make .symbol the containing block */
 }
 
 .open-packs-page-grid-item .set-info {
@@ -67,6 +66,52 @@
   gap: 1rem;
   width: 100%;
   margin-top: 1rem;
+  position: relative; /* Ensure positioning context for absolute children */
+}
+
+.highlighted {
+  border: 3px solid rgb(255, 255, 255); /* White border color */
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #fff; /* White box shadow */
+  animation: pulse 2s infinite;
+  transition: border 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.pulsing-text {
+  font-size: 2rem;
+  font-weight: 500;
+  color: white;
+  text-shadow: 0 0 10px white;
+  animation: textPulse 2s infinite;
+  position: absolute;
+  top: -4.5rem; /* Adjust to position the text above the grid item */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+@keyframes textPulse {
+  0% {
+    text-shadow: 0 0 10px white;
+  }
+  50% {
+    text-shadow: 0 0 20px white;
+  }
+  100% {
+    text-shadow: 0 0 10px white;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px #fff;
+  }
+  50% {
+    box-shadow: 0 0 20px #fff;
+  }
+  100% {
+    box-shadow: 0 0 10px #fff;
+  }
 }
 
 @media screen and (max-width: 1400px) {

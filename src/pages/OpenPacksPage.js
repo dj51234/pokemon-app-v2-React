@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Header from '../components/Header';
-import Grid from '../components/Grid';
 import SetsSearchBar from '../components/SetsSearchBar';
 import Footer from '../components/Footer';
 import { fetchSetData } from '../js/api';
 import '../styles/OpenPacksPage.css';
+import loadingGif from '../assets/loading-gif.gif';
+import AnimatedGridItem from '../components/AnimatedGridItem';
+import Overlay from '../components/Overlay';
 
 const OpenPacksPage = () => {
   const [sets, setSets] = useState([]);
@@ -13,6 +15,8 @@ const OpenPacksPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [activeId, setActiveId] = useState(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     fetchSetData()
@@ -41,9 +45,12 @@ const OpenPacksPage = () => {
     setDisplayedSets(filteredSets);
   }, [searchTerm, selectedSeries, sets]);
 
-  const handleSetClick = (set) => {
-    // Implement the logic for handling set click if needed
-    console.log('Set clicked:', set);
+  const handleSetClick = (id) => {
+    setActiveId(id);
+  };
+
+  const handleClose = () => {
+    setActiveId(null);
   };
 
   const sortSets = (order) => {
@@ -90,28 +97,29 @@ const OpenPacksPage = () => {
       />
       <div className="open-packs-page">
         {isLoading ? (
-          <div className="loading">Loading...</div>
+          <div className="loading">
+            <img src={loadingGif} alt="Loading..." />
+          </div>
         ) : (
           Object.keys(seriesSets).map((seriesName) => (
-            <div className='open-packs-page-container' key={seriesName}>
-              <h2 className='series-title'>{seriesName}</h2>
-              <div className='open-packs-page-grid'>
-                {seriesSets[seriesName].map(set => (
-                  <div key={set.id} className='open-packs-page-grid-item'>
-                    <img src={set.images.logo} className="logo" alt={`${set.name} logo`} />
-                    <div className="set-info">
-                      <img src={set.images.symbol} className="symbol" alt={`${set.name} symbol`} />
-                      <h2>{set.name}</h2>
-                    </div>
-                    <p>Release date: {set.releaseDate}</p>
-                    <p>ID: {set.id}</p>
-                  </div>
+            <div className="open-packs-page-container" key={seriesName}>
+              <h2 className="series-title">{seriesName}</h2>
+              <div className="open-packs-page-grid" ref={gridRef}>
+                {seriesSets[seriesName].map((set) => (
+                  <AnimatedGridItem
+                    key={set.id}
+                    set={set}
+                    id={set.id}
+                    isActive={activeId === set.id}
+                    onClick={handleSetClick}
+                  />
                 ))}
               </div>
             </div>
           ))
         )}
       </div>
+      <Overlay onClose={handleClose} isVisible={activeId !== null} />
       <div className="footer-secondary">
         <Footer />
       </div>
