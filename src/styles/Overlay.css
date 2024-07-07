@@ -1,3 +1,4 @@
+/* src/styles/Overlay.css */
 .overlay {
     position: fixed;
     top: 0;
@@ -12,6 +13,7 @@
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
     pointer-events: none;
+    overflow: hidden;
   }
   
   .overlay.visible {
@@ -24,12 +26,23 @@
     top: 20px;
     right: 20px;
     padding: 10px 20px;
-    font-size: 2.5rem;
+    font-size: 3rem;
+    font-weight: 900;
     background: none;
     border: none;
     cursor: pointer;
     z-index: 10; /* Ensure the button is above the overlay */
     border-radius: 5px;
     color: #fff;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+  }
+
+  .overlay.visible .close-button {
+    opacity: 1;
+  }
+  
+  .no-scroll {
+    overflow: hidden;
   }
   

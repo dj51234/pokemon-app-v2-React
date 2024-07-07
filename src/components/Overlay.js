@@ -1,3 +1,4 @@
+// src/components/Overlay.js
 import React, { useEffect, useState } from 'react';
 import '../styles/Overlay.css';
 
@@ -6,10 +7,17 @@ const Overlay = ({ onClose, isVisible }) => {
 
   useEffect(() => {
     if (isVisible) {
+      document.body.classList.add('no-scroll');
       setTimeout(() => setVisible(true), 10); // Slight delay to trigger the transition
     } else {
+      document.body.classList.remove('no-scroll');
       setVisible(false);
     }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
   }, [isVisible]);
 
   return (

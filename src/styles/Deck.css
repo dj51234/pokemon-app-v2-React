@@ -1,0 +1,8 @@
+/* src/styles/Deck.css */
+.deck {
+    position: relative;
+    width: 100px;
+    height: 150px;
+    margin: auto;
+    perspective: 1000px;
+  }

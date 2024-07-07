@@ -1,3 +1,4 @@
+/* src/styles/OpenPacksPage.css */
 .open-packs-page {
   max-width: 75%;
   margin: 0 auto;
@@ -31,9 +32,10 @@
 .open-packs-page-grid-item {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 2rem;
+  gap: 1rem;
+  padding: 1rem;
   border: 2px solid var(--black);
   border-radius: .5rem;
   text-align: center;
@@ -44,7 +46,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   position: relative; /* Add relative positioning to the grid item */
-  transition: border 0.5s ease-in-out, transform 0.3s ease-in-out, z-index 0s ease 0.5s; /* Add transition for border and transform */
+  transition: border 0.5s ease-in-out, z-index 0s ease 0.5s; /* Add transition for border and transform */
 }
 
 .open-packs-page-grid-item .logo {
@@ -53,7 +55,7 @@
 }
 
 .open-packs-page-grid-item .symbol {
-  width: 40px;
+  width: 20px;
   height: auto;
   position: relative; /* Make .symbol the containing block */
 }
@@ -74,17 +76,17 @@
   transform: scale(1.1);
   box-shadow: 0 0 10px #fff; /* White box shadow */
   animation: pulse 2s infinite;
-  transition: border 0.5s ease-in-out, transform 0.3s ease-in-out;
+  transition: border 0.5s ease-in-out;
 }
 
 .pulsing-text {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: 500;
   color: white;
   text-shadow: 0 0 10px white;
   animation: textPulse 2s infinite;
   position: absolute;
-  top: -4.5rem; /* Adjust to position the text above the grid item */
+  top: -5.5rem; /* Adjust to position the text above the grid item */
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
@@ -111,6 +113,12 @@
   }
   100% {
     box-shadow: 0 0 10px #fff;
+  }
+}
+
+@media screen and (max-width: 960px) and (orientation: landscape) {
+  .pulsing-text {
+    display: none; /* Hide text in landscape mode on mobile */
   }
 }
 
