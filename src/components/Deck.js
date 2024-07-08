@@ -1,4 +1,3 @@
-// src/components/Deck.js
 import React, { useState } from 'react';
 import '../styles/Deck.css';
 import cardBackImage from '../assets/default-image.png'; // Back of the card
@@ -34,16 +33,31 @@ const cards = cardFrontImages.map((image, index) => ({
 const Deck = () => {
   const [flippedCards, setFlippedCards] = useState(new Array(10).fill(false));
   const [flipping, setFlipping] = useState(false);
+  const [deck, setDeck] = useState(cards);
 
-  const handleCardClick = () => {
-    if (!flipping) {
+  const handleCardClick = (index) => {
+    if (flippedCards.every((flipped) => flipped)) {
+      moveCardToBack(index);
+    } else if (!flipping) {
       setFlipping(true);
       flipCardsSequentially(0);
     }
   };
 
+  const moveCardToBack = (cardIndex) => {
+    const newDeck = [...deck];
+    const cardToMove = newDeck.splice(cardIndex, 1)[0];
+    newDeck.push(cardToMove);
+    setDeck(newDeck);
+
+    const newFlippedCards = [...flippedCards];
+    const flippedCardToMove = newFlippedCards.splice(cardIndex, 1)[0];
+    newFlippedCards.push(flippedCardToMove);
+    setFlippedCards(newFlippedCards);
+  };
+
   const flipCardsSequentially = (index) => {
-    if (index >= cards.length) {
+    if (index >= deck.length) {
       setFlipping(false);
       return;
     }
@@ -60,11 +74,11 @@ const Deck = () => {
 
   return (
     <div className="deck-container">
-      {cards.map((card, i) => (
+      {deck.map((card, i) => (
         <div
           className={`deck-card ${flippedCards[i] ? 'flipped' : ''}`}
           key={i}
-          onClick={handleCardClick}
+          onClick={() => handleCardClick(i)}
         >
           <div className="card-face card-back" style={{ backgroundImage: `url(${card.back})` }}></div>
           <div className="card-face card-front" style={{ backgroundImage: `url(${card.front})` }}></div>

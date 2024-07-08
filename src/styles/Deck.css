@@ -3,13 +3,11 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    min-width: 300px; /* Width of a single card */
-    height: 400px; /* Height of a single card */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    min-width: 250px; /* Width of a single card */
+    aspect-ratio: 200000 / 278367;
     transform: translate(-50%, -50%);
     z-index: 10; /* Make sure it's on top of the overlay */
+    transform-style: preserve-3d;
 }
 
 .deck-card {
@@ -32,6 +30,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+    transform-style: preserve-3d;
     position: absolute;
     backface-visibility: hidden;
     box-shadow: 0 12.5px 100px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3), 3px 2px 2px #00000052;
@@ -69,6 +68,7 @@
 .deck-card:nth-child(8) { z-index: 3; animation-delay: 0.8s; transform: translate(-36%, -36%) rotate(-8deg); }
 .deck-card:nth-child(9) { z-index: 2; animation-delay: 0.9s; transform: translate(-34%, -34%) rotate(8deg); }
 .deck-card:nth-child(10) { z-index: 1; animation-delay: 1s; transform: translate(-32%, -32%) rotate(-10deg); }
+
 
 @keyframes fall {
     to {
