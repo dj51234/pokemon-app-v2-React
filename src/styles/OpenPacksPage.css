@@ -11,7 +11,7 @@
 
 .open-packs-page-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Set a more reasonable min-width */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1rem;
   justify-content: flex-start;
 }
@@ -45,9 +45,15 @@
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  position: relative; /* Add relative positioning to the grid item */
-  transition: border 0.5s ease-in-out, z-index 0s ease 0.5s; /* Add transition for border and transform */
+  position: relative;
+  transition: box-shadow 0.3s, transform 0.3s;
 }
+
+.open-packs-page-grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
 
 .open-packs-page-grid-item .logo {
   width: 100px;
@@ -57,7 +63,7 @@
 .open-packs-page-grid-item .symbol {
   width: 20px;
   height: auto;
-  position: relative; /* Make .symbol the containing block */
+  position: relative;
 }
 
 .open-packs-page-grid-item .set-info {
@@ -68,69 +74,18 @@
   gap: 1rem;
   width: 100%;
   margin-top: 1rem;
-  position: relative; /* Ensure positioning context for absolute children */
-}
-
-.highlighted {
-  border: 3px solid rgb(255, 255, 255); /* White border color */
-  transform: scale(1.1);
-  box-shadow: 0 0 10px #fff; /* White box shadow */
-  animation: pulse 2s infinite;
-  transition: border 0.5s ease-in-out;
-}
-
-.pulsing-text {
-  font-size: 3rem;
-  font-weight: 500;
-  color: white;
-  text-shadow: 0 0 10px white;
-  animation: textPulse 2s infinite;
-  position: absolute;
-  top: -5.5rem; /* Adjust to position the text above the grid item */
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-
-@keyframes textPulse {
-  0% {
-    text-shadow: 0 0 10px white;
-  }
-  50% {
-    text-shadow: 0 0 20px white;
-  }
-  100% {
-    text-shadow: 0 0 10px white;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 10px #fff;
-  }
-  50% {
-    box-shadow: 0 0 20px #fff;
-  }
-  100% {
-    box-shadow: 0 0 10px #fff;
-  }
-}
-
-@media screen and (max-width: 960px) and (orientation: landscape) {
-  .pulsing-text {
-    display: none; /* Hide text in landscape mode on mobile */
-  }
+  position: relative;
 }
 
 @media screen and (max-width: 1400px) {
   .open-packs-page-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust min-width for medium screens */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
 @media screen and (max-width: 760px) {
   .open-packs-page-grid {
-    grid-template-columns: 1fr; /* Each item takes up the whole row */
+    grid-template-columns: 1fr;
   }
 }
 

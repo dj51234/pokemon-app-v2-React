@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+// src/components/OpenPacksPage.js
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import SetsSearchBar from '../components/SetsSearchBar';
 import Footer from '../components/Footer';
+import Deck from '../components/Deck';
+import Overlay from '../components/Overlay';
 import { fetchSetData } from '../js/api';
 import '../styles/OpenPacksPage.css';
 import loadingGif from '../assets/loading-gif.gif';
-import AnimatedGridItem from '../components/AnimatedGridItem';
-import Overlay from '../components/Overlay';
 
 const OpenPacksPage = () => {
   const [sets, setSets] = useState([]);
@@ -15,20 +16,23 @@ const OpenPacksPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
-  const [activeId, setActiveId] = useState(null);
-  const gridRef = useRef(null);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
     fetchSetData()
-      .then(data => {
-        const filteredData = data.filter(set => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id));
-        const sortedData = filteredData.sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
+      .then((data) => {
+        const filteredData = data.filter(
+          (set) => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id)
+        );
+        const sortedData = filteredData.sort(
+          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
+        );
         setSets(sortedData);
         setDisplayedSets(sortedData);
-        setSeries([...new Set(sortedData.map(set => set.series))]);
+        setSeries([...new Set(sortedData.map((set) => set.series))]);
         setIsLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         setIsLoading(false);
       });
@@ -37,20 +41,23 @@ const OpenPacksPage = () => {
   useEffect(() => {
     let filteredSets = sets;
     if (selectedSeries !== 'all') {
-      filteredSets = filteredSets.filter(set => set.series === selectedSeries);
+      filteredSets = filteredSets.filter((set) => set.series === selectedSeries);
     }
     if (searchTerm) {
-      filteredSets = filteredSets.filter(set => set.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      filteredSets = filteredSets.filter((set) =>
+        set.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
     setDisplayedSets(filteredSets);
   }, [searchTerm, selectedSeries, sets]);
 
-  const handleSetClick = (id) => {
-    setActiveId(id);
+  const handleSetClick = () => {
+    console.log('Grid item clicked');
+    setShowOverlay(true);
   };
 
   const handleClose = () => {
-    setActiveId(null);
+    setShowOverlay(false);
   };
 
   const sortSets = (order) => {
@@ -104,22 +111,37 @@ const OpenPacksPage = () => {
           Object.keys(seriesSets).map((seriesName) => (
             <div className="open-packs-page-container" key={seriesName}>
               <h2 className="series-title">{seriesName}</h2>
-              <div className="open-packs-page-grid" ref={gridRef}>
+              <div className="open-packs-page-grid">
                 {seriesSets[seriesName].map((set) => (
-                  <AnimatedGridItem
+                  <div
                     key={set.id}
-                    set={set}
-                    id={set.id}
-                    isActive={activeId === set.id}
+                    className="open-packs-page-grid-item"
                     onClick={handleSetClick}
-                  />
+                  >
+                    <img
+                      src={set.images.logo}
+                      className="logo"
+                      alt={`${set.name} logo`}
+                    />
+                    <div className="set-info">
+                      <img
+                        src={set.images.symbol}
+                        className="symbol"
+                        alt={`${set.name} symbol`}
+                      />
+                      <h2>{set.name}</h2>
+                    </div>
+                    <p>Release date: {set.releaseDate}</p>
+                    <p>ID: {set.id}</p>
+                  </div>
                 ))}
               </div>
             </div>
           ))
         )}
       </div>
-      <Overlay onClose={handleClose} isVisible={activeId !== null} />
+      <Overlay onClose={handleClose} isVisible={showOverlay} />
+      {showOverlay && <Deck />}
       <div className="footer-secondary">
         <Footer />
       </div>

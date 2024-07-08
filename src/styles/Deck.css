@@ -1,0 +1,78 @@
+/* src/styles/Deck.css */
+.deck-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 300px; /* Width of a single card */
+    height: 400px; /* Height of a single card */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Make sure it's on top of the overlay */
+}
+
+.deck-card {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -100vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    animation: fall 1s ease forwards;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transform-origin: right center; /* Set the origin to the right side */
+}
+
+.deck-card .card-face {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    position: absolute;
+    backface-visibility: hidden;
+    box-shadow: 0 12.5px 100px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3), 3px 2px 2px #00000052;
+    transition: transform 0.6s;
+}
+
+.deck-card .card-back {
+    transform: rotateY(0deg);
+}
+
+.deck-card .card-front {
+    transform: rotateY(-180deg); /* Adjust the initial rotation for front face */
+}
+
+.deck-card.flipped .card-back {
+    transform: rotateY(180deg); /* Adjust the rotation for back face */
+}
+
+.deck-card.flipped .card-front {
+    transform: rotateY(0deg); /* Adjust the rotation for front face */
+}
+
+.deck-card:nth-child(1) {
+    z-index: 10;
+    animation-delay: 0.1s;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.deck-card:nth-child(2) { z-index: 9; animation-delay: 0.2s; transform: translate(-48%, -48%) rotate(-2deg); }
+.deck-card:nth-child(3) { z-index: 8; animation-delay: 0.3s; transform: translate(-46%, -46%) rotate(2deg); }
+.deck-card:nth-child(4) { z-index: 7; animation-delay: 0.4s; transform: translate(-44%, -44%) rotate(-4deg); }
+.deck-card:nth-child(5) { z-index: 6; animation-delay: 0.5s; transform: translate(-42%, -42%) rotate(4deg); }
+.deck-card:nth-child(6) { z-index: 5; animation-delay: 0.6s; transform: translate(-40%, -40%) rotate(-6deg); }
+.deck-card:nth-child(7) { z-index: 4; animation-delay: 0.7s; transform: translate(-38%, -38%) rotate(6deg); }
+.deck-card:nth-child(8) { z-index: 3; animation-delay: 0.8s; transform: translate(-36%, -36%) rotate(-8deg); }
+.deck-card:nth-child(9) { z-index: 2; animation-delay: 0.9s; transform: translate(-34%, -34%) rotate(8deg); }
+.deck-card:nth-child(10) { z-index: 1; animation-delay: 1s; transform: translate(-32%, -32%) rotate(-10deg); }
+
+@keyframes fall {
+    to {
+        top: 50%;
+        opacity: 1;
+    }
+}
