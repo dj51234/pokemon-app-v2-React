@@ -76,3 +76,21 @@
         opacity: 1;
     }
 }
+
+@keyframes moveToBack {
+    0% {
+      transform: translate(-50%,-50%) rotate(0);
+      z-index: 10;
+    }
+    50% {
+      transform: translate(70%,-50%) rotate(0);
+      z-index: 10;
+    }
+    51% {
+      z-index: 1; /* Lower the z-index temporarily */
+    }
+    100% {
+      transform: translate(-32%, -32%) rotate(-10deg);
+      z-index: 1; /* Keep the z-index lower */
+    }
+  }

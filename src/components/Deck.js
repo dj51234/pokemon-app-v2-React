@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Deck.css';
 import cardBackImage from '../assets/default-image.png'; // Back of the card
 import cardFront1 from '../assets/card-test-1.png';
@@ -54,11 +54,20 @@ const Deck = () => {
     const flippedCardToMove = newFlippedCards.splice(cardIndex, 1)[0];
     newFlippedCards.push(flippedCardToMove);
     setFlippedCards(newFlippedCards);
+
+    const cards = document.querySelectorAll('.deck-card');
+    cards.forEach((card, index) => {
+      card.style.zIndex = 10 - index;
+      if (index === 9) {
+        card.style.animation = 'moveToBack 1s forwards';
+      }
+    });
   };
 
   const flipCardsSequentially = (index) => {
     if (index >= deck.length) {
       setFlipping(false);
+      removeFallAnimation();
       return;
     }
 
@@ -71,6 +80,23 @@ const Deck = () => {
       flipCardsSequentially(index + 1);
     }, 100); // Delay between flips
   };
+
+  const removeFallAnimation = () => {
+    const timer = setTimeout(() => {
+      document.querySelectorAll('.deck-card').forEach((card) => {
+        card.style.animation = 'none';
+        card.style.top = '50%';
+      });
+    }, 1000); // Delay to ensure all animations are finished before changing the top property
+
+    return () => clearTimeout(timer); // Cleanup the timer on component unmount
+  };
+
+  useEffect(() => {
+    if (flippedCards.every((flipped) => flipped)) {
+      removeFallAnimation();
+    }
+  }, [flippedCards]);
 
   return (
     <div className="deck-container">
