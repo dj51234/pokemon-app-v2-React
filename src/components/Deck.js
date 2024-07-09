@@ -32,79 +32,92 @@ const cards = cardFrontImages.map((image, index) => ({
 
 const Deck = () => {
   const [flippedCards, setFlippedCards] = useState(new Array(10).fill(false));
-  const [flipping, setFlipping] = useState(false);
   const [deck, setDeck] = useState(cards);
+  const [animating, setAnimating] = useState(false);
+  const [movingCard, setMovingCard] = useState(null);
+  const [allFlipped, setAllFlipped] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState('200000 / 278367'); // Default aspect ratio
+
+  useEffect(() => {
+    // Calculate aspect ratio based on the first card front image
+    const img = new Image();
+    img.src = cards[0].front;
+    img.onload = () => {
+      setAspectRatio(`${img.naturalWidth} / ${img.naturalHeight}`);
+    };
+  }, []);
 
   const handleCardClick = (index) => {
+    if (animating) return;
+
     if (flippedCards.every((flipped) => flipped)) {
-      moveCardToBack(index);
-    } else if (!flipping) {
-      setFlipping(true);
-      flipCardsSequentially(0);
+      setAnimating(true);
+      setMovingCard(index);
+
+      // Move the clicked card to the back with animation
+      setTimeout(() => {
+        const newDeck = [...deck];
+        const cardToMove = newDeck.splice(index, 1)[0];
+        newDeck.push(cardToMove);
+        setDeck(newDeck);
+
+        const newFlippedCards = [...flippedCards];
+        const flippedCardToMove = newFlippedCards.splice(index, 1)[0];
+        newFlippedCards.push(flippedCardToMove);
+        setFlippedCards(newFlippedCards);
+
+        // Reset moving card and animating state after animation
+        setMovingCard(null);
+        setAnimating(false);
+
+        // Update the aspect ratio based on the next card front image
+        const nextImg = new Image();
+        nextImg.src = newDeck[0].front;
+        nextImg.onload = () => {
+          setAspectRatio(`${nextImg.naturalWidth} / ${nextImg.naturalHeight}`);
+        };
+      }, 650); // Duration should match the CSS animation duration
+    } else {
+      flipAllCards();
     }
   };
 
-  const moveCardToBack = (cardIndex) => {
-    const newDeck = [...deck];
-    const cardToMove = newDeck.splice(cardIndex, 1)[0];
-    newDeck.push(cardToMove);
-    setDeck(newDeck);
-
-    const newFlippedCards = [...flippedCards];
-    const flippedCardToMove = newFlippedCards.splice(cardIndex, 1)[0];
-    newFlippedCards.push(flippedCardToMove);
-    setFlippedCards(newFlippedCards);
-
-    const cards = document.querySelectorAll('.deck-card');
-    cards.forEach((card, index) => {
-      card.style.zIndex = 10 - index;
-      if (index === 9) {
-        card.style.animation = 'moveToBack 1s forwards';
-      }
-    });
-  };
-
-  const flipCardsSequentially = (index) => {
-    if (index >= deck.length) {
-      setFlipping(false);
-      removeFallAnimation();
-      return;
-    }
-
-    setTimeout(() => {
-      setFlippedCards((prev) => {
-        const newFlippedCards = [...prev];
-        newFlippedCards[index] = !newFlippedCards[index];
-        return newFlippedCards;
-      });
-      flipCardsSequentially(index + 1);
-    }, 100); // Delay between flips
-  };
-
-  const removeFallAnimation = () => {
-    const timer = setTimeout(() => {
-      document.querySelectorAll('.deck-card').forEach((card) => {
-        card.style.animation = 'none';
-        card.style.top = '50%';
-      });
-    }, 1000); // Delay to ensure all animations are finished before changing the top property
-
-    return () => clearTimeout(timer); // Cleanup the timer on component unmount
+  const flipAllCards = () => {
+    setFlippedCards((prev) => prev.map((flipped) => !flipped));
+    setAllFlipped(true);
   };
 
   useEffect(() => {
-    if (flippedCards.every((flipped) => flipped)) {
-      removeFallAnimation();
+    if (allFlipped) {
+      const timer = setTimeout(() => {
+        document.querySelectorAll('.deck-card').forEach((card) => {
+          card.style.animation = 'none';
+          card.style.top = '50%';
+        });
+      }, 1000); // Ensure this delay matches the flip animation duration
+
+      return () => clearTimeout(timer);
     }
-  }, [flippedCards]);
+  }, [allFlipped]);
+
+  useEffect(() => {
+    if (movingCard !== null) {
+      const card = document.querySelector(`.deck-card:nth-child(${movingCard + 1})`);
+      if (card) {
+        card.style.animation = ''; // Remove inline animation style
+        card.classList.add('moving-to-back2');
+      }
+    }
+  }, [movingCard]);
 
   return (
-    <div className="deck-container">
+    <div className={`deck-container ${allFlipped ? 'all-flipped' : ''}`} style={{ aspectRatio }}>
       {deck.map((card, i) => (
         <div
-          className={`deck-card ${flippedCards[i] ? 'flipped' : ''}`}
+          className={`deck-card ${flippedCards[i] ? 'flipped' : ''} ${movingCard === i ? 'moving-to-back2' : ''}`}
           key={i}
           onClick={() => handleCardClick(i)}
+          style={{ zIndex: deck.length - i }}
         >
           <div className="card-face card-back" style={{ backgroundImage: `url(${card.back})` }}></div>
           <div className="card-face card-front" style={{ backgroundImage: `url(${card.front})` }}></div>
