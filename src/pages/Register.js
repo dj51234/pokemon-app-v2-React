@@ -1,3 +1,4 @@
+// src/pages/Register.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
@@ -184,7 +185,6 @@ const Register = () => {
           <p className='account-status'>Already have an account? <Link to="/login">Log in here</Link></p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

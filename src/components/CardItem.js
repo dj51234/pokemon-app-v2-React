@@ -1,3 +1,4 @@
+// src/components/CardItem.js
 import React from 'react';
 
 const CardItem = ({ image, rarity }) => {

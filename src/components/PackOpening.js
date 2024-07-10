@@ -1,3 +1,4 @@
+// src/components/PackOpening.js
 import React, { useState, useEffect } from 'react';
 import '../styles/PackOpening.css';
 import defaultImage from '../assets/default-image.png';

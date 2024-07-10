@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -10,6 +11,8 @@ import Sidebar from './components/Sidebar'; // Make sure to include Sidebar
 import { auth, firestore } from './js/firebase';
 import './index.css';
 import { doc, getDoc } from 'firebase/firestore';
+// Import your pack algorithm script
+import { openPack } from './js/pack_algorithm/packAlgorithm';
 
 export const AuthContext = React.createContext();
 

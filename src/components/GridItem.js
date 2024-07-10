@@ -1,4 +1,4 @@
-// GridItem.js
+// src/components/GridItem.js
 import React from 'react';
 
 const GridItem = ({ set, onSetClick }) => {

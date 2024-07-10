@@ -1,3 +1,4 @@
+// src/components/Deck.js
 import React, { useState, useEffect } from 'react';
 import '../styles/Deck.css';
 import cardBackImage from '../assets/default-image.png'; // Back of the card

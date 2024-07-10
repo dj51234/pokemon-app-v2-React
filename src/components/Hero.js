@@ -1,3 +1,4 @@
+// src/components/Hero.js
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';

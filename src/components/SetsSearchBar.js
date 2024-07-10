@@ -1,3 +1,4 @@
+// src/components/SetsSearchBar.js
 import React, { useRef, useEffect, useState } from 'react';
 import '../styles/SearchBar.css';
 

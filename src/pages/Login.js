@@ -128,7 +128,6 @@ const Login = () => {
           <p className='account-status'>Don't have an account? <Link to="/register">Register here</Link></p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

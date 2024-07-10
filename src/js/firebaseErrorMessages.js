@@ -1,3 +1,4 @@
+// src/js/firebaseErrorMessages.js
 const firebaseErrorMessages = {
     'auth/email-already-in-use': 'This email address is already in use.',
     'auth/invalid-email': 'The email address is not valid.',

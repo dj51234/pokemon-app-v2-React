@@ -1,3 +1,4 @@
+// src/components/Grid.js
 import React from 'react';
 import GridItem from './GridItem';
 import CardItem from './CardItem';

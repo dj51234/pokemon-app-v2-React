@@ -1,3 +1,4 @@
+// src/components/HamburgerMenuSidebar.js
 import React from 'react';
 import '../styles/HamburgerMenuSidebar.css';
 
