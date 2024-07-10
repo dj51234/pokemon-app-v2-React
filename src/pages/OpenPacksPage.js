@@ -17,6 +17,7 @@ const OpenPacksPage = () => {
   const [selectedSeries, setSelectedSeries] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [selectedSetId, setSelectedSetId] = useState(null);
 
   useEffect(() => {
     fetchSetData()
@@ -51,8 +52,9 @@ const OpenPacksPage = () => {
     setDisplayedSets(filteredSets);
   }, [searchTerm, selectedSeries, sets]);
 
-  const handleSetClick = () => {
+  const handleSetClick = (setId) => {
     console.log('Grid item clicked');
+    setSelectedSetId(setId);
     setShowOverlay(true);
   };
 
@@ -116,7 +118,7 @@ const OpenPacksPage = () => {
                   <div
                     key={set.id}
                     className="open-packs-page-grid-item"
-                    onClick={handleSetClick}
+                    onClick={() => handleSetClick(set.id)}
                   >
                     <img
                       src={set.images.logo}
@@ -141,7 +143,7 @@ const OpenPacksPage = () => {
         )}
       </div>
       <Overlay onClose={handleClose} isVisible={showOverlay} />
-      {showOverlay && <Deck />}
+      {showOverlay && <Deck setId={selectedSetId} />}
       <div className="footer-secondary">
         <Footer />
       </div>

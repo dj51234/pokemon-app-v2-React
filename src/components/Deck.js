@@ -1,52 +1,50 @@
 // src/components/Deck.js
 import React, { useState, useEffect } from 'react';
 import '../styles/Deck.css';
-import cardBackImage from '../assets/default-image.png'; // Back of the card
-import cardFront1 from '../assets/card-test-1.png';
-import cardFront2 from '../assets/card-test-2.png';
-import cardFront3 from '../assets/card-test-3.png';
-import cardFront4 from '../assets/card-test-4.png';
-import cardFront5 from '../assets/card-test-5.png';
-import cardFront6 from '../assets/card-test-6.png';
-import cardFront7 from '../assets/card-test-7.png';
-import cardFront8 from '../assets/card-test-8.png';
-import cardFront9 from '../assets/card-test-9.png';
-import cardFront10 from '../assets/card-test-10.png';
+import cardBackImage from '../assets/default-image.png';
+import { openPack } from '../js/pack_algorithm/packAlgorithm';
 
-const cardFrontImages = [
-  cardFront1,
-  cardFront2,
-  cardFront3,
-  cardFront4,
-  cardFront5,
-  cardFront6,
-  cardFront7,
-  cardFront8,
-  cardFront9,
-  cardFront10,
-];
-
-const cards = cardFrontImages.map((image, index) => ({
-  front: image,
-  back: cardBackImage,
-}));
-
-const Deck = () => {
+const Deck = ({ setId }) => {
   const [flippedCards, setFlippedCards] = useState(new Array(10).fill(false));
-  const [deck, setDeck] = useState(cards);
-  const [animating, setAnimating] = useState(false);
+  const [deck, setDeck] = useState([]);
+  const [animating, setAnimating] = useState(true); // Start with animating as true to prevent clicks during fall animation
   const [movingCard, setMovingCard] = useState(null);
   const [allFlipped, setAllFlipped] = useState(false);
-  const [aspectRatio, setAspectRatio] = useState('200000 / 278367'); // Default aspect ratio
 
   useEffect(() => {
-    // Calculate aspect ratio based on the first card front image
-    const img = new Image();
-    img.src = cards[0].front;
-    img.onload = () => {
-      setAspectRatio(`${img.naturalWidth} / ${img.naturalHeight}`);
+    const fetchCards = async () => {
+      if (setId) {
+        const cards = await openPack(setId);
+        if (cards && cards.length > 0) {
+          const cardsWithBackImage = cards.map((card) => ({
+            front: card.imageUrl,
+            back: cardBackImage,
+            rarity: card.rarity,
+          }));
+          setDeck(cardsWithBackImage);
+
+          const firstCardImage = cardsWithBackImage[0].front;
+          const img = new Image();
+          img.src = firstCardImage;
+          img.onload = () => {
+            const aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+            const containerWidth = `min(${img.naturalWidth}px, 90vw)`;
+            document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
+            document.documentElement.style.setProperty('--container-width', containerWidth);
+          };
+
+          // Set animating to false after all cards have finished falling
+          setTimeout(() => {
+            setAnimating(false);
+          }, 1000); // Ensure this delay matches the fall animation duration
+        } else {
+          console.error('No cards were returned from the openPack function.');
+        }
+      }
     };
-  }, []);
+
+    fetchCards();
+  }, [setId]);
 
   const handleCardClick = (index) => {
     if (animating) return;
@@ -75,7 +73,10 @@ const Deck = () => {
         const nextImg = new Image();
         nextImg.src = newDeck[0].front;
         nextImg.onload = () => {
-          setAspectRatio(`${nextImg.naturalWidth} / ${nextImg.naturalHeight}`);
+          const aspectRatio = `${nextImg.naturalWidth} / ${nextImg.naturalHeight}`;
+          const containerWidth = `min(${nextImg.naturalWidth}px, 90vw)`;
+          document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
+          document.documentElement.style.setProperty('--container-width', containerWidth);
         };
       }, 650); // Duration should match the CSS animation duration
     } else {
@@ -84,8 +85,13 @@ const Deck = () => {
   };
 
   const flipAllCards = () => {
+    setAnimating(true);
     setFlippedCards((prev) => prev.map((flipped) => !flipped));
     setAllFlipped(true);
+
+    setTimeout(() => {
+      setAnimating(false);
+    }, 1000); // Duration should match the flip animation duration
   };
 
   useEffect(() => {
@@ -112,7 +118,7 @@ const Deck = () => {
   }, [movingCard]);
 
   return (
-    <div className={`deck-container ${allFlipped ? 'all-flipped' : ''}`} style={{ aspectRatio }}>
+    <div className={`deck-container ${allFlipped ? 'all-flipped' : ''}`} style={{ aspectRatio: 'var(--aspect-ratio)', width: 'var(--container-width)' }}>
       {deck.map((card, i) => (
         <div
           className={`deck-card ${flippedCards[i] ? 'flipped' : ''} ${movingCard === i ? 'moving-to-back2' : ''}`}

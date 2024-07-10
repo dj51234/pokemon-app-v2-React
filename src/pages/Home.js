@@ -4,8 +4,6 @@ import Hero from '../components/Hero';
 import PackSelection from '../components/PackSelection';
 import PackOpening from '../components/PackOpening';
 import DemoBinder from '../components/DemoBinder';
-import FeatureSection from '../components/FeatureSection';
-import CallToAction from '../components/CallToAction'; // Import the new component
 import '../styles/Home.css';
 
 const Home = () => {
