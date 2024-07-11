@@ -28,7 +28,7 @@ const Deck = ({ setId }) => {
           img.src = firstCardImage;
           img.onload = () => {
             const aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
-            const containerWidth = `min(${img.naturalWidth}px, 90vw)`;
+            const containerWidth = `min(${img.naturalWidth}px, 75vw)`;
             document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
             document.documentElement.style.setProperty('--container-width', containerWidth);
           };
@@ -74,7 +74,7 @@ const Deck = ({ setId }) => {
         nextImg.src = newDeck[0].front;
         nextImg.onload = () => {
           const aspectRatio = `${nextImg.naturalWidth} / ${nextImg.naturalHeight}`;
-          const containerWidth = `min(${nextImg.naturalWidth}px, 90vw)`;
+          const containerWidth = `min(${nextImg.naturalWidth}px, 75vw)`;
           document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
           document.documentElement.style.setProperty('--container-width', containerWidth);
         };
