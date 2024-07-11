@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import SetsSearchBar from '../components/SetsSearchBar';
 import Footer from '../components/Footer';
-import Deck from '../components/Deck';
 import Overlay from '../components/Overlay';
-import { fetchSetData } from '../js/api';
+import { fetchSetData } from '../js/api'; // Import fetchSetData function
+import { openPack } from '../js/pack_algorithm/packAlgorithm'; // Import openPack function
 import '../styles/OpenPacksPage.css';
 import loadingGif from '../assets/loading-gif.gif';
 
@@ -16,8 +16,9 @@ const OpenPacksPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
-  const [showOverlay, setShowOverlay] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState(null);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [openedCards, setOpenedCards] = useState([]);
 
   useEffect(() => {
     fetchSetData()
@@ -52,14 +53,17 @@ const OpenPacksPage = () => {
     setDisplayedSets(filteredSets);
   }, [searchTerm, selectedSeries, sets]);
 
-  const handleSetClick = (setId) => {
-    console.log('Grid item clicked');
+  const handleSetClick = async (setId) => {
+    console.log(`Set ID: ${setId}`);
     setSelectedSetId(setId);
-    setShowOverlay(true);
+    const cards = await openPack(setId); // Call openPack with the selected set ID
+    console.log(cards); // Log the fetched cards to the console
+    setOpenedCards(cards);
+    setIsOverlayVisible(true); // Show the overlay
   };
 
-  const handleClose = () => {
-    setShowOverlay(false);
+  const closeOverlay = () => {
+    setIsOverlayVisible(false); // Hide the overlay
   };
 
   const sortSets = (order) => {
@@ -142,8 +146,7 @@ const OpenPacksPage = () => {
           ))
         )}
       </div>
-      <Overlay onClose={handleClose} isVisible={showOverlay} />
-      {showOverlay && <Deck setId={selectedSetId} />}
+      {isOverlayVisible && <Overlay onClose={closeOverlay} cards={openedCards} />}
       <div className="footer-secondary">
         <Footer />
       </div>

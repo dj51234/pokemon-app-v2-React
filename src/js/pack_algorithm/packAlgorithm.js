@@ -68,6 +68,11 @@ export async function openPack(setId) {
         })
       );
 
+      // Log rarity and image URLs to the console
+      cardsWithImages.forEach(card => {
+        console.log(`Card ID: ${card.id}, Rarity: ${card.rarity}, Image URL: ${card.imageUrl}`);
+      });
+
       return cardsWithImages.filter(card => card.imageUrl); // Ensure to return only cards with image URLs
     } else {
       console.error(`Set ID ${setId} not found in the JSON data.`);
