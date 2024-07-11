@@ -24,6 +24,22 @@
     transform-origin: right center; /* Set the origin to the right side */
     transition: transform 0.5s;
     backface-visibility: hidden;
+    
+  }
+
+  .deck-card::before {
+    content: "";
+    position:absolute;
+    top: 50%;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 100px 50px rgba(255, 255, 255, 0.062);
+    backface-visibility: hidden;
   }
   
   .deck-card .card-face {
@@ -53,24 +69,6 @@
   .deck-card.flipped .card-front {
     transform: rotateY(0deg); /* Adjust the rotation for front face */
   }
-  
-  .deck-card::before {
-      content: "";
-      z-index: -1;
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background: radial-gradient(circle, #ffffff00 150px, rgba(255, 255, 255, 0.1) 160px);
-      transform: translate3d(0px, 0px, 0) scale(1.1);
-      filter: blur(34px);
-      opacity: var(0.7);
-      transition: opacity 0.5s;
-      border-radius: inherit;
-      pointer-events: none;
-  }
-          
   
   .deck-card:nth-child(1) {
     z-index: 10;
@@ -121,21 +119,11 @@
     z-index: 1;
     animation-delay: 1s;
   }
-  
-  .deck-card:nth-child(1)::before { transform: rotate(0deg); }
-  .deck-card:nth-child(2)::before { transform: rotate(10deg); }
-  .deck-card:nth-child(3)::before { transform: rotate(20deg); }
-  .deck-card:nth-child(4)::before { transform: rotate(30deg); }
-  .deck-card:nth-child(5)::before { transform: rotate(40deg); }
-  .deck-card:nth-child(6)::before { transform: rotate(50deg); }
-  .deck-card:nth-child(7)::before { transform: rotate(60deg); }
-  .deck-card:nth-child(8)::before { transform: rotate(70deg); }
-  .deck-card:nth-child(9)::before { transform: rotate(80deg); }
-  .deck-card:nth-child(10)::before { transform: rotate(90deg); }
 
   .moving-to-back2 {
     animation: moveToBack2 0.65s forwards;
     z-index: 10; /* Ensure it starts on top during the animation */
+    pointer-events: none;
   }
   
   @keyframes fall {
