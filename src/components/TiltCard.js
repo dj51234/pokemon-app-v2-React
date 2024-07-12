@@ -1,7 +1,7 @@
-// src/components/TiltCard.js
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import grain from '../assets/grain.webp'; // Import the grain asset
 
 const CardWrapper = styled.div`
   display: flex;
@@ -22,6 +22,10 @@ const Card = styled.div`
   transform: translate3d(var(--tx), var(--ty), 0) rotateY(var(--ry)) rotateX(var(--rx));
   will-change: transform;
   position: relative;
+  &:hover .card-shine, &:hover .card-grain {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
 `;
 
 const CardInner = styled.div`
@@ -54,10 +58,26 @@ const CardShine = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.8), transparent);
+  background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 30%, transparent 70%);
   mix-blend-mode: overlay;
   pointer-events: none;
   border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+`;
+
+const CardGrain = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(${grain});
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 `;
 
 const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
@@ -82,7 +102,7 @@ const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    const maxTilt = 15;
+    const maxTilt = 17;
     const tiltX = (maxTilt * y) / (rect.height / 2);
     const tiltY = (-maxTilt * x) / (rect.width / 2);
 
@@ -145,7 +165,8 @@ const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
       >
         <CardInner aspectRatio={aspectRatio}>
           <CardFace src={src} />
-          <CardShine />
+          <CardShine className="card-shine" />
+          <CardGrain className="card-grain" />
         </CardInner>
       </Card>
     </CardWrapper>
