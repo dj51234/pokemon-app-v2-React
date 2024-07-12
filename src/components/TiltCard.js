@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import grain from '../assets/grain.webp'; // Import the grain asset
+import grain from '../assets/grain.webp';
 
 const CardWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   perspective: 1000px;
+  @media screen and (max-width: 1200px) {
+    display: none;
+  }
 `;
 
 const Card = styled.div`
@@ -155,7 +158,7 @@ const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
   };
 
   return (
-    <CardWrapper>
+    <CardWrapper className="tilt-card">
       <Card
         ref={cardRef}
         maxWidth={maxWidth}

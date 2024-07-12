@@ -1,4 +1,4 @@
-/* src/styles/Hero.css */
+/* Existing CSS styles */
 
 .hero-grid {
   display: grid;
@@ -131,6 +131,9 @@
   }
   .arrow {
       display: none;
+  }
+  .tilt-card {
+    display: none;
   }
 }
 
