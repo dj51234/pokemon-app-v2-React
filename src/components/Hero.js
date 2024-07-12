@@ -2,10 +2,11 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import Tilt from 'react-parallax-tilt';
+import TiltCard from './TiltCard'; // Import the TiltCard component
 import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
+import pikachu from '../assets/card-front.png'
 
 const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);
@@ -37,13 +38,7 @@ const Hero = () => {
             <a href="/">Learn More</a>
           </div>
         </section>
-        <section className="hero-image">
-          <Tilt tiltMaxAngleX={20} tiltMaxAngleY={20} transitionSpeed={1500}>
-            <div className="pokemon-card secret-rare">
-              <img src="https://images.pokemontcg.io/sv6/25_hires.png" alt="" style={{ visibility: 'hidden' }} />
-            </div>
-          </Tilt>
-        </section>
+        <TiltCard src={pikachu} maxWidth="400px" />
       </main>
       <div className="arrow" onClick={handleNextPage}>
         <span></span>
