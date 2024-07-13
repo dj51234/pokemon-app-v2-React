@@ -1,87 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import '../styles/TiltCard.css';
 import grain from '../assets/grain.webp';
-
-const CardWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1000px;
-  @media screen and (max-width: 1200px) {
-    display: none;
-  }
-`;
-
-const Card = styled.div`
-  width: 100%;
-  max-width: ${(props) => props.maxWidth || '300px'};
-  --tx: 0px;
-  --ty: 0px;
-  --rx: 0deg;
-  --ry: 0deg;
-  --mx: 50%;
-  --my: 50%;
-  transform: translate3d(var(--tx), var(--ty), 0) rotateY(var(--ry)) rotateX(var(--rx));
-  will-change: transform;
-  position: relative;
-  &:hover .card-shine, &:hover .card-grain {
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
-  }
-`;
-
-const CardInner = styled.div`
-  width: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  box-shadow: 0px 10px 20px -5px black;
-  &::before {
-    content: '';
-    display: block;
-    padding-top: ${(props) => props.aspectRatio * 100}%;
-  }
-`;
-
-const CardFace = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  background-size: cover;
-  background-position: center;
-  background-image: url(${(props) => props.src});
-`;
-
-const CardShine = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 30%, transparent 70%);
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  border-radius: 20px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-`;
-
-const CardGrain = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url(${grain});
-  mix-blend-mode: color-dodge;
-  pointer-events: none;
-  border-radius: 20px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-`;
 
 const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -158,21 +78,22 @@ const TiltCard = ({ src, maxWidth, onAspectRatioCalculated }) => {
   };
 
   return (
-    <CardWrapper className="tilt-card">
-      <Card
+    <div className="tilt-card">
+      <div
+        className="tilt-card__card"
         ref={cardRef}
-        maxWidth={maxWidth}
+        style={{ '--max-width': maxWidth, '--aspect-ratio': aspectRatio * 100 + '%' }}
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <CardInner aspectRatio={aspectRatio}>
-          <CardFace src={src} />
-          <CardShine className="card-shine" />
-          <CardGrain className="card-grain" />
-        </CardInner>
-      </Card>
-    </CardWrapper>
+        <div className="tilt-card__card-inner">
+          <div className="tilt-card__card-face" style={{ backgroundImage: `url(${src})` }} />
+          <div className="tilt-card__card-shine card-shine" />
+          <div className="tilt-card__card-grain card-grain" style={{ backgroundImage: `url(${grain})` }} />
+        </div>
+      </div>
+    </div>
   );
 };
 
