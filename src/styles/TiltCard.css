@@ -5,15 +5,9 @@
   perspective: 1000px;
 }
 
-@media screen and (max-width: 1200px) {
-  .tilt-card {
-    display: none;
-  }
-}
-
 .tilt-card__card {
   width: 100%;
-  max-width: var(--max-width, 300px);
+  max-width: var(--max-width, 22vw); /* Use vw units for responsiveness */
   --tx: 0px;
   --ty: 0px;
   --rx: 0deg;
@@ -23,6 +17,18 @@
   transform: translate3d(var(--tx), var(--ty), 0) rotateY(var(--ry)) rotateX(var(--rx));
   will-change: transform;
   position: relative;
+}
+
+@media screen and (max-width: 1920px) {
+  .tilt-card__card {
+    max-width: calc(1920px * 0.22); /* Maintain the size based on 23vw of 1920px */
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .tilt-card {
+    display: none;
+  }
 }
 
 .tilt-card__card:hover .card-shine,

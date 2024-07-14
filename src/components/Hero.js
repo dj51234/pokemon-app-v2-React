@@ -5,7 +5,7 @@ import TiltCard from './TiltCard'; // Import the TiltCard component
 import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
-import pikachu from '../assets/card-front.png'
+import pikachu from '../assets/card-front.png';
 
 const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);
@@ -37,7 +37,7 @@ const Hero = () => {
             <a href="/">Learn More</a>
           </div>
         </section>
-        <TiltCard src={pikachu} maxWidth="400px" />
+        <TiltCard src={pikachu} maxWidth="22vw" />
       </main>
       <div className="arrow" onClick={handleNextPage}>
         <span></span>
