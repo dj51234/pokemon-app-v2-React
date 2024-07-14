@@ -1,3 +1,10 @@
+:root {
+    --mx: 50%;
+    --my: 50%;
+    --rx: 0deg;
+    --ry: 0deg;
+}
+
 .normal-card-wrapper {
     display: flex;
     justify-content: center;
@@ -18,6 +25,8 @@
     --my: 50%;
     transform: rotateY(var(--ry)) rotateX(var(--rx));
     will-change: transform;
+    overflow: hidden; /* Ensure the gradient is clipped within the card */
+    border-radius: 20px;
 }
 
 .normal-card-inner {
@@ -30,7 +39,8 @@
     transform-style: preserve-3d; /* Ensure children are in 3D space */
 }
 
-.normal-card-front, .normal-card-back {
+.normal-card-front,
+.normal-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -40,6 +50,7 @@
 .normal-card-back {
     transform: rotateY(180deg); /* Rotate the back side */
     position: relative;
+    overflow: hidden; /* Ensure the gradient is clipped within the card */
 }
 
 .normal-card-outer img {
@@ -53,8 +64,27 @@
     transform: rotateY(180deg); /* Rotate when .rotated class is applied */
 }
 
-.normal-card-back::after {
-    content: '';
+.shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: radial-gradient(farthest-corner circle at var(--mx) var(--my), hsla(0, 0%, 100%, 0.8) 10%, hsla(0, 0%, 100%, 0.65) 20%, hsla(0, 0%, 0%, 0.5) 90%);
+    opacity: var(--card-opacity, 0);
+    mix-blend-mode: overlay;
+    will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
+    transform: translateZ(1.21px);
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.normal-card-back:hover .shine {
+    opacity: 1;
+}
+
+.grain {
     position: absolute;
     top: 0;
     left: 0;
@@ -68,6 +98,6 @@
     transition: opacity 0.3s ease-in-out;
 }
 
-.rotated .normal-card-back::after {
-    opacity: 1;
+.rotated .grain {
+    opacity: .8;
 }
