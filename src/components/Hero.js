@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import TiltCard from './TiltCard'; // Import the TiltCard component
+import TiltCard from './TiltCard';
+import NormalCard from './NormalCard';
 import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
@@ -37,7 +38,8 @@ const Hero = () => {
             <a href="/">Learn More</a>
           </div>
         </section>
-        <TiltCard src={pikachu} maxWidth="22vw" />
+        <NormalCard />
+        
       </main>
       <div className="arrow" onClick={handleNextPage}>
         <span></span>
