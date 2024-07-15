@@ -94,7 +94,11 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         <h2>Step 2: Open Your Pack</h2>
         <div className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
           {leftStack.map((card, index) => (
-            <div key={index} className={`card ${movingCard === index ? 'moving-to-back' : ''}`}>
+            <div
+              key={index}
+              className={`card ${movingCard === index ? 'moving-to-back' : ''}`}
+              style={{ zIndex: leftStack.length - index }}
+            >
               <NormalCard
                 isFlipped={card.flipped}
                 frontImage={card.front}

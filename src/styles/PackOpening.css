@@ -85,18 +85,18 @@
 
 @keyframes moveToBack {
   0% {
-    transform: translateY(0) rotateY(180deg);
+    transform: translateY(0);
     z-index: 10;
   }
   50% {
-    transform: translateX(100%) rotateY(180deg);
+    transform: translateX(100%);
     z-index: 10;
   }
   51% {
     z-index: 0; /* Lower the z-index temporarily */
   }
   100% {
-    transform: translateX(0) rotateY(180deg);
+    transform: translateX(0);
     z-index: 0; /* Keep the z-index lower */
   }
 }
