@@ -5,6 +5,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
     const [isRotated, setIsRotated] = useState(isFlipped);
     const [aspectRatio, setAspectRatio] = useState(1);
     const [isInteractMode, setIsInteractMode] = useState(false);
+    const [borderRadius, setBorderRadius] = useState('15px');
     const outerRef = useRef(null);
     const innerRef = useRef(null);
     const shineRef = useRef(null);
@@ -13,9 +14,14 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
 
     useEffect(() => {
         const img = new Image();
+        img.crossOrigin = "Anonymous"; // Handle CORS
         img.src = frontImage || backImage;
         img.onload = () => {
             setAspectRatio(img.width / img.height);
+            calculateBorderRadius(img);
+        };
+        img.onerror = () => {
+            console.error("Image failed to load.");
         };
     }, [frontImage, backImage]);
 
@@ -92,6 +98,35 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         });
     };
 
+    const calculateBorderRadius = (img) => {
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            // Analyze the transparency in the corners to determine the border radius
+            const threshold = 0.1; // Transparency threshold to determine the edge
+            const sampleSize = 10; // Number of pixels to sample from the corners
+
+            let radius = 0;
+
+            for (let y = 0; y < sampleSize; y++) {
+                for (let x = 0; x < sampleSize; x++) {
+                    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                    if (pixelData[3] / 255 > threshold) {
+                        radius = Math.max(radius, Math.sqrt(x * x + y * y));
+                    }
+                }
+            }
+
+            setBorderRadius(`${radius}px`);
+        } catch (error) {
+            console.error("Failed to calculate border radius", error);
+        }
+    };
+
     return (
         <div
             className="normal-card-wrapper"
@@ -101,7 +136,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         >
             <div
                 className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
-                style={{ paddingTop: `${100 / aspectRatio}%` }}
+                style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius }}
                 ref={outerRef}
                 onClick={onCardClick}
             >
@@ -113,8 +148,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
                         <img src={frontImage} alt="Normal Card Back" />
                         <div className="shine" ref={shineRef}></div>
                         <div className="glare" ref={glareRef}></div>
-                        <div className="glitter" ref={glitterRef}></div>
                         <div className="grain"></div>
+                        <div className="glitter" ref={glitterRef}></div>
                     </div>
                 </div>
             </div>
