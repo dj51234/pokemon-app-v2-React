@@ -8,6 +8,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
     const outerRef = useRef(null);
     const innerRef = useRef(null);
     const shineRef = useRef(null);
+    const glareRef = useRef(null);
+    const glitterRef = useRef(null);
 
     useEffect(() => {
         const img = new Image();
@@ -39,12 +41,16 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
 
         const outer = outerRef.current;
         const shine = shineRef.current;
+        const glare = glareRef.current;
+        const glitter = glitterRef.current;
         const rect = outer.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
         const maxTilt = 22;
         const tiltX = (maxTilt * y) / (rect.height / 2);
         const tiltY = (-maxTilt * x) / (rect.width / 2);
+
+        outer.classList.add('tilting'); // Add tilting class
 
         requestAnimationFrame(() => {
             outer.style.setProperty('--rx', `${tiltX}deg`);
@@ -54,6 +60,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
 
             shine.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
             shine.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+            glare.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+            glare.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+            glitter.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+            glitter.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
         });
     };
 
@@ -62,6 +72,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
 
         const outer = outerRef.current;
         const shine = shineRef.current;
+        const glare = glareRef.current;
+        const glitter = glitterRef.current;
+        outer.classList.remove('tilting'); // Remove tilting class
+
         requestAnimationFrame(() => {
             outer.style.setProperty('--rx', '0deg');
             outer.style.setProperty('--ry', '0deg');
@@ -71,6 +85,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
 
             shine.style.setProperty('--mx', '50%');
             shine.style.setProperty('--my', '50%');
+            glare.style.setProperty('--pointer-x', '50%');
+            glare.style.setProperty('--pointer-y', '50%');
+            glitter.style.setProperty('--pointer-x', '50%');
+            glitter.style.setProperty('--pointer-y', '50%');
         });
     };
 
@@ -94,6 +112,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
                     <div className="normal-card-back">
                         <img src={frontImage} alt="Normal Card Back" />
                         <div className="shine" ref={shineRef}></div>
+                        <div className="glare" ref={glareRef}></div>
+                        <div className="glitter" ref={glitterRef}></div>
                         <div className="grain"></div>
                     </div>
                 </div>

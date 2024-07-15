@@ -34,7 +34,9 @@
 
 .overlay-card-stack {
   position: relative;
-  width: 300px;  /* Adjust width as needed */
+  width: 25vw;  /* Responsive width based on viewport width */
+  max-width: 600px;  /* Maximum width to ensure it doesn't get too large */
+  min-width: 300px;  /* Minimum width for smaller screens */
   cursor: pointer;
 }
 
