@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Overlay.css';
 import closeIcon from '../assets/close-icon.png'; // Import close icon image
 import defaultImage from '../assets/default-image.png'; // Import default card image
+import NormalCard from './NormalCard'; // Import the NormalCard component
 
 const Overlay = ({ onClose, cards }) => {
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -48,16 +49,19 @@ const Overlay = ({ onClose, cards }) => {
     <div className="overlay">
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
       <div className="overlay-content">
-        <div className="overlay-card-stack" style={{ aspectRatio, '--top-gradient': topGradient }} onClick={() => handleCardClick(movingCard !== null ? movingCard : 0)}>
+        <div className="overlay-card-stack" style={{ aspectRatio, '--top-gradient': topGradient }}>
           {cardStack.map((card, index) => (
             <div
               key={index}
               className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''}`}
               style={{ zIndex: cardStack.length - index }}
-              onClick={() => handleCardClick(index)}
             >
-              <img src={card.back} alt="Card back" className="overlay-card-back" ref={index === 0 ? imageRef : null} />
-              <img src={card.front} alt="Card front" className="overlay-card-front" />
+              <NormalCard
+                isFlipped={card.flipped}
+                frontImage={card.front}
+                backImage={card.back}
+                onCardClick={() => handleCardClick(index)}
+              />
             </div>
           ))}
         </div>
