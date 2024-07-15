@@ -38,7 +38,7 @@ const Hero = () => {
             <a href="/">Learn More</a>
           </div>
         </section>
-        <NormalCard />
+        <TiltCard src={pikachu} />
         
       </main>
       <div className="arrow" onClick={handleNextPage}>

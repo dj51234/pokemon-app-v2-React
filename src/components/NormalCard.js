@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import defaultImage from '../assets/default-image.png';
-import cardTest from '../assets/card-front.png';
 import '../styles/NormalCard.css';
 
-const NormalCard = () => {
-    const [isRotated, setIsRotated] = useState(false);
+const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
+    const [isRotated, setIsRotated] = useState(isFlipped);
     const [aspectRatio, setAspectRatio] = useState(1);
     const [isInteractMode, setIsInteractMode] = useState(false);
     const outerRef = useRef(null);
@@ -13,22 +11,21 @@ const NormalCard = () => {
 
     useEffect(() => {
         const img = new Image();
-        img.src = cardTest;
+        img.src = frontImage || backImage;
         img.onload = () => {
             setAspectRatio(img.width / img.height);
         };
-    }, []);
+    }, [frontImage, backImage]);
 
-    const handleCardClick = () => {
-        setIsRotated(!isRotated);
-        setIsInteractMode(false); // Reset interact mode when starting rotation
-    };
+    useEffect(() => {
+        setIsRotated(isFlipped);
+    }, [isFlipped]);
 
     useEffect(() => {
         const inner = innerRef.current;
         const handleTransitionEnd = () => {
             if (isRotated) {
-                setIsInteractMode(true); // Enable interact mode after rotation completes
+                setIsInteractMode(true);
             }
         };
         inner.addEventListener('transitionend', handleTransitionEnd);
@@ -88,14 +85,14 @@ const NormalCard = () => {
                 className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
                 style={{ paddingTop: `${100 / aspectRatio}%` }}
                 ref={outerRef}
-                onClick={handleCardClick}
+                onClick={onCardClick}
             >
                 <div className="normal-card-inner" ref={innerRef}>
                     <div className="normal-card-front">
-                        <img src={defaultImage} alt="Normal Card Front" />
+                        <img src={backImage} alt="Normal Card Front" />
                     </div>
                     <div className="normal-card-back">
-                        <img src={cardTest} alt="Normal Card Back" />
+                        <img src={frontImage} alt="Normal Card Back" />
                         <div className="shine" ref={shineRef}></div>
                         <div className="grain"></div>
                     </div>

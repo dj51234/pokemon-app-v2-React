@@ -70,7 +70,7 @@
   background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 30%, transparent 70%);
   mix-blend-mode: overlay;
   pointer-events: none;
-  border-radius: 20px;
+  border-radius: 25px;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }

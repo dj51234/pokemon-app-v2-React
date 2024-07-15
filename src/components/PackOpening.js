@@ -1,7 +1,7 @@
-// src/components/PackOpening.js
 import React, { useState, useEffect } from 'react';
 import '../styles/PackOpening.css';
 import defaultImage from '../assets/default-image.png';
+import NormalCard from './NormalCard';
 
 const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
@@ -11,16 +11,16 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const [movingCard, setMovingCard] = useState(null);
   const [sendingToBinder, setSendingToBinder] = useState(false);
   const [hideStack, setHideStack] = useState(false);
-  const [highlightBackButton, setHighlightBackButton] = useState(false); // New state
-  const [hideNextButton, setHideNextButton] = useState(false); // New state
+  const [highlightBackButton, setHighlightBackButton] = useState(false);
+  const [hideNextButton, setHideNextButton] = useState(false);
 
   useEffect(() => {
     if (randomCards.length > 0) {
       setCardsToShow(randomCards);
-      setHideStack(false); // Ensure the stack is visible when new cards are set
+      setHideStack(false);
       setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
       setAllFlipped(false);
-      setHideNextButton(false); // Show the Add to Binder button when new cards are set
+      setHideNextButton(false);
     }
   }, [randomCards]);
 
@@ -68,9 +68,9 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       setCardsToShow([]);
       setAllFlipped(false);
       setMovingCard(null);
-      setHideStack(false); // Ensure the stack is visible when going back
-      setHighlightBackButton(false); // Remove highlight when going back
-    }, 500); // Adjust the delay to match the animation duration
+      setHideStack(false);
+      setHighlightBackButton(false);
+    }, 500);
     onBack();
   };
 
@@ -79,14 +79,13 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     const newRevealedCards = leftStack.filter(card => card.flipped).map(card => ({ image: card.front }));
     addRevealedCards(newRevealedCards);
 
-    // Wait for the animation to complete before hiding the stack
     setTimeout(() => {
       setSendingToBinder(false);
       setHideStack(true);
-      setHighlightBackButton(true); // Highlight the button when adding to binder
-      setHideNextButton(true); // Hide the Add to Binder button after clicking
+      setHighlightBackButton(true);
+      setHideNextButton(true);
       onNext();
-    }, 600); // Duration should match the CSS transition duration
+    }, 600);
   };
 
   return (
@@ -95,15 +94,13 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         <h2>Step 2: Open Your Pack</h2>
         <div className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
           {leftStack.map((card, index) => (
-            <div
-              key={index}
-              id={`card-${index}`}
-              className={`card ${card.flipped ? 'flipped' : ''} ${movingCard === index ? 'moving-to-back' : ''}`}
-              style={{ zIndex: leftStack.length - index }}
-              onClick={() => handleCardClick(index)}
-            >
-              <img src={card.back} alt="Card back" className="card-back" />
-              {card.front && <img src={card.front} alt="Card front" className="card-front" />}
+            <div key={index} className={`card ${movingCard === index ? 'moving-to-back' : ''}`}>
+              <NormalCard
+                isFlipped={card.flipped}
+                frontImage={card.front}
+                backImage={card.back}
+                onCardClick={() => handleCardClick(index)}
+              />
             </div>
           ))}
         </div>
