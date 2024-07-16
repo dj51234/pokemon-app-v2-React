@@ -134,7 +134,7 @@
         farthest-corner circle at var(--pointer-x) var(--pointer-y),
         hsla(0, 0%, 100%, 0.404) 0%,
         hsla(0, 0%, 100%, 0.295) 5%,
-        hsla(0, 0%, 0%, 0.6) 80%
+        hsla(0, 0%, 0%, 0.5) 80%
     );
     opacity: var(--card-opacity);
     mix-blend-mode: overlay;
