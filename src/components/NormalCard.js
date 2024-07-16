@@ -6,6 +6,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
     const [aspectRatio, setAspectRatio] = useState(1);
     const [isInteractMode, setIsInteractMode] = useState(false);
     const [borderRadius, setBorderRadius] = useState('15px');
+    const [contrast, setContrast] = useState('100%');
     const outerRef = useRef(null);
     const innerRef = useRef(null);
     const shineRef = useRef(null);
@@ -19,6 +20,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         img.onload = () => {
             setAspectRatio(img.width / img.height);
             calculateBorderRadius(img);
+            adjustContrast(img);
         };
         img.onerror = () => {
             console.error("Image failed to load.");
@@ -127,6 +129,35 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         }
     };
 
+    const adjustContrast = (img) => {
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            const imageData = ctx.getImageData(0, 0, img.width, img.height);
+            let lightPixels = 0;
+            let darkPixels = 0;
+
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const [r, g, b] = [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2]];
+                const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                if (brightness > 127.5) {
+                    lightPixels++;
+                } else {
+                    darkPixels++;
+                }
+            }
+
+            const contrastValue = lightPixels > darkPixels ? '110%' : '120%';
+            setContrast(contrastValue);
+        } catch (error) {
+            console.error("Failed to adjust contrast", error);
+        }
+    };
+
     return (
         <div
             className="normal-card-wrapper"
@@ -136,7 +167,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         >
             <div
                 className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
-                style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius }}
+                style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, filter: `contrast(${contrast})` }}
                 ref={outerRef}
                 onClick={onCardClick}
             >

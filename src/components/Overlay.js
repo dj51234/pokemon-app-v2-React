@@ -5,7 +5,7 @@ import defaultImage from '../assets/default-image.png'; // Import default card i
 import NormalCard from './NormalCard'; // Import the NormalCard component
 
 const Overlay = ({ onClose, cards }) => {
-  const [aspectRatio, setAspectRatio] = useState(1);
+  const [aspectRatio, setAspectRatio] = useState(640 / 892);
   const [cardStack, setCardStack] = useState(cards.map(card => ({ back: defaultImage, front: card.imageUrl, flipped: false, gradient: card.gradient })));
   const [allFlipped, setAllFlipped] = useState(false);
   const [animating, setAnimating] = useState(false);

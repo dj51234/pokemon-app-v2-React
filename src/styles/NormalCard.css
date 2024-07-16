@@ -32,6 +32,10 @@
     backface-visibility: hidden; /* Ensuring the backface is hidden */
 }
 
+.enhanced-contrast {
+    filter: contrast(var(--contrast));
+}
+
 .normal-card-inner {
     position: absolute;
     top: 0;
@@ -68,7 +72,7 @@
 
 .normal-card-outer.tilting img {
     image-rendering: -webkit-optimize-contrast; /* Optimizes image rendering */
-    image-rendering: crisp-edges; /* Optimizes image rendering for sharpness */
+    image-rendering: optimizeQuality;
 }
 
 .rotated .normal-card-inner {
@@ -84,9 +88,9 @@
     pointer-events: none;
     background-image: radial-gradient(
         farthest-corner circle at var(--mx) var(--my),
-        rgba(230, 230, 230, 0.671) 0%,
+        rgba(230, 230, 230, 0.377) 0%,
         rgba(200, 200, 200, 0.1) 25%,
-        rgba(0, 0, 0, 0.418) 90%
+        rgba(0, 0, 0, 0.318) 90%
     );
     background-blend-mode: soft-light, screen, overlay;
     opacity: var(--card-opacity, 0);
@@ -116,21 +120,21 @@
 }
 
 .rotated .grain {
-    opacity: .7;
+    opacity: .4;
 }
 
 .glare {
     position: absolute;
     top: 0;
     left: 0;
-    width: 110%;
-    height: 110%;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     background-image: radial-gradient(
         farthest-corner circle at var(--pointer-x) var(--pointer-y),
-        hsla(0, 0%, 100%, 0.404) 10%,
-        hsla(0, 0%, 100%, 0.295) 20%,
-        hsla(0, 0%, 0%, 0.6) 90%
+        hsla(0, 0%, 100%, 0.404) 0%,
+        hsla(0, 0%, 100%, 0.295) 5%,
+        hsla(0, 0%, 0%, 0.6) 80%
     );
     opacity: var(--card-opacity);
     mix-blend-mode: overlay;
@@ -153,5 +157,4 @@
     transform: translateZ(1px);
     overflow: hidden;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    
 }
