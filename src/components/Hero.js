@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
-import TiltCard from './TiltCard';
 import NormalCard from './NormalCard';
 import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
-import pikachu from '../assets/card-front.png';
+import pikachu from '../assets/card-front.png'; // Replace with your back image path
 
 const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);
@@ -38,8 +37,9 @@ const Hero = () => {
             <a href="/">Learn More</a>
           </div>
         </section>
-        <TiltCard src={pikachu} />
-        
+        <div className="hero-card">
+          <NormalCard isFlipped={true} frontImage={pikachu} />
+        </div>
       </main>
       <div className="arrow" onClick={handleNextPage}>
         <span></span>

@@ -5,7 +5,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
     const [isRotated, setIsRotated] = useState(isFlipped);
     const [aspectRatio, setAspectRatio] = useState(1);
     const [isInteractMode, setIsInteractMode] = useState(false);
-    const [borderRadius, setBorderRadius] = useState('15px');
+    const [borderRadius, setBorderRadius] = useState('0px');
     const [contrast, setContrast] = useState('100%');
     const outerRef = useRef(null);
     const innerRef = useRef(null);
@@ -18,14 +18,18 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         img.crossOrigin = "Anonymous"; // Handle CORS
         img.src = frontImage || backImage;
         img.onload = () => {
-            setAspectRatio(img.width / img.height);
+            const aspectRatioValue = img.width / img.height;
+            setAspectRatio(aspectRatioValue);
+            document.documentElement.style.setProperty('--card-aspect-ratio', `${aspectRatioValue}`);
             calculateBorderRadius(img);
-            adjustContrast(img);
+            if (isFlipped) {
+                adjustContrast(img);
+            }
         };
         img.onerror = () => {
             console.error("Image failed to load.");
         };
-    }, [frontImage, backImage]);
+    }, [frontImage, backImage, isFlipped]);
 
     useEffect(() => {
         setIsRotated(isFlipped);
@@ -109,21 +113,63 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
             ctx.drawImage(img, 0, 0, img.width, img.height);
 
             // Analyze the transparency in the corners to determine the border radius
-            const threshold = 0.1; // Transparency threshold to determine the edge
-            const sampleSize = 10; // Number of pixels to sample from the corners
+            const threshold = 10; // Transparency threshold to determine the edge
+            const sampleSize = 50; // Number of pixels to sample from the corners
+            const transparentPixelCount = {
+                topLeft: 0,
+                topRight: 0,
+                bottomLeft: 0,
+                bottomRight: 0
+            };
 
-            let radius = 0;
+            // Function to check if a pixel is transparent
+            const isTransparent = (pixelData) => pixelData[3] < threshold;
 
+            // Check top left corner
             for (let y = 0; y < sampleSize; y++) {
                 for (let x = 0; x < sampleSize; x++) {
                     const pixelData = ctx.getImageData(x, y, 1, 1).data;
-                    if (pixelData[3] / 255 > threshold) {
-                        radius = Math.max(radius, Math.sqrt(x * x + y * y));
+                    if (isTransparent(pixelData)) {
+                        transparentPixelCount.topLeft++;
                     }
                 }
             }
 
-            setBorderRadius(`${radius}px`);
+            // Check top right corner
+            for (let y = 0; y < sampleSize; y++) {
+                for (let x = img.width - sampleSize; x < img.width; x++) {
+                    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                    if (isTransparent(pixelData)) {
+                        transparentPixelCount.topRight++;
+                    }
+                }
+            }
+
+            // Check bottom left corner
+            for (let y = img.height - sampleSize; y < img.height; y++) {
+                for (let x = 0; x < sampleSize; x++) {
+                    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                    if (isTransparent(pixelData)) {
+                        transparentPixelCount.bottomLeft++;
+                    }
+                }
+            }
+
+            // Check bottom right corner
+            for (let y = img.height - sampleSize; y < img.height; y++) {
+                for (let x = img.width - sampleSize; x < img.width; x++) {
+                    const pixelData = ctx.getImageData(x, y, 1, 1).data;
+                    if (isTransparent(pixelData)) {
+                        transparentPixelCount.bottomRight++;
+                    }
+                }
+            }
+
+            // Determine the border radius based on the amount of transparent pixels
+            const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
+            const borderRadiusValue = totalTransparentPixels > 0 ? '15px' : '0px';
+
+            setBorderRadius(borderRadiusValue);
         } catch (error) {
             console.error("Failed to calculate border radius", error);
         }
@@ -151,7 +197,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
                 }
             }
 
-            const contrastValue = lightPixels > darkPixels ? '110%' : '120%';
+            const contrastValue = lightPixels > darkPixels ? '110%' : '100%';
             setContrast(contrastValue);
         } catch (error) {
             console.error("Failed to adjust contrast", error);
@@ -167,15 +213,15 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick }) => {
         >
             <div
                 className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
-                style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, filter: `contrast(${contrast})` }}
+                style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, filter: isFlipped ? `contrast(${contrast})` : 'none' }}
                 ref={outerRef}
                 onClick={onCardClick}
             >
                 <div className="normal-card-inner" ref={innerRef}>
-                    <div className="normal-card-front">
+                    <div className="normal-card-front" style={{ borderRadius }}>
                         <img src={backImage} alt="Normal Card Front" />
                     </div>
-                    <div className="normal-card-back">
+                    <div className="normal-card-back" style={{ borderRadius }}>
                         <img src={frontImage} alt="Normal Card Back" />
                         <div className="shine" ref={shineRef}></div>
                         <div className="glare" ref={glareRef}></div>

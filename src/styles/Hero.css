@@ -11,6 +11,22 @@
   z-index: 1;
 }
 
+.hero-card {
+  width: 100%;
+  max-width: 600px; /* Adjust the maximum width as needed */
+  min-width: 420px; /* Ensures the card keeps its aspect ratio */
+  width: 22vw;
+  justify-self: flex-end;
+}
+
+.hero-card .grain {
+  opacity: 1;
+}
+
+.hero-card .glitter {
+  opacity: .1;
+}
+
 .hero-text {
   display: flex;
   flex-direction: column;
@@ -131,7 +147,7 @@
   .arrow {
       display: none;
   }
-  .tilt-card {
+  .hero-card {
     display: none;
   }
 }
