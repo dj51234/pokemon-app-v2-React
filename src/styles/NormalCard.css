@@ -3,18 +3,18 @@
     --my: 50%;
     --rx: 0deg;
     --ry: 0deg;
-}
-
-.normal-card-wrapper {
+  }
+  
+  .normal-card-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
     perspective: 1000px; /* Ensure a good perspective for 3D transforms */
-}
-
-.normal-card-outer {
+  }
+  
+  .normal-card-outer {
     position: relative;
     width: 100%;
     height: 100%;
@@ -29,13 +29,13 @@
     overflow: hidden;
     -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
     backface-visibility: hidden; /* Ensuring the backface is hidden */
-}
-
-.enhanced-contrast {
+  }
+  
+  .enhanced-contrast {
     filter: contrast(var(--contrast));
-}
-
-.normal-card-inner {
+  }
+  
+  .normal-card-inner {
     position: absolute;
     top: 0;
     left: 0;
@@ -44,40 +44,40 @@
     transition: transform 0.6s;
     transform-style: preserve-3d;
     backface-visibility: hidden; /* Ensuring the backface is hidden */
-}
-
-.normal-card-front,
-.normal-card-back {
+  }
+  
+  .normal-card-front,
+  .normal-card-back {
     position: absolute;
     width: 100%;
     height: 100%;
     backface-visibility: hidden; /* Ensuring the backface is hidden */
     transform-style: preserve-3d;
     transform: translate3d(0px, 0px, 0.01px); /* Enhances 3D effect and maintains sharpness */
-}
-
-.normal-card-back {
+  }
+  
+  .normal-card-back {
     transform: rotateY(180deg);
     position: relative;
     overflow: hidden;
-}
-
-.normal-card-outer img {
+  }
+  
+  .normal-card-outer img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.normal-card-outer.tilting img {
+  }
+  
+  .normal-card-outer.tilting img {
     image-rendering: -webkit-optimize-contrast; /* Optimizes image rendering */
     image-rendering: optimizeQuality;
-}
-
-.rotated .normal-card-inner {
+  }
+  
+  .rotated .normal-card-inner {
     transform: rotateY(180deg);
-}
-
-.shine {
+  }
+  
+  .shine {
     position: absolute;
     top: 0;
     left: 0;
@@ -85,10 +85,10 @@
     height: 150%;
     pointer-events: none;
     background-image: radial-gradient(
-        farthest-corner circle at var(--mx) var(--my),
-        rgba(230, 230, 230, 0.177) 0%,
-        rgba(200, 200, 200, 0.1) 25%,
-        rgba(0, 0, 0, 0.318) 90%
+      farthest-corner circle at var(--mx) var(--my),
+      rgba(230, 230, 230, 0.177) 0%,
+      rgba(200, 200, 200, 0.1) 25%,
+      rgba(0, 0, 0, 0.318) 90%
     );
     background-blend-mode: soft-light, screen, overlay;
     opacity: var(--card-opacity, 0);
@@ -97,13 +97,13 @@
     transform: translateZ(1px);
     overflow: hidden;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.normal-card-back:hover .shine {
+  }
+  
+  .normal-card-back:hover .shine {
     opacity: 1;
-}
-
-.grain {
+  }
+  
+  .grain {
     position: absolute;
     top: 0;
     left: 0;
@@ -114,13 +114,13 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
-}
-
-.rotated .grain {
+  }
+  
+  .rotated .grain {
     opacity: .4;
-}
-
-.glare {
+  }
+  
+  .glare {
     position: absolute;
     top: 0;
     left: 0;
@@ -128,18 +128,18 @@
     height: 100%;
     pointer-events: none;
     background-image: radial-gradient(
-        farthest-corner circle at var(--pointer-x) var(--pointer-y),
-        hsla(0, 0%, 100%, 0.404) 0%,
-        hsla(0, 0%, 100%, 0.295) 5%,
-        hsla(0, 0%, 0%, 0.5) 80%
+      farthest-corner circle at var(--pointer-x) var(--pointer-y),
+      hsla(0, 0%, 100%, 0.404) 0%,
+      hsla(0, 0%, 100%, 0.295) 5%,
+      hsla(0, 0%, 0%, 0.5) 80%
     );
     opacity: var(--card-opacity);
     mix-blend-mode: overlay;
     transform: translateZ(1.41px);
     overflow: hidden;
-}
-
-.glitter {
+  }
+  
+  .glitter {
     position: absolute;
     top: 0;
     left: 0;
@@ -154,4 +154,5 @@
     transform: translateZ(1px);
     overflow: hidden;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
+  }
+  

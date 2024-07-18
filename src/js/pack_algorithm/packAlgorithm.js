@@ -61,19 +61,29 @@ export async function openPack(setId) {
         });
       }
 
-      const cardsWithImages = await Promise.all(
+      const cardsWithDetails = await Promise.all(
         finalSelectedCards.map(async (card) => {
           const cardData = await fetchCardData(card.id);
-          return { ...card, imageUrl: cardData ? cardData.images.large : null };
+          if (cardData) {
+            return { 
+              ...card, 
+              imageUrl: cardData.images.large, 
+              subtypes: cardData.subtypes,
+              setId: cardData.set.id,
+              supertypes: cardData.supertype,
+              type: cardData.types ? cardData.types[0] : 'Unknown'
+            };
+          }
+          return card;
         })
       );
 
       // Log rarity and image URLs to the console
-      cardsWithImages.forEach(card => {
+      cardsWithDetails.forEach(card => {
         console.log(`Card ID: ${card.id}, Rarity: ${card.rarity}, Image URL: ${card.imageUrl}`);
       });
 
-      return cardsWithImages.filter(card => card.imageUrl); // Ensure to return only cards with image URLs
+      return cardsWithDetails.filter(card => card.imageUrl); // Ensure to return only cards with image URLs
     } else {
       console.error(`Set ID ${setId} not found in the JSON data.`);
       return [];

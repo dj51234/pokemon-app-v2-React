@@ -6,7 +6,16 @@ import NormalCard from './NormalCard'; // Import the NormalCard component
 
 const Overlay = ({ onClose, cards }) => {
   const [aspectRatio, setAspectRatio] = useState(640 / 892);
-  const [cardStack, setCardStack] = useState(cards.map(card => ({ back: defaultImage, front: card.imageUrl, flipped: false, gradient: card.gradient })));
+  const [cardStack, setCardStack] = useState(cards.map(card => ({
+    back: defaultImage,
+    front: card.imageUrl,
+    flipped: false,
+    gradient: card.gradient,
+    rarity: card.rarity,
+    subtypes: card.subtypes,
+    setId: card.setId,
+    supertypes: card.supertypes
+  })));
   const [allFlipped, setAllFlipped] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
@@ -61,6 +70,10 @@ const Overlay = ({ onClose, cards }) => {
                 frontImage={card.front}
                 backImage={card.back}
                 onCardClick={() => handleCardClick(index)}
+                rarity={card.rarity}
+                subtypes={card.subtypes}
+                setId={card.setId}
+                supertypes={card.supertypes}
               />
             </div>
           ))}
