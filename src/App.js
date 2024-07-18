@@ -13,6 +13,7 @@ import './index.css';
 import { doc, getDoc } from 'firebase/firestore';
 // Import your pack algorithm script
 import { openPack } from './js/pack_algorithm/packAlgorithm';
+// import { fetchAndGroupCardsForAllSets } from './js/pack_algorithm/fetchAllSetData'; // uncomment to fetch new full set data json
 
 export const AuthContext = React.createContext();
 

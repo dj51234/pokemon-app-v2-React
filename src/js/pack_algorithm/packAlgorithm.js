@@ -28,18 +28,18 @@ export async function openPack(setId) {
       
       let finalSelectedCards = [];
 
-      if (setData.Common && setData.Uncommon) {
-        const selectedCommonCards = getRandomCards(setData.Common, 6).map(id => ({
+      if (setData.common && setData.uncommon) {
+        const selectedcommonCards = getRandomCards(setData.common, 6).map(id => ({
           id,
-          rarity: 'Common'
+          rarity: 'common'
         }));
-        const selectedUncommonCards = getRandomCards(setData.Uncommon, 3).map(id => ({
+        const selecteduncommonCards = getRandomCards(setData.uncommon, 3).map(id => ({
           id,
-          rarity: 'Uncommon'
+          rarity: 'uncommon'
         }));
 
         const remainingRarities = Object.keys(setData).filter(
-          (rarity) => rarity !== 'Common' && rarity !== 'Uncommon'
+          (rarity) => rarity !== 'common' && rarity !== 'uncommon'
         );
 
         const selectedRarity = remainingRarities[Math.floor(Math.random() * remainingRarities.length)];
@@ -49,15 +49,15 @@ export async function openPack(setId) {
         }))[0];
 
         finalSelectedCards = [
-          ...selectedCommonCards,
-          ...selectedUncommonCards,
+          ...selectedcommonCards,
+          ...selecteduncommonCards,
           selectedRareCard
         ];
       } else {
         const allCards = Object.values(setData).flat();
         finalSelectedCards = getRandomCards(allCards, 10).map(id => {
           const rarity = Object.keys(setData).find(rarity => setData[rarity].includes(id));
-          return { id, rarity: rarity || 'Unknown' };
+          return { id, rarity: rarity || 'unknown' };
         });
       }
 
@@ -71,7 +71,7 @@ export async function openPack(setId) {
               subtypes: cardData.subtypes,
               setId: cardData.set.id,
               supertypes: cardData.supertype,
-              type: cardData.types ? cardData.types[0] : 'Unknown'
+              type: cardData.types ? cardData.types[0] : 'unknown'
             };
           }
           return card;

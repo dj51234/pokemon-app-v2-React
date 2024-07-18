@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
-import '../styles/cards/base.css';
-import '../styles/cards/base2.css';
 
-const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, type }) => {
+const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes }) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(false);
@@ -118,6 +116,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, img.width, img.height);
 
+      // Analyze the transparency in the corners to determine the border radius
       const threshold = 10; // Transparency threshold to determine the edge
       const sampleSize = 50; // Number of pixels to sample from the corners
       const transparentPixelCount = {
@@ -127,8 +126,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         bottomRight: 0
       };
 
+      // Function to check if a pixel is transparent
       const isTransparent = (pixelData) => pixelData[3] < threshold;
 
+      // Check top left corner
       for (let y = 0; y < sampleSize; y++) {
         for (let x = 0; x < sampleSize; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -138,6 +139,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
+      // Check top right corner
       for (let y = 0; y < sampleSize; y++) {
         for (let x = img.width - sampleSize; x < img.width; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -147,6 +149,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
+      // Check bottom left corner
       for (let y = img.height - sampleSize; y < img.height; y++) {
         for (let x = 0; x < sampleSize; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -156,6 +159,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
+      // Check bottom right corner
       for (let y = img.height - sampleSize; y < img.height; y++) {
         for (let x = img.width - sampleSize; x < img.width; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -165,6 +169,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
+      // Determine the border radius based on the amount of transparent pixels
       const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
       const borderRadiusValue = totalTransparentPixels > 0 ? '15px' : '0px';
 
@@ -203,17 +208,26 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     }
   };
 
+  const formatSupertypes = (supertypes) => {
+    if (Array.isArray(supertypes)) {
+      return supertypes.map(type => type.toLowerCase().replace('pokémon', 'pokemon')).join(',');
+    } else if (supertypes) {
+      return supertypes.toLowerCase().replace('pokémon', 'pokemon');
+    } else {
+      return '';
+    }
+  };
+
   return (
     <div
-      className={`normal-card-wrapper ${type}`}
+      className="normal-card-wrapper"
       style={{ perspective: '1000px' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       data-rarity={rarity}
-      data-subtypes={subtypes}
+      data-subtypes={Array.isArray(subtypes) ? subtypes.join(',').toLowerCase() : (subtypes || '').toLowerCase()}
       data-set={setId}
-      data-supertypes={supertypes}
-      data-type={type}
+      data-supertypes={formatSupertypes(supertypes)}
     >
       <div
         className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
@@ -227,8 +241,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
           </div>
           <div className="normal-card-back" style={{ borderRadius }}>
             <img src={frontImage} alt="Normal Card Back" />
-            <div className="shine card__shine" ref={shineRef}></div>
-            <div className="glare card__glare" ref={glareRef}></div>
+            <div className="shine" ref={shineRef}></div>
+            <div className="glare" ref={glareRef}></div>
             <div className="grain"></div>
             {['Common', 'Uncommon'].includes(rarity) && (
               <div className="glitter" ref={glitterRef}></div>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import NormalCard from './NormalCard';
@@ -10,6 +10,14 @@ import pikachu from '../assets/card-front.png'; // Replace with your back image 
 const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = pikachu;
+    img.onload = () => setImageLoaded(true);
+    img.onerror = () => console.error("Image failed to load.");
+  }, []);
 
   const handleStartCollection = (e) => {
     e.preventDefault();
@@ -38,7 +46,11 @@ const Hero = () => {
           </div>
         </section>
         <div className="hero-card">
-          <NormalCard isFlipped={true} frontImage={pikachu} />
+          {imageLoaded ? (
+            <NormalCard isFlipped={true} frontImage={pikachu} />
+          ) : (
+            <div></div>
+          )}
         </div>
       </main>
       <div className="arrow" onClick={handleNextPage}>
