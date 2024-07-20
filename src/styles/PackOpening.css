@@ -23,7 +23,9 @@
 
 .card-stack {
   position: relative;
-  min-width: 300px; /* width of the card */
+  width: 18vw;  /* Responsive width based on viewport width */
+  max-width: 650px;  /* Maximum width to ensure it doesn't get too large */
+  min-width: 300px;  /* Minimum width for smaller screens */
   aspect-ratio: 200000 / 278367;
   transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
 }

@@ -171,7 +171,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
 
       // Determine the border radius based on the amount of transparent pixels
       const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
-      const borderRadiusValue = totalTransparentPixels > 0 ? '15px' : '0px';
+      const borderRadiusValue = totalTransparentPixels > 0 ? '22px' : '0px';
 
       setBorderRadius(borderRadiusValue);
     } catch (error) {
@@ -231,7 +231,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     >
       <div
         className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
-        style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, filter: isFlipped ? `contrast(${contrast})` : 'none' }}
+        style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius}}
         ref={outerRef}
         onClick={onCardClick}
       >
@@ -244,7 +244,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
             <div className="shine" ref={shineRef}></div>
             <div className="glare" ref={glareRef}></div>
             <div className="grain"></div>
-            {['Common', 'Uncommon'].includes(rarity) && (
+            {['common', 'uncommon'].includes(rarity) && (
               <div className="glitter" ref={glitterRef}></div>
             )}
           </div>

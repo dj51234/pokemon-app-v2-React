@@ -1,158 +1,191 @@
 :root {
-    --mx: 50%;
-    --my: 50%;
-    --rx: 0deg;
-    --ry: 0deg;
-  }
+  --mx: 50%;
+  --my: 50%;
+  --rx: 0deg;
+  --ry: 0deg;
+}
+
+.normal-card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px; /* Ensure a good perspective for 3D transforms */
+}
+
+.normal-card-outer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.1s;
+  transform-style: preserve-3d;
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  transform: rotateY(var(--ry)) rotateX(var(--rx));
+  will-change: transform;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
+  backface-visibility: hidden; /* Ensuring the backface is hidden */
+}
+
+.enhanced-contrast {
+  filter: contrast(var(--contrast));
+}
+
+.normal-card-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  backface-visibility: hidden; /* Ensuring the backface is hidden */
+}
+
+.normal-card-front,
+.normal-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Ensuring the backface is hidden */
+  transform-style: preserve-3d;
+  transform: translate3d(0px, 0px, 0.01px); /* Enhances 3D effect and maintains sharpness */
+}
+
+.normal-card-back {
+  transform: rotateY(180deg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* .normal-card-back::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/sparkles.webp');
+  mix-blend-mode: screen;
+  opacity: 1;
+  z-index: 1;
+  clip-path: inset(10% 5% 20% 5%);
+}
+
+.normal-card-back::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/holo.webp');
+  mix-blend-mode: overlay;
+  opacity: .2;
+  z-index: 2;
+} */
+
+.normal-card-outer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.normal-card-outer.tilting img {
+  image-rendering: -webkit-optimize-contrast; /* Optimizes image rendering */
+  image-rendering: optimizeQuality;
+}
+
+.rotated .normal-card-inner {
+  transform: rotateY(180deg);
+}
+
+.shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: radial-gradient(
+    farthest-corner circle at var(--mx) var(--my),
+    rgba(230, 230, 230, 0.177) 0%,
+    rgba(200, 200, 200, 0.1) 25%,
+    rgba(0, 0, 0, 0.318) 90%
+  );
+  background-blend-mode: soft-light, screen, overlay;
+  opacity: 1;
+  mix-blend-mode: overlay;
+  will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
+  transform: translateZ(1px);
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
   
-  .normal-card-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    perspective: 1000px; /* Ensure a good perspective for 3D transforms */
-  }
-  
-  .normal-card-outer {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.1s;
-    transform-style: preserve-3d;
-    --rx: 0deg;
-    --ry: 0deg;
-    --mx: 50%;
-    --my: 50%;
-    transform: rotateY(var(--ry)) rotateX(var(--rx));
-    will-change: transform;
-    overflow: hidden;
-    -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
-    backface-visibility: hidden; /* Ensuring the backface is hidden */
-  }
-  
-  .enhanced-contrast {
-    filter: contrast(var(--contrast));
-  }
-  
-  .normal-card-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-    backface-visibility: hidden; /* Ensuring the backface is hidden */
-  }
-  
-  .normal-card-front,
-  .normal-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden; /* Ensuring the backface is hidden */
-    transform-style: preserve-3d;
-    transform: translate3d(0px, 0px, 0.01px); /* Enhances 3D effect and maintains sharpness */
-  }
-  
-  .normal-card-back {
-    transform: rotateY(180deg);
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .normal-card-outer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .normal-card-outer.tilting img {
-    image-rendering: -webkit-optimize-contrast; /* Optimizes image rendering */
-    image-rendering: optimizeQuality;
-  }
-  
-  .rotated .normal-card-inner {
-    transform: rotateY(180deg);
-  }
-  
-  .shine {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 150%;
-    height: 150%;
-    pointer-events: none;
-    background-image: radial-gradient(
-      farthest-corner circle at var(--mx) var(--my),
-      rgba(230, 230, 230, 0.177) 0%,
-      rgba(200, 200, 200, 0.1) 25%,
-      rgba(0, 0, 0, 0.318) 90%
-    );
-    background-blend-mode: soft-light, screen, overlay;
-    opacity: var(--card-opacity, 0);
-    mix-blend-mode: overlay;
-    will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
-    transform: translateZ(1px);
-    overflow: hidden;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  }
-  
-  .normal-card-back:hover .shine {
-    opacity: 1;
-  }
-  
-  .grain {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/grain.webp');
-    mix-blend-mode: color-dodge;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-  
-  .rotated .grain {
-    opacity: .4;
-  }
-  
-  .glare {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background-image: radial-gradient(
-      farthest-corner circle at var(--pointer-x) var(--pointer-y),
-      hsla(0, 0%, 100%, 0.404) 0%,
-      hsla(0, 0%, 100%, 0.295) 5%,
-      hsla(0, 0%, 0%, 0.5) 80%
-    );
-    opacity: var(--card-opacity);
-    mix-blend-mode: overlay;
-    transform: translateZ(1.41px);
-    overflow: hidden;
-  }
-  
-  .glitter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 110%;
-    height: 110%;
-    pointer-events: none;
-    background-image: url('../assets/glitter.png');
-    background-size: 25%;
-    opacity: 0.2;
-    mix-blend-mode: lighten;
-    will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
-    transform: translateZ(1px);
-    overflow: hidden;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  }
-  
+}
+
+.normal-card-back:hover .shine {
+  opacity: 1;
+}
+
+.grain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/grain.webp');
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.rotated .grain {
+  opacity: .4;
+}
+
+.glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: radial-gradient(
+    farthest-corner circle at var(--pointer-x) var(--pointer-y),
+    hsla(0, 0%, 100%, 0.404) 0%,
+    hsla(0, 0%, 100%, 0.295) 5%,
+    hsla(0, 0%, 0%, 0.5) 80%
+  );
+  opacity: var(--card-opacity);
+  mix-blend-mode: overlay;
+  transform: translateZ(1.41px);
+  overflow: hidden;
+}
+
+.glitter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 110%;
+  height: 110%;
+  pointer-events: none;
+  background-image: url('../assets/glitter.png');
+  background-size: 25%;
+  opacity: .2;
+  mix-blend-mode: screen;
+  will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
+  transform: translateZ(1px);
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+
+
+
+
+
