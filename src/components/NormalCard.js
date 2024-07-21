@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ColorThief from 'colorthief';
 import '../styles/NormalCard.css';
 
 const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive }) => {
@@ -8,6 +9,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   const [borderRadius, setBorderRadius] = useState('0px');
   const [contrast, setContrast] = useState('100%');
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [prominentColors, setProminentColors] = useState([]);
   const outerRef = useRef(null);
   const innerRef = useRef(null);
   const shineRef = useRef(null);
@@ -27,11 +29,23 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         adjustContrast(img);
       }
       setImageLoaded(true);
+      extractColors(img);
     };
     img.onerror = () => {
       console.error("Image failed to load.");
     };
   }, [frontImage, backImage, isFlipped]);
+
+  const extractColors = (img) => {
+    try {
+      const colorThief = new ColorThief();
+      const colors = colorThief.getPalette(img, 5); // Extract 5 colors
+      setProminentColors(colors || []);
+    } catch (error) {
+      console.error("Failed to extract colors", error);
+      setProminentColors([]);
+    }
+  };
 
   useEffect(() => {
     setIsRotated(isFlipped);
@@ -252,6 +266,19 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
               {['common', 'uncommon'].includes(rarity) && (
                 <div className="glitter" ref={glitterRef}></div>
               )}
+              <div
+                className="color-shine"
+                style={{
+                  background: `linear-gradient(45deg, ${prominentColors.map(color => `rgba(${color.join(',')}, 0.5)`).join(', ')})`,
+                  mixBlendMode: 'overlay',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  borderRadius: borderRadius
+                }}
+              ></div>
             </div>
           </div>
         </div>
