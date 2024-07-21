@@ -47,7 +47,7 @@ const Hero = () => {
         </section>
         <div className="hero-card">
           {imageLoaded ? (
-            <NormalCard isFlipped={true} frontImage={pikachu} />
+            <NormalCard isFlipped={true} frontImage={pikachu} startInteractive={true} heroCard={true} />
           ) : (
             <div></div>
           )}

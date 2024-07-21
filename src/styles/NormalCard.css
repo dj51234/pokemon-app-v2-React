@@ -62,7 +62,36 @@
   overflow: hidden;
 }
 
-/* .normal-card-back::after {
+.normal-card-wrapper[data-rarity='special illustration rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='ace spec rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='amazing rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='hyper rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='double rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='radiant rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='illustration rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare ace'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare holo'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare break'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare holo ex'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare holo gx'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare holo lv.x'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare holo star'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare v'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare holo vmax'] .normal-card-back::after, 
+.normal-card-wrapper[data-rarity='rare rare holo vstar'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare prime'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare prism star'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare rainbow'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare secret'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare shining'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare holo shiny'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare shiny gx'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='rare ultra'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='shiny rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='shiny ultra rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='special illustration rare'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='trainer gallery rare holo'] .normal-card-back::after,
+.normal-card-wrapper[data-rarity='ultra rare'] .normal-card-back::after { 
   content: '';
   position: absolute;
   top: 0;
@@ -70,24 +99,12 @@
   width: 100%;
   height: 100%;
   background: url('../assets/sparkles.webp');
-  mix-blend-mode: screen;
+  mix-blend-mode: color-dodge;
   opacity: 1;
   z-index: 1;
-  clip-path: inset(10% 5% 20% 5%);
 }
 
-.normal-card-back::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('../assets/holo.webp');
-  mix-blend-mode: overlay;
-  opacity: .2;
-  z-index: 2;
-} */
+
 
 .normal-card-outer img {
   width: 100%;
@@ -183,3 +200,8 @@
   overflow: hidden;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
+
+.hero-card .normal-card-outer {
+  box-shadow: 0 0 3px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
+}
+
