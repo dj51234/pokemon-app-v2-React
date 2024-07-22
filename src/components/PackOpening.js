@@ -4,7 +4,7 @@ import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 
 const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
-  const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false, rarity: '', subtypes: [], supertypes: '', setId: '' }));
+  const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
   const [animating, setAnimating] = useState(false);
   const [allFlipped, setAllFlipped] = useState(false);
@@ -18,7 +18,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     if (randomCards.length > 0) {
       setCardsToShow(randomCards);
       setHideStack(false);
-      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false, rarity: '', subtypes: [], supertypes: '', setId: '' }));
+      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
       setAllFlipped(false);
       setHideNextButton(false);
     }
@@ -36,14 +36,14 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       const updatedStack = newLeftStack.map((card, i) => {
         if (!card.flipped && cardsToShow.length > 0) {
           const randomCard = cardsToShow.pop();
-          return {
-            ...card,
-            front: randomCard.images.large,
-            flipped: true,
-            rarity: randomCard.rarity || '',
-            subtypes: randomCard.subtypes || [],
-            supertypes: randomCard.supertypes || '',
-            setId: randomCard.set.id || ''
+          return { 
+            ...card, 
+            front: randomCard.images.large, 
+            flipped: true, 
+            rarity: randomCard.rarity,
+            subtypes: randomCard.subtypes,
+            setId: randomCard.setId,
+            supertypes: randomCard.supertypes
           };
         }
         return card;
@@ -72,7 +72,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
   const handleBackClick = () => {
     setTimeout(() => {
-      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false, rarity: '', subtypes: [], supertypes: '', setId: '' }));
+      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
       setCardsToShow([]);
       setAllFlipped(false);
       setMovingCard(null);
@@ -112,10 +112,11 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
                 frontImage={card.front}
                 backImage={card.back}
                 onCardClick={() => handleCardClick(index)}
-                rarity={card.rarity.toLowerCase()}
-                subtypes={card.subtypes.map(subtype => subtype.toLowerCase())}
+                rarity={card.rarity}
+                subtypes={card.subtypes}
                 setId={card.setId}
-                supertypes={card.supertypes.toLowerCase().replace('pokémon', 'pokemon')}
+                supertypes={card.supertypes}
+                isTopCard={index === 0}
               />
             </div>
           ))}
