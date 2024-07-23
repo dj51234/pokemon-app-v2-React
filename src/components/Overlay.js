@@ -10,7 +10,6 @@ const Overlay = ({ onClose, cards }) => {
     back: defaultImage,
     front: card.imageUrl,
     flipped: false,
-    gradient: card.gradient,
     rarity: card.rarity,
     subtypes: card.subtypes,
     setId: card.setId,
@@ -44,7 +43,6 @@ const Overlay = ({ onClose, cards }) => {
         const movingCard = newCardStack.splice(index, 1)[0];
         newCardStack.push(movingCard);
         setCardStack(newCardStack);
-        setTopGradient(newCardStack[0].gradient); // Update the gradient based on the top card
         setMovingCard(null);
       }, 600);
     }
@@ -58,7 +56,7 @@ const Overlay = ({ onClose, cards }) => {
     <div className="overlay">
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
       <div className="overlay-content">
-        <div className="overlay-card-stack" style={{ aspectRatio, '--top-gradient': topGradient }}>
+        <div className="overlay-card-stack" style={{ aspectRatio}}>
           {cardStack.map((card, index) => (
             <div
               key={index}

@@ -40,10 +40,10 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
             ...card, 
             front: randomCard.images.large, 
             flipped: true, 
-            rarity: randomCard.rarity,
-            subtypes: randomCard.subtypes,
-            setId: randomCard.setId,
-            supertypes: randomCard.supertypes
+            rarity: randomCard.rarity?.toLowerCase() || '',
+            subtypes: randomCard.subtypes?.map(subtype => subtype.toLowerCase()) || [],
+            setId: randomCard.setId?.toLowerCase() || '',
+            supertypes: randomCard.supertypes?.map(supertype => supertype.toLowerCase()) || []
           };
         }
         return card;
