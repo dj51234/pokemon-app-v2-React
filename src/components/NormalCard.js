@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
 
-const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex }) => {
+const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard }) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(startInteractive);
@@ -248,7 +248,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   return (
     imageLoaded && (
       <div
-        className={`normal-card-wrapper ${isRare() && applyBoxShadow ? 'rare-card' : ''} ${initialTransition ? 'initial-transition' : ''}`}
+        className={`normal-card-wrapper ${isRare() && applyBoxShadow && isTopCard ? 'rare-card' : ''} ${initialTransition ? 'initial-transition' : ''}`}
         style={{ perspective: '1000px', zIndex }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}

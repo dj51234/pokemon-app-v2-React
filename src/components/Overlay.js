@@ -56,7 +56,7 @@ const Overlay = ({ onClose, cards }) => {
     <div className="overlay">
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
       <div className="overlay-content">
-        <div className="overlay-card-stack" style={{ aspectRatio}}>
+        <div className="overlay-card-stack" style={{ aspectRatio }}>
           {cardStack.map((card, index) => (
             <div
               key={index}
@@ -72,6 +72,7 @@ const Overlay = ({ onClose, cards }) => {
                 subtypes={card.subtypes}
                 setId={card.setId}
                 supertypes={card.supertypes}
+                isTopCard={index === 0}
               />
             </div>
           ))}

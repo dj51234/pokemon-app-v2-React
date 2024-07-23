@@ -108,11 +108,11 @@
 
 .rare-card .normal-card-outer {
   transition: box-shadow 0.5s ease;
-  box-shadow: 0 0 3px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
+  box-shadow: 0 0 5px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
 }
 
 .rare-card[data-rarity='ace spec rare'] .normal-card-outer {
-  box-shadow: 0 0 3px -1px purple, 0 0 3px 1px purple, 0 0 12px 2px purple, 0px 10px 20px -5px black, 0 0 40px -30px purple, 0 0 50px -20px purple;
+  box-shadow: 0 0 3px -1px purple, 0 0 5px 1px purple, 0 0 22px 2px purple, 0px 10px 20px -5px black, 0 0 40px -30px purple, 0 0 50px -20px purple;
 }
 
 .rare-card.initial-transition .normal-card-outer {
