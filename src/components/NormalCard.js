@@ -37,9 +37,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   useEffect(() => {
     setIsRotated(isFlipped);
     if (isFlipped) {
-      setTimeout(() => {
+
         setApplyBoxShadow(true);
-      }, 600); // Adjust this value to match your CSS animation duration
     } else {
       setApplyBoxShadow(false);
     }
