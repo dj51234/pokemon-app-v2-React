@@ -37,8 +37,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   useEffect(() => {
     setIsRotated(isFlipped);
     if (isFlipped) {
-
-        setApplyBoxShadow(true);
+      setApplyBoxShadow(true);
     } else {
       setApplyBoxShadow(false);
     }
@@ -60,7 +59,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   }, [isRotated]);
 
   const handleMouseMove = (e) => {
-    if (!isInteractMode) return;
+    if (!isInteractMode || !isFlipped || !isRotated) return;
 
     const outer = outerRef.current;
     const shine = shineRef.current;
@@ -93,7 +92,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   };
 
   const handleMouseLeave = () => {
-    if (!isInteractMode) return;
+    if (!isInteractMode || !isFlipped || !isRotated) return;
 
     const outer = outerRef.current;
     const shine = shineRef.current;

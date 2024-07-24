@@ -13,20 +13,12 @@ const Overlay = ({ onClose, cards }) => {
     rarity: card.rarity,
     subtypes: card.subtypes,
     setId: card.setId,
-    supertypes: card.supertypes
+    supertypes: card.supertypes,
+    class: '' // Track the class for box shadow
   })));
   const [allFlipped, setAllFlipped] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
-  const [topGradient, setTopGradient] = useState(cards[0].gradient);
-  const imageRef = useRef();
-
-  useEffect(() => {
-    if (imageRef.current) {
-      const { naturalWidth, naturalHeight } = imageRef.current;
-      setAspectRatio(naturalWidth / naturalHeight);
-    }
-  }, [imageRef]);
 
   const handleCardClick = (index) => {
     if (animating) return;
@@ -38,18 +30,44 @@ const Overlay = ({ onClose, cards }) => {
       setAllFlipped(true);
     } else {
       setMovingCard(index);
+
+      if (index === 0 && cardStack[1]) {
+        const siblingCard = cardStack[1];
+        if (isRare(siblingCard.rarity)) {
+          siblingCard.class = 'rare-card';
+        }
+      }
+
       setTimeout(() => {
         const newCardStack = [...cardStack];
         const movingCard = newCardStack.splice(index, 1)[0];
         newCardStack.push(movingCard);
+
+        if (index === 0 && newCardStack[0].class === 'rare-card') {
+          newCardStack[0].class = '';
+        }
+
         setCardStack(newCardStack);
         setMovingCard(null);
-      }, 600);
+        setAnimating(false);
+      }, 700);
     }
 
     setTimeout(() => {
       setAnimating(false);
     }, 600);
+  };
+
+  const isRare = (rarity) => {
+    const rareRarities = [
+      'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
+      'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
+      'rare holo gx', 'rare holo lv.x', 'rare holo star', 'rare v', 'rare holo vmax',
+      'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
+      'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
+      'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
+    ];
+    return rareRarities.includes(rarity);
   };
 
   return (
@@ -60,7 +78,7 @@ const Overlay = ({ onClose, cards }) => {
           {cardStack.map((card, index) => (
             <div
               key={index}
-              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''}`}
+              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''} ${card.class}`}
               style={{ zIndex: cardStack.length - index }}
             >
               <NormalCard
