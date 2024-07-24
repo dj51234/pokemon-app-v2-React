@@ -90,7 +90,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     const rareRarities = [
       'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
       'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
-      'rare holo gx', 'rare holo lv.x', 'rare holo star', 'rare v', 'rare holo vmax',
+      'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
       'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
       'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
       'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
