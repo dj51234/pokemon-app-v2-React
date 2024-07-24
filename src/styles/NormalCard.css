@@ -18,14 +18,14 @@
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.1s;
+  transition: transform 0.1s, box-shadow 0.5s ease;;
   transform-style: preserve-3d;
   --rx: 0deg;
   --ry: 0deg;
   --mx: 50%;
   --my: 50%;
   transform: rotateY(var(--ry)) rotateX(var(--rx));
-  will-change: transform;
+  will-change: transform, box-shadow;
   overflow: hidden;
   -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
   backface-visibility: hidden; /* Ensuring the backface is hidden */
@@ -107,22 +107,12 @@
 }
 
 .rare-card .normal-card-outer {
-  transition: box-shadow 0.5s ease;
   box-shadow: 0 0 5px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
 }
 
 .rare-card[data-rarity='ace spec rare'] .normal-card-outer {
   box-shadow: 0 0 3px -1px purple, 0 0 5px 1px purple, 0 0 22px 2px purple, 0px 10px 20px -5px black, 0 0 40px -30px purple, 0 0 50px -20px purple;
 }
-
-.rare-card.initial-transition .normal-card-outer {
-  transition: box-shadow 0.5s ease;
-}
-
-.rare-card:not(.initial-transition) .normal-card-outer {
-  transition: none;
-}
-
 
 .normal-card-outer img {
   width: 100%;

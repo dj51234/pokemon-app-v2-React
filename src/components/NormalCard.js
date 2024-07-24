@@ -9,7 +9,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   const [contrast, setContrast] = useState('100%');
   const [imageLoaded, setImageLoaded] = useState(false);
   const [applyBoxShadow, setApplyBoxShadow] = useState(false);
-  const [initialTransition, setInitialTransition] = useState(true);
   const outerRef = useRef(null);
   const innerRef = useRef(null);
   const shineRef = useRef(null);
@@ -40,11 +39,9 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     if (isFlipped) {
       setTimeout(() => {
         setApplyBoxShadow(true);
-        setTimeout(() => setInitialTransition(false), 600); // Adjust this value to match your CSS animation duration
       }, 600); // Adjust this value to match your CSS animation duration
     } else {
       setApplyBoxShadow(false);
-      setInitialTransition(true);
     }
   }, [isFlipped]);
 
@@ -110,7 +107,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       outer.style.setProperty('--ry', '0deg');
       outer.style.setProperty('--mx', '50%');
       outer.style.setProperty('--my', '50%');
-      outer.style.transition = 'transform 0.3s ease-out';
+      outer.style.transition = 'transform 0.3s ease-out, box-shadow 0.5s ease;';
 
       shine.style.setProperty('--mx', '50%');
       shine.style.setProperty('--my', '50%');
@@ -248,7 +245,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   return (
     imageLoaded && (
       <div
-        className={`normal-card-wrapper ${isRare() && applyBoxShadow && isTopCard ? 'rare-card' : ''} ${initialTransition ? 'initial-transition' : ''}`}
+        className={`normal-card-wrapper ${isRare() && applyBoxShadow && isTopCard ? 'rare-card' : ''}`}
         style={{ perspective: '1000px', zIndex }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
