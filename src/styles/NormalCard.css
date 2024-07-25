@@ -18,7 +18,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.15s, box-shadow 0.5s ease;;
+  transition: transform 0.3s, box-shadow 0.5s ease;;
   transform-style: preserve-3d;
   --rx: 0deg;
   --ry: 0deg;
@@ -110,7 +110,10 @@
   box-shadow: 0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1;
 }
 
-.double-rare .normal-card-outer {
+.double-rare .normal-card-outer,
+.special-illustration-rare .normal-card-outer,
+.hyper-rare .normal-card-outer,
+.illustration-rare .normal-card-outer {
   box-shadow: 0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
 }
 
@@ -215,6 +218,7 @@
 
 .hero-card .normal-card-outer {
   box-shadow: 0 0 3px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
+  filter: contrast(105%) !important;
 }
 
 

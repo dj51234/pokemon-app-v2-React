@@ -25,6 +25,7 @@
     "react-autosuggest": "^10.1.0",
     "react-burger-menu": "^3.0.9",
     "react-card-flip": "^1.2.3",
+    "react-confetti-explosion": "^2.1.2",
     "react-dom": "^18.3.1",
     "react-explode": "^2.0.5",
     "react-extract-colors": "^1.0.3",

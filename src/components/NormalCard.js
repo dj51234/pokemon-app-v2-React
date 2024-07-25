@@ -57,7 +57,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     if (isTopCard && isFlipped) {
       switch (rarity) {
         case 'ace spec rare':
-          setBoxShadow('0 0 3px -1px purple, 0 0 5px 1px purple, 0 0 22px 2px purple, 0px 10px 20px -5px black, 0 0 40px -30px purple, 0 0 50px -20px purple');
+          setBoxShadow('0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1');
           break;
         case 'double rare':
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
@@ -263,7 +263,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       >
         <div
           className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
-          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})` }}
+          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
           ref={outerRef}
           onClick={onCardClick}
         >

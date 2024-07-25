@@ -20,6 +20,10 @@ const Overlay = ({ onClose, cards }) => {
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
 
+  useEffect(() => {
+    // Handle initial setup or reset when cards are updated
+  }, [cards]);
+
   const handleCardClick = (index) => {
     if (animating) return;
     setAnimating(true);
@@ -28,13 +32,17 @@ const Overlay = ({ onClose, cards }) => {
       const updatedStack = cardStack.map(card => ({ ...card, flipped: true }));
       setCardStack(updatedStack);
       setAllFlipped(true);
+
+      setTimeout(() => {
+        setAnimating(false);
+      }, 600);
     } else {
       setMovingCard(index);
 
       if (index === 0 && cardStack[1]) {
         const siblingCard = cardStack[1];
         if (isRare(siblingCard.rarity)) {
-          siblingCard.class = 'rare-card';
+          siblingCard.class = siblingCard.rarity?.toLowerCase().replace(/ /g, '-') || '';
         }
       }
 
@@ -43,7 +51,11 @@ const Overlay = ({ onClose, cards }) => {
         const movingCard = newCardStack.splice(index, 1)[0];
         newCardStack.push(movingCard);
 
-        if (index === 0 && newCardStack[0].class === 'rare-card') {
+        newCardStack.forEach((card, idx) => {
+          card.zIndex = newCardStack.length - idx;
+        });
+
+        if (index === 0 && newCardStack[0].class) {
           newCardStack[0].class = '';
         }
 
@@ -52,10 +64,6 @@ const Overlay = ({ onClose, cards }) => {
         setAnimating(false);
       }, 700);
     }
-
-    setTimeout(() => {
-      setAnimating(false);
-    }, 600);
   };
 
   const isRare = (rarity) => {
