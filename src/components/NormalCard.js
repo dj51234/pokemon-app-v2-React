@@ -8,7 +8,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   const [borderRadius, setBorderRadius] = useState('0px');
   const [contrast, setContrast] = useState('100%');
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [applyBoxShadow, setApplyBoxShadow] = useState(false);
   const outerRef = useRef(null);
   const innerRef = useRef(null);
   const shineRef = useRef(null);
@@ -36,11 +35,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
 
   useEffect(() => {
     setIsRotated(isFlipped);
-    if (isFlipped) {
-      setApplyBoxShadow(true);
-    } else {
-      setApplyBoxShadow(false);
-    }
   }, [isFlipped]);
 
   useEffect(() => {
@@ -228,22 +222,15 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     }
   };
 
-  const isRare = () => {
-    const rareRarities = [
-      'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
-      'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
-      'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
-      'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
-      'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
-      'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
-    ];
-    return rareRarities.includes(rarity?.toLowerCase());
+  const getRarityClass = () => {
+    if (!rarity) return '';
+    return rarity.toLowerCase().replace(/ /g, '-');
   };
 
   return (
     imageLoaded && (
       <div
-        className={`normal-card-wrapper ${isRare() && applyBoxShadow && isTopCard ? 'rare-card' : ''}`}
+        className={`normal-card-wrapper ${isTopCard && isFlipped ? getRarityClass() : ''}`}
         style={{ perspective: '1000px', zIndex }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}

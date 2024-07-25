@@ -63,9 +63,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
       if (index === 0 && newLeftStack[1]) {
         const siblingCard = newLeftStack[1];
-        if (isRare(siblingCard.rarity)) {
-          siblingCard.class = 'rare-card';
-        }
+        siblingCard.class = siblingCard.rarity?.toLowerCase().replace(/ /g, '-') || '';
       }
 
       setTimeout(() => {
@@ -75,7 +73,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           card.zIndex = newLeftStack.length - idx;
         });
 
-        if (index === 0 && newCard.class === 'rare-card') {
+        if (index === 0 && newCard.class) {
           newCard.class = '';
         }
 
@@ -84,18 +82,6 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         setAnimating(false);
       }, 700);
     }
-  };
-
-  const isRare = (rarity) => {
-    const rareRarities = [
-      'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
-      'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
-      'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
-      'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
-      'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
-      'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
-    ];
-    return rareRarities.includes(rarity);
   };
 
   const handleBackClick = () => {
