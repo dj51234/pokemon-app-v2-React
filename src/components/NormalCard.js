@@ -8,6 +8,9 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   const [borderRadius, setBorderRadius] = useState('0px');
   const [contrast, setContrast] = useState('100%');
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [boxShadow, setBoxShadow] = useState('');
+  const [transitionBoxShadow, setTransitionBoxShadow] = useState(false);
+
   const outerRef = useRef(null);
   const innerRef = useRef(null);
   const shineRef = useRef(null);
@@ -23,15 +26,13 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       setAspectRatio(aspectRatioValue);
       document.documentElement.style.setProperty('--card-aspect-ratio', `${aspectRatioValue}`);
       calculateBorderRadius(img);
-      if (isFlipped) {
-        adjustContrast(img);
-      }
+      adjustContrast(img);
       setImageLoaded(true);
     };
     img.onerror = () => {
       console.error("Image failed to load.");
     };
-  }, [frontImage, backImage, isFlipped]);
+  }, [frontImage, backImage]);
 
   useEffect(() => {
     setIsRotated(isFlipped);
@@ -51,6 +52,26 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       };
     }
   }, [isRotated]);
+
+  useEffect(() => {
+    if (isTopCard && isFlipped) {
+      switch (rarity) {
+        case 'ace spec rare':
+          setBoxShadow('0 0 3px -1px purple, 0 0 5px 1px purple, 0 0 22px 2px purple, 0px 10px 20px -5px black, 0 0 40px -30px purple, 0 0 50px -20px purple');
+          break;
+        case 'double rare':
+          setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
+          break;
+        // Add other cases for different rarities if needed
+        default:
+          setBoxShadow('');
+      }
+      setTransitionBoxShadow(true);
+    } else {
+      setBoxShadow('');
+      setTransitionBoxShadow(false);
+    }
+  }, [isTopCard, isFlipped, rarity]);
 
   const handleMouseMove = (e) => {
     if (!isInteractMode || !isFlipped || !isRotated) return;
@@ -99,7 +120,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       outer.style.setProperty('--ry', '0deg');
       outer.style.setProperty('--mx', '50%');
       outer.style.setProperty('--my', '50%');
-      outer.style.transition = 'transform 0.3s ease-out, box-shadow 0.5s ease;';
+      outer.style.transition = 'transform 0.3s ease-out';
 
       shine.style.setProperty('--mx', '50%');
       shine.style.setProperty('--my', '50%');
@@ -207,6 +228,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
 
       const contrastValue = lightPixels > darkPixels ? '110%' : '100%';
       setContrast(contrastValue);
+      document.documentElement.style.setProperty('--contrast', contrastValue);
     } catch (error) {
       console.error("Failed to adjust contrast", error);
     }
@@ -240,8 +262,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         data-supertypes={formatSupertypes(supertypes)}
       >
         <div
-          className={`normal-card-outer ${isRotated ? 'rotated' : ''}`}
-          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius}}
+          className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
+          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})` }}
           ref={outerRef}
           onClick={onCardClick}
         >
