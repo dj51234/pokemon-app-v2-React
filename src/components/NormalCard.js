@@ -226,7 +226,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      const contrastValue = lightPixels > darkPixels ? '110%' : '100%';
+      const contrastValue = lightPixels > darkPixels ? '110%' : '105%';
       setContrast(contrastValue);
       document.documentElement.style.setProperty('--contrast', contrastValue);
     } catch (error) {
