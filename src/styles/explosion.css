@@ -10,8 +10,8 @@
   
   .particle {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(0, 0, 0, 0) 100%);
     border-radius: 50%;
     opacity: 1;
