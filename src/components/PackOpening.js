@@ -4,6 +4,18 @@ import '../styles/explosion.css';
 import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 
+const isRare = (rarity) => {
+  const rareRarities = [
+    'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
+    'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
+    'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
+    'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
+    'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
+    'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
+  ];
+  return rareRarities.includes(rarity);
+};
+
 const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
@@ -15,6 +27,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const [highlightBackButton, setHighlightBackButton] = useState(false);
   const [hideNextButton, setHideNextButton] = useState(false);
   const topCardRef = useRef(null);
+  const cardStackRef = useRef(null);
 
   useEffect(() => {
     if (randomCards.length > 0) {
@@ -26,35 +39,31 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     }
   }, [randomCards]);
 
-  const createParticle = () => {
+  const createParticle = (explosionContainer) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
 
-    // Randomize particle movement
     const angle = Math.random() * 360;
     const distance = Math.random() * 200 + 500; // Increased distance
     const tx = Math.cos(angle * (Math.PI / 180)) * distance + 'px';
     const ty = Math.sin(angle * (Math.PI / 180)) * distance + 'px';
 
-    // Apply random properties to particle
     particle.style.setProperty('--tx', tx);
     particle.style.setProperty('--ty', ty);
 
-    document.querySelector('.explosion-container').appendChild(particle);
+    explosionContainer.appendChild(particle);
 
-    // Trigger animation
     particle.style.animation = 'explosion 1.5s forwards'; // Increased duration for a more gradual effect
 
-    // Remove particle after animation
     particle.addEventListener('animationend', () => {
       particle.remove();
     });
   };
 
-  const triggerExplosion = () => {
+  const triggerExplosion = (explosionContainer) => {
     const numberOfParticles = 250; // Adjust the number of particles
     for (let i = 0; i < numberOfParticles; i++) {
-      createParticle();
+      createParticle(explosionContainer);
     }
   };
 
@@ -70,7 +79,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       const updatedStack = newLeftStack.map((card, i) => {
         if (!card.flipped && cardsToShow.length > 0) {
           const randomCard = cardsToShow.pop();
-          return { 
+          const newCard = { 
             ...card, 
             front: randomCard.images.large, 
             flipped: true, 
@@ -79,6 +88,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
             setId: randomCard.setId?.toLowerCase() || '',
             supertypes: randomCard.supertypes?.map(supertype => supertype.toLowerCase()) || []
           };
+          return newCard;
         }
         return card;
       });
@@ -94,9 +104,16 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       setAnimating(true);
       setMovingCard(index);
 
-      if (index === 0 && newLeftStack[1]) {
-        const siblingCard = newLeftStack[1];
-        siblingCard.class = siblingCard.rarity?.toLowerCase().replace(/ /g, '-') || '';
+      // Check the next top card's rarity before moving the current top card to the back
+      const nextTopCardElement = Array.from(cardStackRef.current.children).find((child) => 
+        parseInt(child.style.zIndex, 10) === 9
+      ); // Select the second-to-top card
+      if (nextTopCardElement) {
+        const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity');
+        if (isRare(nextTopCardRarity)) {
+          // Trigger the explosion animation on the next top card
+          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
+        }
       }
 
       setTimeout(() => {
@@ -106,14 +123,9 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           card.zIndex = newLeftStack.length - idx;
         });
 
-        if (index === 0 && newCard.class) {
-          newCard.class = '';
-        }
-
         setLeftStack(newLeftStack);
         setMovingCard(null);
         setAnimating(false);
-        triggerExplosion(); // Trigger explosion on card click
       }, 700);
     }
   };
@@ -148,13 +160,14 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
         <h2>Step 2: Open Your Pack</h2>
-        <div className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
+        <div ref={cardStackRef} className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
           {leftStack.map((card, index) => (
             <div
               key={index}
               ref={index === 0 ? topCardRef : null}
-              className={`card ${movingCard === index ? 'moving-to-back' : ''} ${card.class || ''}`}
+              className={`card ${movingCard === index ? 'moving-to-back' : ''}`}
               style={{ zIndex: leftStack.length - index }}
+              data-rarity={card.rarity}
             >
               <NormalCard
                 isFlipped={card.flipped}

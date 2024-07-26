@@ -88,11 +88,11 @@
 @keyframes moveToBack {
   0% {
     transform: translateY(0);
-    z-index: 1000;
+    z-index: 10;
   }
   50% {
     transform: translateX(100%);
-    z-index: 1000;
+    z-index: 10;
   }
   51% {
     z-index: 0; /* Lower the z-index temporarily */
