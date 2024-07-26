@@ -104,6 +104,7 @@
   opacity: 1;
   z-index: 1;
   display: block;
+  
 }
 
 .ace-spec-rare .normal-card-outer {
@@ -115,6 +116,18 @@
 .hyper-rare .normal-card-outer,
 .illustration-rare .normal-card-outer {
   box-shadow: 0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
+}
+
+.explosion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: visible;
+
 }
 
 .box-shadow-transition {
@@ -221,6 +234,17 @@
   filter: contrast(105%) !important;
 }
 
+@keyframes buttsex {
+  0% {
+    background: red;
+    opacity: 1;
+  }
+  100% {
+    background: blue;
+    opacity: 0;
+  }
+  
+}
 
 
 
