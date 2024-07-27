@@ -1,7 +1,7 @@
 .explosion-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none; /* Ensure it doesn't interfere with clicks */
@@ -10,8 +10,10 @@
   
   .particle {
     position: absolute;
-    width: 15px;
-    height: 15px;
+    left: var(--start-x);
+    top: var(--start-y);
+    width: 10px;
+    height: 10px;
     background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(0, 0, 0, 0) 100%);
     border-radius: 50%;
     opacity: 1;
@@ -20,16 +22,8 @@
   }
   
   @keyframes explosion {
-    0% {
-      transform: translate(0, 0) scale(1);
-      opacity: 1;
-    }
-    50% {
-
-        opacity: 8;
-      }
-    100% {
-      transform: translate(var(--tx), var(--ty)) scale(0);
+    to {
+      transform: translate(var(--tx), var(--ty));
       opacity: 0;
     }
   }

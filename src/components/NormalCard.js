@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
 
-const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard }) => {
+const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard, applyBoxShadow }) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(startInteractive);
@@ -54,7 +54,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   }, [isRotated]);
 
   useEffect(() => {
-    if (isTopCard && isFlipped) {
+    if (applyBoxShadow) {
       switch (rarity) {
         case 'ace spec rare':
           setBoxShadow('0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1');
@@ -71,7 +71,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       setBoxShadow('');
       setTransitionBoxShadow(false);
     }
-  }, [isTopCard, isFlipped, rarity]);
+  }, [applyBoxShadow, rarity]);
 
   const handleMouseMove = (e) => {
     if (!isInteractMode || !isFlipped || !isRotated) return;
@@ -226,7 +226,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      const contrastValue = lightPixels > darkPixels ? '110%' : '105%';
+      const contrastValue = lightPixels > darkPixels ? '115%' : '115%';
       setContrast(contrastValue);
       document.documentElement.style.setProperty('--contrast', contrastValue);
     } catch (error) {

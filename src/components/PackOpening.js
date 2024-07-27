@@ -26,6 +26,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const [hideStack, setHideStack] = useState(false);
   const [highlightBackButton, setHighlightBackButton] = useState(false);
   const [hideNextButton, setHideNextButton] = useState(false);
+  const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const topCardRef = useRef(null);
   const cardStackRef = useRef(null);
 
@@ -42,19 +43,50 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const createParticle = (explosionContainer) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
-
-    const angle = Math.random() * 360;
-    const distance = Math.random() * 200 + 500; // Increased distance
-    const tx = Math.cos(angle * (Math.PI / 180)) * distance + 'px';
-    const ty = Math.sin(angle * (Math.PI / 180)) * distance + 'px';
-
+    
+    const rect = explosionContainer.getBoundingClientRect();
+    const cardWidth = rect.width;
+    const cardHeight = rect.height;
+  
+    // Determine a random starting position around the border of the card
+    let startX, startY;
+    const side = Math.floor(Math.random() * 4);
+    switch (side) {
+      case 0: // Top border
+        startX = Math.random() * cardWidth;
+        startY = 5;
+        break;
+      case 1: // Right border
+        startX = cardWidth + 5;
+        startY = Math.random() * cardHeight;
+        break;
+      case 2: // Bottom border
+        startX = Math.random() * cardWidth;
+        startY = cardHeight + 5;
+        break;
+      case 3: // Left border
+        startX = 5;
+        startY = Math.random() * cardHeight;
+        break;
+    }
+  
+    const angle = Math.atan2(startY - cardHeight / 2, startX - cardWidth / 2);
+    const distance = Math.random() * 300 + 500; // Increased distance
+    const tx = Math.cos(angle) * distance + 'px';
+    const ty = Math.sin(angle) * distance + 'px';
+  
+    const size = Math.random() * 15; // Random size up to 10px
+    particle.style.setProperty('--start-x', `${startX}px`);
+    particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
     particle.style.setProperty('--ty', ty);
-
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+  
     explosionContainer.appendChild(particle);
-
-    particle.style.animation = 'explosion 1.5s forwards'; // Increased duration for a more gradual effect
-
+  
+    particle.style.animation = 'explosion 2.5s forwards'; // Increased duration for a more gradual effect
+  
     particle.addEventListener('animationend', () => {
       particle.remove();
     });
@@ -111,8 +143,10 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       if (nextTopCardElement) {
         const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity');
         if (isRare(nextTopCardRarity)) {
+          // Set the next top card rarity to apply box shadow after the current top card is clicked
+          setNextTopCardRarity(nextTopCardRarity);
           // Trigger the explosion animation on the next top card
-          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
+            triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
         }
       }
 
@@ -125,6 +159,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
         setLeftStack(newLeftStack);
         setMovingCard(null);
+        setNextTopCardRarity(null);
         setAnimating(false);
       }, 700);
     }
@@ -179,6 +214,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
                 setId={card.setId}
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
+                applyBoxShadow={index === 1 && !!nextTopCardRarity}
               />
               <div className="explosion-container"></div>
             </div>

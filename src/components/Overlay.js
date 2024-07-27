@@ -27,28 +27,70 @@ const Overlay = ({ onClose, cards }) => {
     subtypes: card.subtypes,
     setId: card.setId,
     supertypes: card.supertypes,
-    class: '' // Track the class for box shadow
+    zIndex: cards.length - cards.indexOf(card),
   })));
   const [allFlipped, setAllFlipped] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
+  const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const cardStackRef = useRef(null);
 
   useEffect(() => {
-    // Handle initial setup or reset when cards are updated
+    setCardStack(cards.map(card => ({
+      back: defaultImage,
+      front: card.imageUrl,
+      flipped: false,
+      rarity: card.rarity,
+      subtypes: card.subtypes,
+      setId: card.setId,
+      supertypes: card.supertypes,
+      zIndex: cards.length - cards.indexOf(card),
+    })));
+    setAllFlipped(false);
   }, [cards]);
 
   const createParticle = (explosionContainer) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
+    
+    const rect = explosionContainer.getBoundingClientRect();
+    const cardWidth = rect.width;
+    const cardHeight = rect.height;
 
-    const angle = Math.random() * 360;
+    // Determine a random starting position around the border of the card
+    let startX, startY;
+    const side = Math.floor(Math.random() * 4);
+    switch (side) {
+      case 0: // Top border
+        startX = Math.random() * cardWidth;
+        startY = 5;
+        break;
+      case 1: // Right border
+        startX = cardWidth + 5;
+        startY = Math.random() * cardHeight;
+        break;
+      case 2: // Bottom border
+        startX = Math.random() * cardWidth;
+        startY = cardHeight + 5;
+        break;
+      case 3: // Left border
+        startX = 5;
+        startY = Math.random() * cardHeight;
+        break;
+    }
+
+    const angle = Math.atan2(startY - cardHeight / 2, startX - cardWidth / 2);
     const distance = Math.random() * 200 + 500; // Increased distance
-    const tx = Math.cos(angle * (Math.PI / 180)) * distance + 'px';
-    const ty = Math.sin(angle * (Math.PI / 180)) * distance + 'px';
+    const tx = Math.cos(angle) * distance + 'px';
+    const ty = Math.sin(angle) * distance + 'px';
 
+    const size = Math.random() * 10; // Random size up to 10px
+    particle.style.setProperty('--start-x', `${startX}px`);
+    particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
     particle.style.setProperty('--ty', ty);
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
 
     explosionContainer.appendChild(particle);
 
@@ -89,6 +131,7 @@ const Overlay = ({ onClose, cards }) => {
         const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity');
         if (isRare(nextTopCardRarity)) {
           triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
+          setNextTopCardRarity(nextTopCardRarity);
         }
       }
 
@@ -103,6 +146,7 @@ const Overlay = ({ onClose, cards }) => {
 
         setCardStack(newCardStack);
         setMovingCard(null);
+        setNextTopCardRarity(null);
         setAnimating(false);
       }, 700);
     }
@@ -116,7 +160,7 @@ const Overlay = ({ onClose, cards }) => {
           {cardStack.map((card, index) => (
             <div
               key={index}
-              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''} ${card.class}`}
+              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''}`}
               style={{ zIndex: cardStack.length - index }}
               data-rarity={card.rarity}
             >
@@ -130,6 +174,7 @@ const Overlay = ({ onClose, cards }) => {
                 setId={card.setId}
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
+                applyBoxShadow={index === 1 && !!nextTopCardRarity}
               />
               <div className="explosion-container"></div>
             </div>
