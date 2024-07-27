@@ -63,7 +63,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
           break;
         case 'hyper rare':
-          setBoxShadow('0 0 3px -1px gold, 0 0 5px 1px gold, 0 0 22px 2px gold, 0px 10px 20px -5px black, 0 0 40px -30px gold, 0 0 50px -20px gold');
+          setBoxShadow('0 0 3px -1px gold, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
           break;
         // Add other cases for different rarities if needed
         default:

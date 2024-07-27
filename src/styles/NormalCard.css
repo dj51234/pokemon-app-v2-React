@@ -108,10 +108,14 @@
   box-shadow: 0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1;
 }
 
+.hyper-rare .normal-card-outer {
+  box-shadow: 0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913;
+}
+
 .double-rare .normal-card-outer,
 .special-illustration-rare .normal-card-outer,
-.hyper-rare .normal-card-outer,
-.illustration-rare .normal-card-outer {
+.illustration-rare .normal-card-outer,
+.ultra-rare .normal-card-outer {
   box-shadow: 0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
 }
 
@@ -154,7 +158,6 @@
   transform: translateZ(1px);
   overflow: hidden;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  z-index: 10; /* Ensure it is above other elements */
 }
 
 .rotated .shine {

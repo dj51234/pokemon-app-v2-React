@@ -19,6 +19,7 @@ const isRare = (rarity) => {
 
 const rarityColors = {
   'ace spec rare': '#F700C1',
+  'hyper rare': '#FFD913'
   // Add more colors for other rarities as needed
 };
 
@@ -29,7 +30,7 @@ const getBoxShadowForRarity = (rarity) => {
     case 'double rare':
       return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
     case 'hyper rare':
-      return '0 0 3px -1px gold, 0 0 5px 1px gold, 0 0 22px 2px gold, 0px 10px 20px -5px black, 0 0 40px -30px gold, 0 0 50px -20px gold';
+      return '0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913';
     // Add other cases for different rarities if needed
     default:
       return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';

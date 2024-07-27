@@ -18,7 +18,7 @@ const isRare = (rarity) => {
 
 const rarityColors = {
   'ace spec rare': '#F700C1',
-  'hyper rare': 'gold',
+  'hyper rare': '#FFD913',
   // Add more colors for other rarities as needed
 };
 
