@@ -157,7 +157,7 @@
   will-change: transform, opacity, background-image, background-size, background-position, background-blend-mode, filter;
   transform: translateZ(1px);
   overflow: hidden;
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .rotated .shine {
@@ -194,10 +194,11 @@
     hsla(0, 0%, 100%, 0.295) 5%,
     hsla(0, 0%, 0%, 0.5) 80%
   );
-  opacity: var(--card-opacity);
+  opacity: 1;
   mix-blend-mode: overlay;
   transform: translateZ(1.41px);
   overflow: hidden;
+  z-index: 10;
 }
 
 .glitter {

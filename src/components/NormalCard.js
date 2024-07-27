@@ -19,7 +19,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
 
   useEffect(() => {
     const img = new Image();
-    img.crossOrigin = "Anonymous"; // Handle CORS
+    img.crossOrigin = "Anonymous";
     img.src = frontImage || backImage;
     img.onload = () => {
       const aspectRatioValue = img.width / img.height;
@@ -65,7 +65,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         case 'hyper rare':
           setBoxShadow('0 0 3px -1px gold, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
           break;
-        // Add other cases for different rarities if needed
         default:
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
       }
@@ -75,6 +74,22 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       setTransitionBoxShadow(false);
     }
   }, [applyBoxShadow, rarity]);
+
+  useEffect(() => {
+    if (shineRef.current) {
+      shineRef.current.style.setProperty('--mx', '50%');
+      shineRef.current.style.setProperty('--my', '50%');
+    }
+    if (glareRef.current) {
+      glareRef.current.style.setProperty('--pointer-x', '50%');
+      glareRef.current.style.setProperty('--pointer-y', '50%');
+    }
+    if (glitterRef.current) {
+      glitterRef.current.style.setProperty('--pointer-x', '50%');
+      glitterRef.current.style.setProperty('--pointer-y', '50%');
+    }
+    document.documentElement.style.setProperty('--contrast', contrast);
+  }, [contrast]);
 
   const handleMouseMove = (e) => {
     if (!isInteractMode || !isFlipped || !isRotated) return;
@@ -90,7 +105,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     const tiltX = (maxTilt * y) / (rect.height / 2);
     const tiltY = (-maxTilt * x) / (rect.width / 2);
 
-    outer.classList.add('tilting'); // Add tilting class
+    outer.classList.add('tilting');
 
     requestAnimationFrame(() => {
       outer.style.setProperty('--rx', `${tiltX}deg`);
@@ -101,10 +116,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       shine.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
       shine.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
       glare.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-      glare.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+      glare.style.setProperty('--pointer-y', `${((e.clientX - rect.top) / rect.height) * 100}%`);
       if (glitter) {
         glitter.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-        glitter.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+        glitter.style.setProperty('--pointer-y', `${((e.clientX - rect.top) / rect.height) * 100}%`);
       }
     });
   };
@@ -116,7 +131,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     const shine = shineRef.current;
     const glare = glareRef.current;
     const glitter = glitterRef.current;
-    outer.classList.remove('tilting'); // Remove tilting class
+    outer.classList.remove('tilting');
 
     requestAnimationFrame(() => {
       outer.style.setProperty('--rx', '0deg');
@@ -136,6 +151,27 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     });
   };
 
+  const handleCardClick = (e) => {
+    // Reset tilt before the card moves
+    const outer = outerRef.current;
+    outer.classList.remove('tilting');
+    outer.style.setProperty('--rx', '0deg');
+    outer.style.setProperty('--ry', '0deg');
+    outer.style.setProperty('--mx', '50%');
+    outer.style.setProperty('--my', '50%');
+    
+    shineRef.current.style.setProperty('--mx', '50%');
+    shineRef.current.style.setProperty('--my', '50%');
+    glareRef.current.style.setProperty('--pointer-x', '50%');
+    glareRef.current.style.setProperty('--pointer-y', '50%');
+    if (glitterRef.current) {
+      glitterRef.current.style.setProperty('--pointer-x', '50%');
+      glitterRef.current.style.setProperty('--pointer-y', '50%');
+    }
+
+    onCardClick(e);
+  };
+
   const calculateBorderRadius = (img) => {
     try {
       const canvas = document.createElement('canvas');
@@ -144,20 +180,12 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, img.width, img.height);
 
-      // Analyze the transparency in the corners to determine the border radius
-      const threshold = 10; // Transparency threshold to determine the edge
-      const sampleSize = 50; // Number of pixels to sample from the corners
-      const transparentPixelCount = {
-        topLeft: 0,
-        topRight: 0,
-        bottomLeft: 0,
-        bottomRight: 0
-      };
+      const threshold = 10;
+      const sampleSize = 50;
+      const transparentPixelCount = { topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0 };
 
-      // Function to check if a pixel is transparent
       const isTransparent = (pixelData) => pixelData[3] < threshold;
 
-      // Check top left corner
       for (let y = 0; y < sampleSize; y++) {
         for (let x = 0; x < sampleSize; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -167,7 +195,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      // Check top right corner
       for (let y = 0; y < sampleSize; y++) {
         for (let x = img.width - sampleSize; x < img.width; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -177,7 +204,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      // Check bottom left corner
       for (let y = img.height - sampleSize; y < img.height; y++) {
         for (let x = 0; x < sampleSize; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -187,7 +213,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      // Check bottom right corner
       for (let y = img.height - sampleSize; y < img.height; y++) {
         for (let x = img.width - sampleSize; x < img.width; x++) {
           const pixelData = ctx.getImageData(x, y, 1, 1).data;
@@ -197,7 +222,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         }
       }
 
-      // Determine the border radius based on the amount of transparent pixels
       const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
       const borderRadiusValue = totalTransparentPixels > 0 ? '22px' : '0px';
 
@@ -268,7 +292,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
           className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
           style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
           ref={outerRef}
-          onClick={onCardClick}
+          onClick={handleCardClick}
         >
           <div className="normal-card-inner" ref={innerRef}>
             <div className="normal-card-front" style={{ borderRadius }}>
