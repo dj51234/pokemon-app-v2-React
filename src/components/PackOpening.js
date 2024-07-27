@@ -16,6 +16,12 @@ const isRare = (rarity) => {
   return rareRarities.includes(rarity);
 };
 
+const rarityColors = {
+  'ace spec rare': '#F700C1',
+  'hyper rare': 'gold',
+  // Add more colors for other rarities as needed
+};
+
 const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
   const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
   const [cardsToShow, setCardsToShow] = useState([]);
@@ -40,14 +46,14 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     }
   }, [randomCards]);
 
-  const createParticle = (explosionContainer) => {
+  const createParticle = (explosionContainer, color) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
     const rect = explosionContainer.getBoundingClientRect();
     const cardWidth = rect.width;
     const cardHeight = rect.height;
-  
+
     // Determine a random starting position around the border of the card
     let startX, startY;
     const side = Math.floor(Math.random() * 4);
@@ -69,33 +75,35 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         startY = Math.random() * cardHeight;
         break;
     }
-  
+
     const angle = Math.atan2(startY - cardHeight / 2, startX - cardWidth / 2);
     const distance = Math.random() * 300 + 500; // Increased distance
     const tx = Math.cos(angle) * distance + 'px';
     const ty = Math.sin(angle) * distance + 'px';
-  
-    const size = Math.random() * 15; // Random size up to 10px
+
+    const size = Math.random() * 10; // Random size up to 10px
     particle.style.setProperty('--start-x', `${startX}px`);
     particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
     particle.style.setProperty('--ty', ty);
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
-  
+    particle.style.background = color;
+
     explosionContainer.appendChild(particle);
-  
+
     particle.style.animation = 'explosion 2.5s forwards'; // Increased duration for a more gradual effect
-  
+
     particle.addEventListener('animationend', () => {
       particle.remove();
     });
   };
 
-  const triggerExplosion = (explosionContainer) => {
+  const triggerExplosion = (explosionContainer, rarity) => {
+    const color = rarityColors[rarity] || 'white'; // Default to white if no color specified
     const numberOfParticles = 250; // Adjust the number of particles
     for (let i = 0; i < numberOfParticles; i++) {
-      createParticle(explosionContainer);
+      createParticle(explosionContainer, color);
     }
   };
 
@@ -146,7 +154,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           // Set the next top card rarity to apply box shadow after the current top card is clicked
           setNextTopCardRarity(nextTopCardRarity);
           // Trigger the explosion animation on the next top card
-            triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
+          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'), nextTopCardRarity);
         }
       }
 

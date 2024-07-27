@@ -29,10 +29,7 @@
   overflow: hidden;
   -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
   backface-visibility: hidden; /* Ensuring the backface is hidden */
-}
-
-.enhanced-contrast {
-  filter: contrast(var(--contrast));
+  z-index: 1;
 }
 
 .normal-card-inner {
@@ -157,11 +154,11 @@
   transform: translateZ(1px);
   overflow: hidden;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  
+  z-index: 10; /* Ensure it is above other elements */
 }
 
-.normal-card-back:hover .shine {
-  opacity: 1;
+.rotated .shine {
+  opacity: 1; /* Ensure it is visible when rotated */
 }
 
 .grain {
@@ -222,17 +219,6 @@
   filter: contrast(105%) !important;
 }
 
-@keyframes buttsex {
-  0% {
-    background: red;
-    opacity: 1;
-  }
-  100% {
-    background: blue;
-    opacity: 0;
-  }
-  
-}
 
 
 

@@ -17,6 +17,25 @@ const isRare = (rarity) => {
   return rareRarities.includes(rarity);
 };
 
+const rarityColors = {
+  'ace spec rare': '#F700C1',
+  // Add more colors for other rarities as needed
+};
+
+const getBoxShadowForRarity = (rarity) => {
+  switch (rarity) {
+    case 'ace spec rare':
+      return '0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1';
+    case 'double rare':
+      return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
+    case 'hyper rare':
+      return '0 0 3px -1px gold, 0 0 5px 1px gold, 0 0 22px 2px gold, 0px 10px 20px -5px black, 0 0 40px -30px gold, 0 0 50px -20px gold';
+    // Add other cases for different rarities if needed
+    default:
+      return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
+  }
+};
+
 const Overlay = ({ onClose, cards }) => {
   const [aspectRatio, setAspectRatio] = useState(640 / 892);
   const [cardStack, setCardStack] = useState(cards.map(card => ({
@@ -49,7 +68,7 @@ const Overlay = ({ onClose, cards }) => {
     setAllFlipped(false);
   }, [cards]);
 
-  const createParticle = (explosionContainer) => {
+  const createParticle = (explosionContainer, color) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
@@ -91,6 +110,7 @@ const Overlay = ({ onClose, cards }) => {
     particle.style.setProperty('--ty', ty);
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
+    particle.style.background = color;
 
     explosionContainer.appendChild(particle);
 
@@ -101,10 +121,11 @@ const Overlay = ({ onClose, cards }) => {
     });
   };
 
-  const triggerExplosion = (explosionContainer) => {
+  const triggerExplosion = (explosionContainer, rarity) => {
+    const color = rarityColors[rarity] || 'white'; // Default to white if no color specified
     const numberOfParticles = 250; // Adjust the number of particles
     for (let i = 0; i < numberOfParticles; i++) {
-      createParticle(explosionContainer);
+      createParticle(explosionContainer, color);
     }
   };
 
@@ -130,7 +151,7 @@ const Overlay = ({ onClose, cards }) => {
       if (nextTopCardElement) {
         const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity');
         if (isRare(nextTopCardRarity)) {
-          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'));
+          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'), nextTopCardRarity);
           setNextTopCardRarity(nextTopCardRarity);
         }
       }
@@ -175,6 +196,7 @@ const Overlay = ({ onClose, cards }) => {
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
+                boxShadow={index === 1 && !!nextTopCardRarity ? getBoxShadowForRarity(card.rarity) : ''}
               />
               <div className="explosion-container"></div>
             </div>

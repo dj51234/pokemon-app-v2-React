@@ -7,24 +7,23 @@
   pointer-events: none; /* Ensure it doesn't interfere with clicks */
   z-index: 1; /* Ensure it's above the card but below other elements */
 }
-  
-  .particle {
-    position: absolute;
-    left: var(--start-x);
-    top: var(--start-y);
-    width: 10px;
-    height: 10px;
-    background: radial-gradient(circle, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 50%, rgba(0, 0, 0, 0) 100%);
-    border-radius: 50%;
-    opacity: 1;
-    will-change: transform, opacity;
-    z-index: 999;
+
+.particle {
+  position: absolute;
+  left: var(--start-x);
+  top: var(--start-y);
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, var(--particle-color, rgb(255, 255, 255)) 0%, var(--particle-color, rgb(255, 255, 255)) 50%, rgba(0, 0, 0, 0) 100%);
+  border-radius: 50%;
+  opacity: 1;
+  will-change: transform, opacity;
+  z-index: 999;
+}
+
+@keyframes explosion {
+  to {
+    transform: translate(var(--tx), var(--ty));
+    opacity: 0;
   }
-  
-  @keyframes explosion {
-    to {
-      transform: translate(var(--tx), var(--ty));
-      opacity: 0;
-    }
-  }
-  
+}
