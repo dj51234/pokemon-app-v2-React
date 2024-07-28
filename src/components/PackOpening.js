@@ -19,6 +19,8 @@ const isRare = (rarity) => {
 const rarityColors = {
   'ace spec rare': '#F700C1',
   'hyper rare': '#FFD913',
+  'rare holo': '#FFFFFF',
+  'rare secret': '#FFD913'
   // Add more colors for other rarities as needed
 };
 
@@ -49,39 +51,25 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   const createParticle = (explosionContainer, color) => {
     const particle = document.createElement('div');
     particle.classList.add('particle');
-    
+
     const rect = explosionContainer.getBoundingClientRect();
     const cardWidth = rect.width;
     const cardHeight = rect.height;
+    const centerX = cardWidth / 2;
+    const centerY = cardHeight / 2;
 
-    // Determine a random starting position around the border of the card
-    let startX, startY;
-    const side = Math.floor(Math.random() * 4);
-    switch (side) {
-      case 0: // Top border
-        startX = Math.random() * cardWidth;
-        startY = 5;
-        break;
-      case 1: // Right border
-        startX = cardWidth + 5;
-        startY = Math.random() * cardHeight;
-        break;
-      case 2: // Bottom border
-        startX = Math.random() * cardWidth;
-        startY = cardHeight + 5;
-        break;
-      case 3: // Left border
-        startX = 5;
-        startY = Math.random() * cardHeight;
-        break;
-    }
+    // Determine a random starting position along a circular path near the border
+    const angle = Math.random() * 2 * Math.PI; // Random angle
+    const borderRadius = (Math.min(cardWidth, cardHeight) / 2) * 1.2; // Larger radius close to the border
+    const startX = centerX + borderRadius * Math.cos(angle);
+    const startY = centerY + borderRadius * Math.sin(angle);
 
-    const angle = Math.atan2(startY - cardHeight / 2, startX - cardWidth / 2);
-    const distance = Math.random() * 300 + 500; // Increased distance
+    // Calculate the target position
+    const distance = Math.random() * 300 + 200; // Adjust the explosion distance
     const tx = Math.cos(angle) * distance + 'px';
     const ty = Math.sin(angle) * distance + 'px';
 
-    const size = Math.random() * 10; // Random size up to 10px
+    const size = Math.random() * 10; // Random size up to 15px
     particle.style.setProperty('--start-x', `${startX}px`);
     particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
@@ -92,7 +80,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
     explosionContainer.appendChild(particle);
 
-    particle.style.animation = 'explosion 2.5s forwards'; // Increased duration for a more gradual effect
+    particle.style.animation = 'explosion 2.2s forwards'; // Animation duration
 
     particle.addEventListener('animationend', () => {
       particle.remove();
@@ -101,7 +89,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
   const triggerExplosion = (explosionContainer, rarity) => {
     const color = rarityColors[rarity] || 'white'; // Default to white if no color specified
-    const numberOfParticles = 250; // Adjust the number of particles
+    const numberOfParticles = 450; // Adjust the number of particles
     for (let i = 0; i < numberOfParticles; i++) {
       createParticle(explosionContainer, color);
     }

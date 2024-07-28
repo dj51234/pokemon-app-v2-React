@@ -16,12 +16,18 @@
   height: 10px;
   background: radial-gradient(circle, var(--particle-color, rgb(255, 255, 255)) 0%, var(--particle-color, rgb(255, 255, 255)) 50%, rgba(0, 0, 0, 0) 100%);
   border-radius: 50%;
-  opacity: 1;
+  opacity: 0;
   will-change: transform, opacity;
   z-index: 999;
 }
 
 @keyframes explosion {
+  from {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
   to {
     transform: translate(var(--tx), var(--ty));
     opacity: 0;

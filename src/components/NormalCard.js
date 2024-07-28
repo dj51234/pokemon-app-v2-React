@@ -63,7 +63,13 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
           break;
         case 'hyper rare':
-          setBoxShadow('0 0 3px -1px gold, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
+          setBoxShadow('0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
+          break;
+        case 'rare holo':
+          setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
+          break;
+        case 'rare secret':
+          setBoxShadow('0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
           break;
         default:
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
@@ -116,10 +122,10 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       shine.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
       shine.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
       glare.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-      glare.style.setProperty('--pointer-y', `${((e.clientX - rect.top) / rect.height) * 100}%`);
+      glare.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
       if (glitter) {
         glitter.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-        glitter.style.setProperty('--pointer-y', `${((e.clientX - rect.top) / rect.height) * 100}%`);
+        glitter.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
       }
     });
   };
@@ -152,7 +158,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   };
 
   const handleCardClick = (e) => {
-    // Reset tilt before the card moves
     const outer = outerRef.current;
     outer.classList.remove('tilting');
     outer.style.setProperty('--rx', '0deg');
@@ -290,7 +295,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       >
         <div
           className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
-          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
+          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius,  boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
           ref={outerRef}
           onClick={handleCardClick}
         >
