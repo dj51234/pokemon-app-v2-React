@@ -71,7 +71,7 @@ export async function openPack(setId) {
               subtypes: cardData.subtypes,
               setId: cardData.set.id,
               supertypes: cardData.supertype,
-              type: cardData.types ? cardData.types[0] : 'unknown'
+              type: cardData.types ? cardData.types[0] : 'unknown',
             };
           }
           return card;

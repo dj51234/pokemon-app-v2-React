@@ -1,5 +1,4 @@
-// src/components/OpenPacksPage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Header from '../components/Header';
 import SetsSearchBar from '../components/SetsSearchBar';
 import Footer from '../components/Footer';
@@ -9,9 +8,12 @@ import { openPack } from '../js/pack_algorithm/packAlgorithm'; // Import openPac
 import '../styles/OpenPacksPage.css';
 import loadingGif from '../assets/loading-gif.gif';
 
+const CHUNK_SIZE = 10; // Number of sets to load at a time
+
 const OpenPacksPage = () => {
   const [sets, setSets] = useState([]);
   const [displayedSets, setDisplayedSets] = useState([]);
+  const [currentChunk, setCurrentChunk] = useState(0); // Track the current chunk
   const [series, setSeries] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('all');
@@ -19,6 +21,7 @@ const OpenPacksPage = () => {
   const [selectedSetId, setSelectedSetId] = useState(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [openedCards, setOpenedCards] = useState([]);
+  const observer = useRef();
 
   useEffect(() => {
     fetchSetData()
@@ -30,8 +33,8 @@ const OpenPacksPage = () => {
           (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
         );
         setSets(sortedData);
-        setDisplayedSets(sortedData);
         setSeries([...new Set(sortedData.map((set) => set.series))]);
+        setDisplayedSets(sortedData.slice(0, CHUNK_SIZE)); // Load the initial chunk
         setIsLoading(false);
       })
       .catch((error) => {
@@ -50,8 +53,8 @@ const OpenPacksPage = () => {
         set.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    setDisplayedSets(filteredSets);
-  }, [searchTerm, selectedSeries, sets]);
+    setDisplayedSets(filteredSets.slice(0, (currentChunk + 1) * CHUNK_SIZE));
+  }, [searchTerm, selectedSeries, sets, currentChunk]);
 
   const handleSetClick = async (setId) => {
     console.log(`Set ID: ${setId}`);
@@ -98,6 +101,24 @@ const OpenPacksPage = () => {
 
   const seriesSets = groupSetsBySeries(displayedSets);
 
+  const loadMoreSets = useCallback(() => {
+    setCurrentChunk((prevChunk) => prevChunk + 1);
+  }, []);
+
+  const lastSetElementRef = useCallback(
+    (node) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreSets();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, loadMoreSets]
+  );
+
   return (
     <div>
       <Header secondary />
@@ -118,29 +139,58 @@ const OpenPacksPage = () => {
             <div className="open-packs-page-container" key={seriesName}>
               <h2 className="series-title">{seriesName}</h2>
               <div className="open-packs-page-grid">
-                {seriesSets[seriesName].map((set) => (
-                  <div
-                    key={set.id}
-                    className="open-packs-page-grid-item"
-                    onClick={() => handleSetClick(set.id)}
-                  >
-                    <img
-                      src={set.images.logo}
-                      className="logo"
-                      alt={`${set.name} logo`}
-                    />
-                    <div className="set-info">
-                      <img
-                        src={set.images.symbol}
-                        className="symbol"
-                        alt={`${set.name} symbol`}
-                      />
-                      <h2>{set.name}</h2>
-                    </div>
-                    <p>Release date: {set.releaseDate}</p>
-                    <p>ID: {set.id}</p>
-                  </div>
-                ))}
+                {seriesSets[seriesName].map((set, index) => {
+                  if (index === seriesSets[seriesName].length - 1) {
+                    return (
+                      <div
+                        key={set.id}
+                        ref={lastSetElementRef}
+                        className="open-packs-page-grid-item"
+                        onClick={() => handleSetClick(set.id)}
+                      >
+                        <img
+                          src={set.images.logo}
+                          className="logo"
+                          alt={`${set.name} logo`}
+                        />
+                        <div className="set-info">
+                          <img
+                            src={set.images.symbol}
+                            className="symbol"
+                            alt={`${set.name} symbol`}
+                          />
+                          <h2>{set.name}</h2>
+                        </div>
+                        <p>Release date: {set.releaseDate}</p>
+                        <p>ID: {set.id}</p>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div
+                        key={set.id}
+                        className="open-packs-page-grid-item"
+                        onClick={() => handleSetClick(set.id)}
+                      >
+                        <img
+                          src={set.images.logo}
+                          className="logo"
+                          alt={`${set.name} logo`}
+                        />
+                        <div className="set-info">
+                          <img
+                            src={set.images.symbol}
+                            className="symbol"
+                            alt={`${set.name} symbol`}
+                          />
+                          <h2>{set.name}</h2>
+                        </div>
+                        <p>Release date: {set.releaseDate}</p>
+                        <p>ID: {set.id}</p>
+                      </div>
+                    );
+                  }
+                })}
               </div>
             </div>
           ))

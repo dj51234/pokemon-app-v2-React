@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
 
-const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard, applyBoxShadow }) => {
+const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard, applyBoxShadow, isInteractable, heroCard, id }) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(startInteractive);
@@ -71,6 +71,9 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         case 'rare secret':
           setBoxShadow('0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913');
           break;
+        case 'rare rainbow':
+          setBoxShadow('0 0 3px -1px rgb(255, 56, 6), 0 0 5px 1px rgb(0, 110, 255), 0 0 22px 2px rgb(66, 255, 66), 0px 10px 20px -5px rgb(255, 51, 0), 0 0 40px -30px rgb(58, 255, 58), 0 0 50px -20px rgb(255, 80, 80)');
+          break;
         default:
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
       }
@@ -98,7 +101,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   }, [contrast]);
 
   const handleMouseMove = (e) => {
-    if (!isInteractMode || !isFlipped || !isRotated) return;
+    if (!isInteractMode || !isFlipped || !isRotated || (!isInteractable && !heroCard) || !outerRef.current) return;
 
     const outer = outerRef.current;
     const shine = shineRef.current;
@@ -119,10 +122,14 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       outer.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
       outer.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
 
-      shine.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-      shine.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
-      glare.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
-      glare.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+      if (shine) {
+        shine.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+        shine.style.setProperty('--my', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+      }
+      if (glare) {
+        glare.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
+        glare.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
+      }
       if (glitter) {
         glitter.style.setProperty('--pointer-x', `${((e.clientX - rect.left) / rect.width) * 100}%`);
         glitter.style.setProperty('--pointer-y', `${((e.clientY - rect.top) / rect.height) * 100}%`);
@@ -131,7 +138,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   };
 
   const handleMouseLeave = () => {
-    if (!isInteractMode || !isFlipped || !isRotated) return;
+    if (!isInteractMode || !isFlipped || !isRotated || !outerRef.current) return;
 
     const outer = outerRef.current;
     const shine = shineRef.current;
@@ -146,10 +153,14 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       outer.style.setProperty('--my', '50%');
       outer.style.transition = 'transform 0.3s ease-out';
 
-      shine.style.setProperty('--mx', '50%');
-      shine.style.setProperty('--my', '50%');
-      glare.style.setProperty('--pointer-x', '50%');
-      glare.style.setProperty('--pointer-y', '50%');
+      if (shine) {
+        shine.style.setProperty('--mx', '50%');
+        shine.style.setProperty('--my', '50%');
+      }
+      if (glare) {
+        glare.style.setProperty('--pointer-x', '50%');
+        glare.style.setProperty('--pointer-y', '50%');
+      }
       if (glitter) {
         glitter.style.setProperty('--pointer-x', '50%');
         glitter.style.setProperty('--pointer-y', '50%');
@@ -158,6 +169,8 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
   };
 
   const handleCardClick = (e) => {
+    if (!outerRef.current) return;
+
     const outer = outerRef.current;
     outer.classList.remove('tilting');
     outer.style.setProperty('--rx', '0deg');
@@ -165,10 +178,14 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
     outer.style.setProperty('--mx', '50%');
     outer.style.setProperty('--my', '50%');
     
-    shineRef.current.style.setProperty('--mx', '50%');
-    shineRef.current.style.setProperty('--my', '50%');
-    glareRef.current.style.setProperty('--pointer-x', '50%');
-    glareRef.current.style.setProperty('--pointer-y', '50%');
+    if (shineRef.current) {
+      shineRef.current.style.setProperty('--mx', '50%');
+      shineRef.current.style.setProperty('--my', '50%');
+    }
+    if (glareRef.current) {
+      glareRef.current.style.setProperty('--pointer-x', '50%');
+      glareRef.current.style.setProperty('--pointer-y', '50%');
+    }
     if (glitterRef.current) {
       glitterRef.current.style.setProperty('--pointer-x', '50%');
       glitterRef.current.style.setProperty('--pointer-y', '50%');
@@ -292,10 +309,11 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         data-subtypes={Array.isArray(subtypes) ? subtypes.join(',').toLowerCase() : (subtypes || '').toLowerCase()}
         data-set={setId}
         data-supertypes={formatSupertypes(supertypes)}
+        data-id={id}
       >
         <div
           className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
-          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius,  boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
+          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
           ref={outerRef}
           onClick={handleCardClick}
         >

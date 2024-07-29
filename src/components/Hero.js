@@ -11,11 +11,15 @@ const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);
   const navigate = useNavigate();
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
 
   useEffect(() => {
     const img = new Image();
     img.src = pikachu;
-    img.onload = () => setImageLoaded(true);
+    img.onload = () => {
+      setImageSrc(pikachu);
+      setImageLoaded(true);
+    };
     img.onerror = () => console.error("Image failed to load.");
   }, []);
 
@@ -46,11 +50,11 @@ const Hero = () => {
           </div>
         </section>
         <div className="hero-card">
-          {imageLoaded ? (
-            <NormalCard isFlipped={true} frontImage={pikachu} startInteractive={true} heroCard={true} />
-          ) : (
-            <div></div>
-          )}
+          <div className={`image-container ${imageLoaded ? 'loaded' : ''}`}>
+            {imageSrc && (
+              <NormalCard isFlipped={true} frontImage={imageSrc} startInteractive={true} heroCard={true} />
+            )}
+          </div>
         </div>
       </main>
       <div className="arrow" onClick={handleNextPage}>

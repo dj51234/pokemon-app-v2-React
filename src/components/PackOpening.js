@@ -20,7 +20,8 @@ const rarityColors = {
   'ace spec rare': '#F700C1',
   'hyper rare': '#FFD913',
   'rare holo': '#FFFFFF',
-  'rare secret': '#FFD913'
+  'rare secret': '#FFD913',
+  'illustration rare': '#FFFFFF'
   // Add more colors for other rarities as needed
 };
 
@@ -55,32 +56,53 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     const rect = explosionContainer.getBoundingClientRect();
     const cardWidth = rect.width;
     const cardHeight = rect.height;
+
+    // Determine a random starting position around the border of the card
+    let startX, startY;
+    const borderSide = Math.floor(Math.random() * 4);
+    switch (borderSide) {
+      case 0: // Top border
+        startX = Math.random() * cardWidth;
+        startY = 0;
+        break;
+      case 1: // Right border
+        startX = cardWidth;
+        startY = Math.random() * cardHeight;
+        break;
+      case 2: // Bottom border
+        startX = Math.random() * cardWidth;
+        startY = cardHeight;
+        break;
+      case 3: // Left border
+        startX = 0;
+        startY = Math.random() * cardHeight;
+        break;
+      default:
+        startX = Math.random() * cardWidth;
+        startY = Math.random() * cardHeight;
+    }
+
+    // Calculate the target position based on direction from center
     const centerX = cardWidth / 2;
     const centerY = cardHeight / 2;
+    const directionX = startX - centerX;
+    const directionY = startY - centerY;
+    const distance = Math.random() * 500 + 300; // Increase the explosion distance
+    const tx = directionX * distance / cardWidth + 'px';
+    const ty = directionY * distance / cardHeight + 'px';
 
-    // Determine a random starting position along a circular path near the border
-    const angle = Math.random() * 2 * Math.PI; // Random angle
-    const borderRadius = (Math.min(cardWidth, cardHeight) / 2) * 1.2; // Larger radius close to the border
-    const startX = centerX + borderRadius * Math.cos(angle);
-    const startY = centerY + borderRadius * Math.sin(angle);
-
-    // Calculate the target position
-    const distance = Math.random() * 300 + 200; // Adjust the explosion distance
-    const tx = Math.cos(angle) * distance + 'px';
-    const ty = Math.sin(angle) * distance + 'px';
-
-    const size = Math.random() * 10; // Random size up to 15px
+    const size = Math.random() * 12; // Random size between 10px and 30px
     particle.style.setProperty('--start-x', `${startX}px`);
     particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
     particle.style.setProperty('--ty', ty);
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
-    particle.style.background = color;
+    particle.style.background = color; // Use color for the particle background
 
     explosionContainer.appendChild(particle);
 
-    particle.style.animation = 'explosion 2.2s forwards'; // Animation duration
+    particle.style.animation = 'explosion 1s forwards'; // Shorter animation duration
 
     particle.addEventListener('animationend', () => {
       particle.remove();
@@ -114,7 +136,8 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
             rarity: randomCard.rarity?.toLowerCase() || '',
             subtypes: randomCard.subtypes?.map(subtype => subtype.toLowerCase()) || [],
             setId: randomCard.setId?.toLowerCase() || '',
-            supertypes: randomCard.supertypes?.map(supertype => supertype.toLowerCase()) || []
+            supertypes: randomCard.supertypes?.map(supertype => supertype.toLowerCase()) || [],
+            id: randomCard.id // Add the card id here
           };
           return newCard;
         }
@@ -201,6 +224,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
               data-rarity={card.rarity}
             >
               <NormalCard
+                id={card.id} // Pass the id to the NormalCard component
                 isFlipped={card.flipped}
                 frontImage={card.front}
                 backImage={card.back}
@@ -211,6 +235,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
+                isInteractable={leftStack.length - index === 10} // Pass interactable prop
               />
               <div className="explosion-container"></div>
             </div>

@@ -115,6 +115,16 @@
   animation-delay: -0.4s;
 }
 
+.image-container {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.image-container.loaded {
+  opacity: 1;
+}
+
+
 @keyframes animate {
   0% {
       opacity: 0;
