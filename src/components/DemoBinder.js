@@ -42,7 +42,7 @@ const DemoBinder = ({ show, revealedCards, onBack }) => {
   return (
     <div className={`demo-binder ${show ? 'show' : ''}`}>
       <div className="demo-binder-content">
-        <h2>Step 3: Build Your Binder</h2>
+        <h2><span className='gradient-text'>Step 3:</span> Build Your Binder</h2>
         <div className="carousel">
           <button className="carousel-button" onClick={handlePrevPage}>{"<"}</button>
           <div className="card-grid">
@@ -54,7 +54,7 @@ const DemoBinder = ({ show, revealedCards, onBack }) => {
           </div>
           <button className="carousel-button" onClick={handleNextPage}>{">"}</button>
         </div>
-        <button className="back-button" onClick={onBack}>Back to Pack Opening</button>
+        <button className="back-button btn-primary" onClick={onBack}>Back to Pack Opening</button>
       </div>
     </div>
   );

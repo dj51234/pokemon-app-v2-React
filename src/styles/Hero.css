@@ -42,34 +42,7 @@
 .hero-buttons a {
   text-decoration: none;
   padding: 1rem 2rem;
-  border-radius: 1rem;
   font-size: 2rem;
-}
-
-.hero-buttons a:first-child {
-  color: var(--yellow);
-  background-color: rgb(255, 225, 101, 0);
-  border: 2px solid var(--yellow);
-  transition: all 0.1s ease-in-out;
-}
-
-.hero-buttons a:first-child:hover {
-  color: var(--black);
-  background-color: var(--yellow);
-  border: 2px solid transparent;
-}
-
-.hero-buttons a:nth-child(2) {
-  color: var(--white);
-  background-color: rgb(244, 244, 245, 0);
-  border: 1px solid var(--white);
-  transition: all 0.1s ease-in-out;
-}
-
-.hero-buttons a:nth-child(2):hover {
-  color: rgb(0, 0, 0);
-  background-color: var(--white);
-  border: 1px solid transparent;
 }
 
 .hero-grid h2 {

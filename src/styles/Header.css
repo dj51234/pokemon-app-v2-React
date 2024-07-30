@@ -6,6 +6,7 @@
   z-index: 2;
   position: relative;
   transition: all 0.3s ease-in-out; /* Added top transition */
+  padding: 2rem 0;
 }
 
 .header-wrap--secondary {
@@ -35,46 +36,6 @@ nav ul {
 nav ul a {
   text-decoration: none;
   padding: 1rem 2rem;
-  border-radius: 1rem;
-}
-
-nav ul li:nth-child(1) a {
-  color: var(--yellow);
-  background-color: rgb(255, 225, 101, 0);
-  border: 2px solid var(--yellow);
-  transition: all 0.1s ease-in-out;
-}
-
-nav ul li:nth-child(1) a:hover {
-  color: var(--black);
-  background-color: var(--yellow);
-  border: 2px solid transparent;
-}
-
-nav ul li:nth-child(2) a {
-  color: var(--pink);
-  background-color: rgb(244, 244, 245, 0);
-  border: 1px solid var(--pink);
-  transition: all 0.1s ease-in-out;
-}
-
-nav ul li:nth-child(2) a:hover {
-  color: var(--black);
-  background-color: var(--pink);
-  border: 1px solid transparent;
-}
-
-nav ul li:nth-child(3) a {
-  color: var(--white);
-  background-color: rgb(244, 244, 245, 0);
-  border: 1px solid var(--white);
-  transition: all 0.1s ease-in-out;
-}
-
-nav ul li:nth-child(3) a:hover {
-  color: var(--black);
-  background-color: var(--white);
-  border: 1px solid transparent;
 }
 
 .profile-image {
@@ -113,8 +74,6 @@ nav ul li:nth-child(3) a:hover {
   border-radius: 50%;
   text-transform: uppercase; /* Ensure letter is uppercase */
 }
-
-/* src/styles/Header.css */
 
 /* Mobileb */
 

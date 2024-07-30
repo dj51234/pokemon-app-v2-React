@@ -34,7 +34,7 @@ const PackSelection = ({ onSelect, show, onFetchCards, onNext }) => {
 
   return (
     <div className={`pack-selection ${show ? 'show' : ''}`}>
-      <h2>Step 1: Select Your Pack</h2>
+      <h2><span className='gradient-text'>Step 1:</span> Select Your Pack</h2>
       <div className="sets-container">
         {sets.map((set, index) => (
           set ? (

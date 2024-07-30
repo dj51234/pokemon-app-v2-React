@@ -42,11 +42,11 @@ const Hero = () => {
       <ParticlesBackground />
       <main className="hero-grid">
         <section className="hero-text">
-          <h2>Experience the <span>Magic of Pokémon</span> Card Pack Openings Online!</h2>
+          <h2>Experience the <span className='gradient-text'>Magic of Pokémon</span> Card Pack Openings Online!</h2>
           <p>Open, Collect, and Trade Pokémon cards with fans worldwide. Join our community and relive the excitement! Dive into the nostalgia of opening packs and discovering rare finds. Participate in events and challenges to showcase your collection. Become a part of a thriving community of Pokémon enthusiasts. Your adventure awaits—start collecting today!</p>
           <div className="hero-buttons">
-            <a href="/" onClick={handleStartCollection}>Start Your Collection</a>
-            <a href="/">Learn More</a>
+            <a href="/" className='btn-primary' onClick={handleStartCollection}>Start Your Collection</a>
+            <a href="/" className='btn-primary'>Learn More</a>
           </div>
         </section>
         <div className="hero-card">

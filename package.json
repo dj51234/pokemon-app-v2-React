@@ -29,6 +29,7 @@
     "react-dom": "^18.3.1",
     "react-explode": "^2.0.5",
     "react-extract-colors": "^1.0.3",
+    "react-intersection-observer": "^9.13.0",
     "react-parallax-tilt": "^1.7.227",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",

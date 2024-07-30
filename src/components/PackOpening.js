@@ -213,7 +213,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
-        <h2>Step 2: Open Your Pack</h2>
+        <h2><span className='gradient-text'>Step 2:</span> Open Your Pack</h2>
         <div ref={cardStackRef} className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
           {leftStack.map((card, index) => (
             <div
@@ -242,7 +242,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           ))}
         </div>
         <div className="pack-opening-buttons">
-          <button className={`back-button ${highlightBackButton ? 'highlighted' : ''}`} onClick={handleBackClick}>Open New Pack</button>
+          <button className={`back-button btn-primary ${highlightBackButton ? 'highlighted' : ''}`} onClick={handleBackClick}>Open New Pack</button>
           {allFlipped && !hideNextButton && <button className="next-button" onClick={handleNextClick}>Add to Binder</button>}
         </div>
       </div>

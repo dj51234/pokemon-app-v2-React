@@ -63,17 +63,17 @@ const Header = ({ secondary }) => {
       <header>
         <div className="logo">
           <Link to="/">
-            <img src={logo} alt="Pokemon logo" />
+            <h2><span className='gradient-text'>Pokemon</span></h2>
           </Link>
         </div>
         <nav>
           {!currentUser && (
             <>
               <ul className="nav-links">
-                <li><Link to="/register">Register</Link></li>
-                <li><Link to="/login">Login</Link></li>
+                <li><Link to="/register" className='btn-primary'>Register</Link></li>
+                <li><Link to="/login" className='btn-primary'>Login</Link></li>
                 {location.pathname !== '/pokedex' && (
-                  <li><Link to="/pokedex">Browse Cards</Link></li>
+                  <li><Link to="/pokedex" className='btn-primary'>Browse Cards</Link></li>
                 )}
               </ul>
               <div className="hamburger" onClick={toggleHamburgerMenu}>

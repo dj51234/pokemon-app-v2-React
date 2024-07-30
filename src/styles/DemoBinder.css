@@ -78,18 +78,7 @@
   margin-top: 2rem;
   padding: 1rem 2rem;
   font-size: 1.6rem;
-  color: var(--white);
-  background-color: var(--black);
-  border: 2px solid var(--yellow);
-  border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.back-button:hover {
-  background-color: var(--yellow);
-  color: var(--black);
-  transform: scale(1.05);
 }
 
 @media screen and (max-width: 1200px) {
