@@ -1,5 +1,4 @@
-// src/pages/Pokedex.js
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef, useCallback } from 'react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
@@ -28,6 +27,10 @@ const PokedexPage = () => {
   const [noResults, setNoResults] = useState(false);
   const [suggestedPokemon, setSuggestedPokemon] = useState([]);
   const [pokemonNames, setPokemonNames] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const observer = useRef();
 
   useEffect(() => {
     fetchSetData().then(data => {
@@ -64,16 +67,18 @@ const PokedexPage = () => {
       if (selectedSeries !== 'all') {
         filteredSets = filteredSets.filter(set => set.series === selectedSeries);
       }
-      setDisplayedSets(filteredSets);
+      setDisplayedSets(filteredSets.slice(0, page * 20));
+      setHasMore(filteredSets.length > page * 20);
     }
-  }, [sets, selectedSeries, searchBy]);
+  }, [sets, selectedSeries, searchBy, page]);
 
   useEffect(() => {
     if (searchBy === 'set') {
       const filteredSets = sets.filter(set => set.name.toLowerCase().includes(searchTerm.toLowerCase()));
-      setDisplayedSets(filteredSets);
+      setDisplayedSets(filteredSets.slice(0, page * 20));
+      setHasMore(filteredSets.length > page * 20);
     }
-  }, [searchTerm, sets, searchBy]);
+  }, [searchTerm, sets, searchBy, page]);
 
   useEffect(() => {
     if (viewMode === 'sets') {
@@ -151,10 +156,11 @@ const PokedexPage = () => {
         const specialSearchTerm = specialCases[normalizedTerm] || term;
         let cardData = await fetchPokemonCardsByName(specialSearchTerm);
         cardData = cardData.filter(card => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id));
-        setCards(cardData);
+        setCards(cardData.slice(0, page * 20));
         setViewMode('cards');
         setIsLoading(false);
         setNoResults(cardData.length === 0);
+        setHasMore(cardData.length > page * 20);
         if (cardData.length === 0) {
           const bestMatches = findBestMatches(term);
           setSuggestedPokemon(bestMatches);
@@ -172,10 +178,11 @@ const PokedexPage = () => {
   const handleSetClick = async (set) => {
     setIsLoading(true);
     const cardData = await fetchCardData(set.cardIDs);
-    setCards(cardData);
+    setCards(cardData.slice(0, page * 20));
     setSelectedSet(set);
     setViewMode('cards');
     setIsLoading(false);
+    setHasMore(cardData.length > page * 20);
   };
 
   const handleBackToSets = () => {
@@ -190,11 +197,13 @@ const PokedexPage = () => {
     setNoResults(false);
     setSuggestedPokemon([]);
     setCards([]);
+    setPage(1);
     if (value === 'pokemon') {
       setIsLoading(true);
       const randomPokemonCards = await fetchRandomPokemonCardsForPokedex(5);
       setCards(randomPokemonCards);
       setIsLoading(false);
+      setHasMore(randomPokemonCards.length > 20);
     } else {
       setCards([]); // Clear cards when switching to sets view
     }
@@ -216,6 +225,21 @@ const PokedexPage = () => {
       return acc;
     }, {});
   };
+
+  const loadMore = useCallback((entries) => {
+    const [entry] = entries;
+    if (entry.isIntersecting && hasMore && !isLoading) {
+      setPage(prevPage => prevPage + 1);
+    }
+  }, [hasMore, isLoading]);
+
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(loadMore);
+    if (document.querySelector('#loading-trigger')) {
+      observer.current.observe(document.querySelector('#loading-trigger'));
+    }
+  }, [loadMore]);
 
   const seriesSets = groupSetsBySeries(displayedSets);
 
@@ -282,6 +306,7 @@ const PokedexPage = () => {
         )}
       </div>
       <Footer />
+      <div id="loading-trigger" style={{ height: '1px' }}></div>
     </div>
   );
 };
