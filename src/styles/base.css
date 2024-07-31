@@ -3,10 +3,11 @@
     font-size: 62.5%;
     --yellow: rgb(255, 225, 101);
     --yellow-transparent: rgba(255, 225, 101, .3);
-    --pink: rgb(84, 255, 141);
+    --pink: #d03ce7;
     --white: rgb(244, 244, 245);
     --subtext: rgb(157, 157, 158);
-    --black: #080B11;
+    --black: #080B12;
+    --secondary-color: #363e6442;
 }
 
 * {
@@ -22,6 +23,7 @@ html, body {
 .app {
     overflow: hidden;
     color: var(--white);
+    background: var(--black);
 }
 
 .auth-background {
@@ -69,10 +71,13 @@ span.gradient-text {
     background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
     border-radius: 1rem;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    position: inline-block;
 }
 
 .gradient-btn:hover {
-    box-shadow: 0px 0px 1.5rem 0px rgba(162, 128, 255, 0.822);
+    box-shadow: 0px 0px 1rem 0px rgba(162, 128, 255, 0.781);
 }
 
 .btn-primary {
@@ -80,7 +85,6 @@ span.gradient-text {
     display: inline-block;
     color: #fff;
     background-color: var(--black);
-    padding: 10px 20px;
     text-decoration: none;
     border-radius: 1rem;
     transition: all 0.2s ease-in-out;
@@ -88,6 +92,9 @@ span.gradient-text {
     overflow: hidden;
     border: 1px solid transparent; /* Needed to maintain the structure */
     font-size: 2rem;
+    outline: none;
+    cursor: pointer;
+    padding: 1rem 2rem;
 }
 
 .btn-primary::before {
@@ -123,6 +130,17 @@ span.gradient-text {
     box-shadow: 0px 0px 1rem 0px rgba(162, 128, 255, 0.822);
 }
 
+.btn-primary.highlighted {
+    box-shadow: 0 0 10px #B14BF4;
+    margin-right: 1rem;
+    transition: transform 0.3s ease-in-out;
+    background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
+    filter: brightness(1.2);
+}
+
+.btn-primary.highlighted::after {
+    background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
+}
 
 
 

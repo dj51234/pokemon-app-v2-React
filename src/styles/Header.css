@@ -11,7 +11,7 @@
 
 .header-wrap--secondary {
   background-color: var(--black);
-  border-bottom: 1px solid var(--yellow-transparent);
+  border-bottom: 1px solid rgba(255, 0, 234, 0.281);
 }
 
 header {
@@ -33,10 +33,15 @@ nav ul {
   gap: 2rem;
 }
 
+nav ul li:first-child {
+  margin-top:10px;
+}
+
 nav ul a {
   text-decoration: none;
   padding: 1rem 2rem;
 }
+
 
 .profile-image {
   width: 100%;

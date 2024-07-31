@@ -222,7 +222,7 @@ const PokedexPage = () => {
   return (
     <div className="container">
       <Header secondary />
-      <div className="content">
+      <div className="content" style={{background: '#080B12'}}>
         <SearchBar
           sortSets={sortSets}
           series={series}
@@ -261,7 +261,7 @@ const PokedexPage = () => {
                     <span
                       key={index}
                       onClick={() => handleSuggestedPokemonClick(name)}
-                      style={{ cursor: 'pointer', color: 'blue', marginLeft: '5px', fontWeight: 500}}
+                      style={{ cursor: 'pointer', color: '#BC4CCE', marginLeft: '5px', fontWeight: 500}}
                     >
                       {name}
                       {index < suggestedPokemon.length - 1 ? ',' : ''}

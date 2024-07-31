@@ -9,7 +9,7 @@ const CardItem = ({ image, rarity }) => {
   return (
     <div
       className="grid-item--card"
-      style={{ backgroundSize: 'contain', backgroundPosition: 'center' }}
+      style={{ backgroundSize: 'contain', backgroundPosition: 'center', background: '#080B12' }}
     >
       <div className="card-wrapper" data-rarity={lowerCaseRarity}>
         <img src={image} alt="Card" className="card-image" />

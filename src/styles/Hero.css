@@ -41,7 +41,6 @@
 
 .hero-buttons a {
   text-decoration: none;
-  padding: 1rem 2rem;
   font-size: 2rem;
 }
 
@@ -69,12 +68,34 @@
   cursor: pointer;
 }
 
-.arrow span {
+.arrow span:nth-child(1) {
   display: block;
   width: 2rem;
   height: 2rem;
-  border-bottom: 5px solid var(--yellow);
-  border-right: 5px solid var(--yellow);
+  border-bottom: 5px solid #B14BF4;
+  border-right: 5px solid #B14BF4;
+  transform: rotate(45deg);
+  margin: -10px;
+  animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(2) {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  border-bottom: 5px solid #ea00ff;
+  border-right: 5px solid #ea00ff;
+  transform: rotate(45deg);
+  margin: -10px;
+  animation: animate 2s infinite;
+}
+
+.arrow span:nth-child(3) {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  border-bottom: 5px solid #4D91FF;
+  border-right: 5px solid #4D91FF;
   transform: rotate(45deg);
   margin: -10px;
   animation: animate 2s infinite;
@@ -90,7 +111,7 @@
 
 .image-container {
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 1s ease-in-out;
 }
 
 .image-container.loaded {
@@ -114,7 +135,7 @@
 
 /* Media Queries for Vertical Mode */
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1260px) {
   .hero-grid {
     grid-template-columns: 1fr;
   }
@@ -156,5 +177,11 @@
 @media screen and (min-width: 2000px) {
   .hero-grid {
       max-width: 65%;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1450px) {
+  .hero-text {
+      gap: 2rem;
   }
 }

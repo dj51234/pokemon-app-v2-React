@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: rgb(10, 10, 10);
+    background-color: var(--black);
 }
 
 .register-content {
@@ -16,7 +16,7 @@
 }
 
 .register {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--secondary-color);
     padding: 4rem;
     border-radius: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -45,27 +45,14 @@
     border-radius: 0.5rem;
 }
 
-.register button[type='submit'] {
-    border: 1px solid var(--yellow);
-    background-color: var(--yellow);
-    color: var(--black);
-}
-
 .register button {
-    padding: 1rem;
+    padding: 1rem 2rem;
     font-size: 1.6rem;
     color: var(--white);
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--white);
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.1s ease-in-out;
-}
-
-.register button:hover {
-    color: var(--black);
-    background-color: var(--white);
-    border: 1px solid transparent;
+    border: none;
 }
 
 .register p {

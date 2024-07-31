@@ -43,28 +43,12 @@
   }
   
   .set.highlighted {
-    border: 3px solid var(--yellow);
-    transform: scale(1.1);
-    box-shadow: 0 0 10px var(--yellow);
-    margin-right: 1rem;
-    animation: pulse-yellow 2s infinite;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .set.highlighted:hover {
-    transform: scale(1.1); 
-  }
-  
-  @keyframes pulse-yellow {
-    0% {
-      box-shadow: 0 0 10px var(--yellow);
-    }
-    50% {
-      box-shadow: 0 0 20px var(--yellow);
-    }
-    100% {
-      box-shadow: 0 0 10px var(--yellow);
-    }
+    position: relative;
+    border: 2px solid transparent;
+    border-image: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
+    border-image-slice: 1;
+    box-shadow: 0 0 12px 0 rgba(250, 85, 96, 0.6), 0 0 12px 0 rgba(177, 75, 244, 0.6), 0 0 10px 0 rgba(77, 145, 255, 0.6);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   }
   
   .set-text h3 {
@@ -84,8 +68,8 @@
     left: 50%;
     width: 1.3rem;
     height: 1.3rem;
-    border-bottom: 5px solid var(--yellow);
-    border-right: 5px solid var(--yellow);
+    border-bottom: 5px solid #B14BF4;
+    border-right: 5px solid #B14BF4;
     animation: bounce 2s infinite;
     transform: translateX(-50%) rotate(45deg);
     pointer-events: none;

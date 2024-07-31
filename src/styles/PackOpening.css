@@ -118,17 +118,6 @@
   border-radius: 0.5rem;
 }
 
-.pack-opening-buttons .back-button.highlighted {
-    border: 3px solid var(--yellow);
-    transform: scale(1.1);
-    box-shadow: 0 0 10px var(--yellow);
-    margin-right: 1rem;
-    animation: pulse-yellow 2s infinite;
-    transition: transform 0.3s ease-in-out;
-    background: var(--yellow);
-    color: var(--black);
-}
-
 @media screen and (max-width: 1200px) {
   .pack-opening h2 {
     font-size: 4rem;

@@ -2,6 +2,7 @@
 #grid {
   width: 100%;
   margin-bottom: 3rem;
+
 }
 
 .sets-grid {
@@ -27,11 +28,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  border: 2px solid var(--black);
+  background:  var(--secondary-color);
   border-radius: 0.5rem;
   text-align: center;
   text-decoration: none;
-  color: var(--black);
+  color: var(--white);
   margin-bottom: 1rem;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -67,6 +68,7 @@
   display: inline-block;
   max-width: 300px;
   max-height: 100%;
+  background: var(--black);
 }
 
 .card-wrapper::after {
@@ -116,6 +118,6 @@
 .series-title-main {
   width: 75%;
   margin: 2rem auto 1rem;
-  color: #333;
+  color: var(--pink);
   font-size: 3rem;
 }

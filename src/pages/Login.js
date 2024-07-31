@@ -112,15 +112,15 @@ const Login = () => {
               placeholder="Password"
               required
             />
-            <button type="submit">Login</button>
+            <button type="submit" className='gradient-btn'>Login</button>
             {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
           </form>
           <div className="auth-buttons">
-            <button onClick={handleGoogleSignIn} className="google-sign-in">
+            <button onClick={handleGoogleSignIn} className="google-sign-in btn-primary">
               <img src={googleLogo} alt="Google logo" className="icon-left google-icon" />
               Sign in with Google
             </button>
-            <button onClick={handleFacebookSignIn} className="facebook-sign-in">
+            <button onClick={handleFacebookSignIn} className="facebook-sign-in btn-primary">
               <img src={faceBookLogo} alt="Facebook logo" className="icon-left facebook-icon" />
               Sign in with Facebook
             </button>

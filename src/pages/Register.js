@@ -169,15 +169,15 @@ const Register = () => {
               placeholder="Password"
               required
             />
-            <button type="submit">Register</button>
+            <button type="submit" className='gradient-btn'>Register</button>
             {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
           </form>
           <div className="auth-buttons">
-            <button onClick={handleGoogleSignUp} className="google-sign-in">
+            <button onClick={handleGoogleSignUp} className="google-sign-in btn-primary">
               <img src={googleLogo} alt="Google logo" className="icon-left google-icon" />
               Sign up with Google
             </button>
-            <button onClick={handleFacebookSignUp} className="facebook-sign-in">
+            <button onClick={handleFacebookSignUp} className="facebook-sign-in btn-primary">
               <img src={faceBookLogo} alt="Facebook logo" className="icon-left facebook-icon" />
               Sign up with Facebook
             </button>

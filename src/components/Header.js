@@ -70,7 +70,7 @@ const Header = ({ secondary }) => {
           {!currentUser && (
             <>
               <ul className="nav-links">
-                <li><Link to="/register" className='btn-primary'>Register</Link></li>
+                <li><Link to="/register" className='gradient-btn'>Register</Link></li>
                 <li><Link to="/login" className='btn-primary'>Login</Link></li>
                 {location.pathname !== '/pokedex' && (
                   <li><Link to="/pokedex" className='btn-primary'>Browse Cards</Link></li>

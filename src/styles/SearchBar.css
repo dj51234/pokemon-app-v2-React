@@ -48,41 +48,55 @@
   width: calc(100% - 80px); /* Adjust width to fit buttons */
   padding-right: 160px; /* Make space for the buttons */
   padding: 1rem;
-  border: 2px solid var(--white);
   border-radius: 5px;
   font-family: Goldplay;
   font-size: 1.6rem;
-  color: var(--black);
+  color: var(--white);
   margin-left: 1rem;
   box-shadow: 0 0 2px var(--white);
   transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  background: var(--secondary-color);
+  outline: none;
 }
 
 #search-bar:focus {
   outline: none;
-  box-shadow: 0 0 7px var(--white);
+  box-shadow: 0 0 10px var(--pink);
 }
 
 #search-bar::placeholder {
-  color: var(--black);
+  color: #616c81;
 }
 
 #sort-options, #series-options, #search-by-dropdown {
   width: 100%;
   max-width: max-content;
   padding: 1rem;
-  border: 1px solid var(--black);
+  border: none;
+  outline: none;
   border-radius: 5px;
   font-family: Goldplay;
   font-size: 1.6rem;
-  color: var(--black);
-  padding: 1rem 2.5rem 1rem 1rem;
-  background-color: white;
+  color: var(--white);
+  padding: 1rem 3.5rem 1rem 1rem;
+  background-color: var(--secondary-color);
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="black" d="M2 0L0 2h4L2 0zm0 5L0 3h4l-2 2z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="white" d="M2 0L0 2h4L2 0zm0 5L0 3h4l-2 2z"/></svg>');
   background-repeat: no-repeat;
   background-position: right .7em top 50%, 0 0;
   background-size: .65em auto, 100%;
+}
+
+#sort-options:focus, #series-options:focus, #search-by-dropdown:focus {
+  background-color: #141827;
+  border: none;
+  outline: none;
+}
+
+#sort-options:focus-within, #series-options:focus-within, #search-by-dropdown:focus-within {
+  background-color: #141827;
+  border: none;
+  outline: none;
 }
 
 #sort-options {
@@ -93,20 +107,21 @@
   width: 100%;
   max-width: max-content;
   padding: 1rem;
-  border: 1px solid var(--black);
+  background-color: var(--black);
   border-radius: 5px;
   font-family: Goldplay;
   font-size: 1.6rem;
-  color: var(--black);
-  background-color: var(--yellow);
+  color: var(--white);
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 4"><path fill="black" d="M0 2L2 0v4L0 2z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 4"><path fill="white" d="M0 2L2 0v4L0 2z"/></svg>');
   background-repeat: no-repeat;
   background-position: left .7em center;
   background-size: .65em auto;
   padding-left: 2rem;
   cursor: pointer;
   margin-top: 0;
+  outline: none;
+  border: 1px solid var(--pink);
 }
 
 #search-container .toggle-button {
@@ -128,31 +143,37 @@
   position: relative;
   display: inline-block;
   width: 100%;
+  outline: none;
 }
 
 #search-bar {
-  width: calc(100% - 80px); /* Adjust width to fit button */
-  padding-right: 160px; /* Make space for the button */
+  outline: none;
+  border: 1px solid var(--pink);
 }
 
 .search-button {
   position: absolute;
-  right: 0;
+  right: -1%;
   top: 0;
   height: 100%;
-  width: 80px; /* Adjust width to fit your design */
+  width: 100px; /* Adjust width to fit your design */
   border: none;
   background: none;
   cursor: pointer;
   font-size: 1rem;
   text-align: center;
-  background-color: var(--yellow);
-  color: var(--black);
+  background-color: var(--pink);
+  color: var(--white);
   font-size: 1.4rem;
   font-family: Goldplay;
   font-weight: 400;
-  border-left: 1px solid rgba(0,0,0,.2);
+  border-left: 1px solid rgba(225, 0, 255, 0.2);
   border-radius: 0 5px 5px 0;
+  transition: all 0.2s ease;
+}
+
+.search-button:hover {
+  filter: brightness(1.2);
 }
 
 .dropdown-menu {
@@ -161,7 +182,6 @@
   left: 0;
   width: 100vw; /* Full width of the viewport */
   background-color: var(--black); /* Match the color of the search bar */
-  color: var(--white);
   z-index: 1000;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   padding: 1rem;
@@ -180,7 +200,7 @@
 
 .dropdown-category {
   font-weight: bold;
-  color: grey;
+  color: var(--pink);
   margin-bottom: 0.5rem;
 }
 
@@ -191,16 +211,24 @@
 }
 
 .dropdown-item:hover {
-  background-color: var(--yellow);
+  background-color: #BC4CCE;
   color: var(--black);
 }
 
 .no-results {
   font-size: 3.6rem;
-  color: var(--black);
+  color: var(--white);
   text-align: center;
   margin: 3rem auto;
   height: 100vh;
+}
+
+.no-results span {
+  border-bottom: 2px solid #BC4CCE ;
+}
+
+.no-results span:hover {
+  filter:brightness(1.5);
 }
 
 @media screen and (max-width: 1200px) {

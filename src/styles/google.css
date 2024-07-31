@@ -3,20 +3,14 @@
     padding: 1rem;
     font-size: 1.6rem;
     color: var(--white);
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--white);
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.1s ease-in-out;
     margin-top: 1rem;
     width: 100%;
     position: relative;
-  }
-  
-  .google-sign-in:hover, .facebook-sign-in:hover {
-    color: var(--black);
-    background-color: var(--white);
-    border: 2px solid transparent;
+    border: none;
+    outline: none;
   }
   
   .icon-left {

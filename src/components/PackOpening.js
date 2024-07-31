@@ -243,7 +243,7 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
         </div>
         <div className="pack-opening-buttons">
           <button className={`back-button btn-primary ${highlightBackButton ? 'highlighted' : ''}`} onClick={handleBackClick}>Open New Pack</button>
-          {allFlipped && !hideNextButton && <button className="next-button" onClick={handleNextClick}>Add to Binder</button>}
+          {allFlipped && !hideNextButton && <button className="next-button btn-primary" onClick={handleNextClick}>Add to Binder</button>}
         </div>
       </div>
     </div>
