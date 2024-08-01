@@ -69,10 +69,11 @@ const Overlay = ({ onClose, cards }) => {
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
+  const [initialAnimation, setInitialAnimation] = useState(true);
   const cardStackRef = useRef(null);
 
   useEffect(() => {
-    setCardStack(cards.map(card => ({
+    const initialCardStack = cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
       flipped: false,
@@ -82,8 +83,15 @@ const Overlay = ({ onClose, cards }) => {
       supertypes: card.supertypes,
       zIndex: cards.length - cards.indexOf(card),
       id: card.id
-    })));
-    setAllFlipped(false);
+    }));
+    setCardStack(initialCardStack);
+
+    // Remove the initial animation class after the animation completes
+    const timer = setTimeout(() => {
+      setInitialAnimation(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
   }, [cards]);
 
   const createParticle = (explosionContainer, color) => {
@@ -202,11 +210,11 @@ const Overlay = ({ onClose, cards }) => {
     <div className="overlay">
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
       <div className="overlay-content">
-        <div ref={cardStackRef} className="overlay-card-stack" style={{ aspectRatio }}>
+        <div ref={cardStackRef} className={`overlay-card-stack`} style={{ aspectRatio }}>
           {cardStack.map((card, index) => (
             <div
               key={index}
-              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-moving-to-back' : ''}`}
+              className={`overlay-card ${initialAnimation ? 'slide-down' : ''} ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-card-moving-to-back' : ''}`}
               style={{ zIndex: cardStack.length - index }}
               data-rarity={card.rarity}
             >
