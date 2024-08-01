@@ -70,10 +70,11 @@ const Overlay = ({ onClose, cards }) => {
   const [movingCard, setMovingCard] = useState(null);
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const [initialAnimation, setInitialAnimation] = useState(true);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
   const cardStackRef = useRef(null);
 
   useEffect(() => {
+    setOverlayVisible(true);
     const initialCardStack = cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
@@ -87,25 +88,31 @@ const Overlay = ({ onClose, cards }) => {
     }));
     setCardStack(initialCardStack);
 
-    // Remove the initial animation class after the animation completes
-    const timer = setTimeout(() => {
-      setInitialAnimation(false);
-    }, 600);
+    const timers = [];
 
-    // Simulate image loading
-    const imagePromises = cards.map(card => new Promise(resolve => {
-      const img = new Image();
-      img.src = card.imageUrl;
-      img.onload = resolve;
-      img.onerror = resolve; // Resolve even if image fails to load
-    }));
-
-    Promise.all(imagePromises).then(() => {
-      setImagesLoaded(true);
+    // Trigger the animation class addition with delays
+    initialCardStack.forEach((card, index) => {
+      const timer = setTimeout(() => {
+        document.getElementById(card.id)?.classList.add('slide-down');
+      }, index * 200 + 200); // Minimum 200ms delay for the first card
+      timers.push(timer);
     });
 
-    return () => clearTimeout(timer);
+    // Remove the initial animation class after the animation completes
+    const clearInitialAnimation = setTimeout(() => {
+      setInitialAnimation(false);
+    }, (cards.length * 200) + 800); // Ensure all cards complete their animation
+
+    return () => {
+      timers.forEach(clearTimeout);
+      clearTimeout(clearInitialAnimation);
+    };
   }, [cards]);
+
+  const handleClose = () => {
+    setOverlayVisible(false);
+    setTimeout(onClose, 500); // Match this duration with the overlay transition duration
+  };
 
   const createParticle = (explosionContainer, color) => {
     const particle = document.createElement('div');
@@ -176,7 +183,7 @@ const Overlay = ({ onClose, cards }) => {
   };
 
   const handleCardClick = (index) => {
-    if (!imagesLoaded || animating) return;
+    if (animating) return;
     setAnimating(true);
 
     if (!allFlipped) {
@@ -220,16 +227,17 @@ const Overlay = ({ onClose, cards }) => {
   };
 
   return (
-    <div className="overlay">
-      <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
+    <div className={`overlay ${overlayVisible ? 'visible' : 'hidden'}`}>
+      <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={handleClose} />
       <div className="overlay-content">
         <div ref={cardStackRef} className="overlay-card-stack" style={{ aspectRatio }}>
           {cardStack.map((card, index) => (
             <div
               key={index}
-              className={`overlay-card ${initialAnimation ? 'slide-down' : ''} ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-card-moving-to-back' : ''}`}
-              style={{ zIndex: cardStack.length - index }}
+              id={card.id}
+              className={`overlay-card ${initialAnimation ? '' : ''} ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-card-moving-to-back' : ''}`}
               data-rarity={card.rarity}
+              style={{ zIndex: cardStack.length - index }}
             >
               <NormalCard
                 id={card.id} // Pass the id to the NormalCard component
@@ -243,7 +251,7 @@ const Overlay = ({ onClose, cards }) => {
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
-                isInteractable={cardStack.length - index === 10 && imagesLoaded} // Pass interactable prop
+                isInteractable={cardStack.length - index === 10} // Pass interactable prop
                 boxShadow={index === 1 && !!nextTopCardRarity ? getBoxShadowForRarity(card.rarity) : ''}
               />
               <div className="explosion-container"></div>
