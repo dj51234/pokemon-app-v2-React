@@ -70,6 +70,7 @@ const Overlay = ({ onClose, cards }) => {
   const [movingCard, setMovingCard] = useState(null);
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const [initialAnimation, setInitialAnimation] = useState(true);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const cardStackRef = useRef(null);
 
   useEffect(() => {
@@ -90,6 +91,18 @@ const Overlay = ({ onClose, cards }) => {
     const timer = setTimeout(() => {
       setInitialAnimation(false);
     }, 600);
+
+    // Simulate image loading
+    const imagePromises = cards.map(card => new Promise(resolve => {
+      const img = new Image();
+      img.src = card.imageUrl;
+      img.onload = resolve;
+      img.onerror = resolve; // Resolve even if image fails to load
+    }));
+
+    Promise.all(imagePromises).then(() => {
+      setImagesLoaded(true);
+    });
 
     return () => clearTimeout(timer);
   }, [cards]);
@@ -163,7 +176,7 @@ const Overlay = ({ onClose, cards }) => {
   };
 
   const handleCardClick = (index) => {
-    if (animating) return;
+    if (!imagesLoaded || animating) return;
     setAnimating(true);
 
     if (!allFlipped) {
@@ -210,7 +223,7 @@ const Overlay = ({ onClose, cards }) => {
     <div className="overlay">
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={onClose} />
       <div className="overlay-content">
-        <div ref={cardStackRef} className={`overlay-card-stack`} style={{ aspectRatio }}>
+        <div ref={cardStackRef} className="overlay-card-stack" style={{ aspectRatio }}>
           {cardStack.map((card, index) => (
             <div
               key={index}
@@ -230,7 +243,7 @@ const Overlay = ({ onClose, cards }) => {
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
-                isInteractable={cardStack.length - index === 10} // Pass interactable prop
+                isInteractable={cardStack.length - index === 10 && imagesLoaded} // Pass interactable prop
                 boxShadow={index === 1 && !!nextTopCardRarity ? getBoxShadowForRarity(card.rarity) : ''}
               />
               <div className="explosion-container"></div>
