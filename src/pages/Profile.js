@@ -1,4 +1,3 @@
-// src/pages/Profile.js
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
@@ -27,7 +26,7 @@ const Profile = () => {
   const [newUsername, setNewUsername] = useState(username);
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [newBio, setNewBio] = useState(bio);
-  const [loading, setLoading] = useState(true);  // Loading state
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const usernameInputRef = useRef(null);
 
@@ -74,7 +73,7 @@ const Profile = () => {
   };
 
   const handleSaveUsernameClick = async () => {
-    setError('');  // Clear any previous errors
+    setError('');
     if (newUsername.length < MIN_USERNAME_LENGTH || newUsername.length > MAX_USERNAME_LENGTH) {
       setError(`Username must be between ${MIN_USERNAME_LENGTH} and ${MAX_USERNAME_LENGTH} characters`);
       return;
@@ -153,17 +152,17 @@ const Profile = () => {
             setNewUsername(userData.displayName);
           }
         }
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setLoading(false); // Set loading to false even if there's an error
+        setLoading(false);
       }
     };
 
     if (currentUser) {
       fetchUserData();
     } else {
-      setLoading(false); // Set loading to false if there's no current user
+      setLoading(false);
     }
   }, [currentUser]);
 
@@ -190,7 +189,7 @@ const Profile = () => {
                 {profileImage ? (
                   <img src={profileImage} alt="Profile" className="profile-image" />
                 ) : (
-                  <div className="default-image" style={{ backgroundColor: profileColor, color: textColor }}>
+                  <div className="default-image gradient-background">
                     {username.charAt(0)}
                   </div>
                 )}

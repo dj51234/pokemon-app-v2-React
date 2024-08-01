@@ -1,4 +1,3 @@
-// src/components/Header.js
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -42,10 +41,9 @@ const Header = ({ secondary }) => {
       );
     }
     if (currentUser) {
-      const textColor = isLightColor(profileColor) ? 'black' : 'white';
       return (
         <div className="nav-default-image-wrapper" onClick={() => setSidebarOpen(true)}>
-          <div className="nav-default-image nav-profile-image" style={{ backgroundColor: profileColor, color: textColor }}>
+          <div className="nav-default-image nav-profile-image gradient-background">
             {initial}
           </div>
         </div>

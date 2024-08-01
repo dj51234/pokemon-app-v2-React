@@ -74,6 +74,12 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         case 'rare rainbow':
           setBoxShadow('0 0 3px -1px rgb(255, 56, 6), 0 0 5px 1px rgb(0, 110, 255), 0 0 22px 2px rgb(66, 255, 66), 0px 10px 20px -5px rgb(255, 51, 0), 0 0 40px -30px rgb(58, 255, 58), 0 0 50px -20px rgb(255, 80, 80)');
           break;
+        case 'rare ultra':
+          setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
+          break;
+        case 'rare holo vmax':
+          setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
+          break;
         default:
           setBoxShadow('0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white');
       }

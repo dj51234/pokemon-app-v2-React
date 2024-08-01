@@ -96,7 +96,7 @@ function shuffleArray(array) {
 export async function fetchSetsForPackSelection() {
   try {
     const twilightMasqueradeId = 'sv6'; // Twilight Masquerade set ID
-    const popularSetIds = ['base1', 'neo1', 'gym1']; // Example popular set IDs
+    const popularSetIds = ['sv3pt5', 'swsh12pt5', 'base1']; // Example popular set IDs
 
     // Fetch Twilight Masquerade set
     const twilightMasquerade = await pokemon.set.find(twilightMasqueradeId);

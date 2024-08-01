@@ -24,7 +24,7 @@
 }
 
 .series-title {
-  color: #333;
+  color: var(--pink);
   font-size: 3rem;
   margin-bottom: 2rem;
 }
@@ -35,18 +35,19 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 2rem;
   border: 2px solid var(--black);
   border-radius: .5rem;
   text-align: center;
   text-decoration: none;
-  color: var(--black);
+  color: var(--white);
   background-color: #fff;
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   position: relative;
   transition: box-shadow 0.3s, transform 0.3s;
+  background: var(--secondary-color);
 }
 
 .open-packs-page-grid-item:hover {
@@ -56,7 +57,7 @@
 
 
 .open-packs-page-grid-item .logo {
-  width: 100px;
+  width: 200px;
   height: auto;
 }
 
