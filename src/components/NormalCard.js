@@ -325,7 +325,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         >
           <div className="normal-card-inner" ref={innerRef}>
             <div className="normal-card-front" style={{ borderRadius }}>
-              <img src={backImage} alt="Normal Card Front" />
+              <img src={backImage} alt="" />
             </div>
             <div className="normal-card-back" style={{ borderRadius }}>
               <img src={frontImage} alt="Normal Card Back" />

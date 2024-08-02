@@ -24,7 +24,6 @@
 .overlay-content {
   width: 80%;  /* Adjust width as needed */
   padding: 20px;
-
   position: relative;
   display: flex;
   justify-content: center;
@@ -57,8 +56,6 @@
   transition: transform 0.6s, top 0.6s, left 0.6s;
   transform-style: preserve-3d;
   cursor: pointer;
-  transform: translateY(-200%);
-
 }
 
 .overlay-card img {
@@ -87,21 +84,6 @@
   transform: rotateY(0deg);
 }
 
-@keyframes slideDown {
-  0% {
-    transform: translateY(-150%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.overlay-card.slide-down {
-  animation: slideDown 0.8s ease-out forwards;
-}
-
 @keyframes overlay-moveToBack {
   0% {
     transform: translateY(0);
@@ -123,4 +105,12 @@
 .overlay-card-moving-to-back {
   animation: overlay-moveToBack 0.6s forwards;
 }
+
+.noscroll {
+  position: fixed;
+  top: var(--st, 0);
+  inline-size: 100%;
+  overflow-y: scroll;
+}
+
 

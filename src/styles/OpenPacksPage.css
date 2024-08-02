@@ -16,13 +16,6 @@
   justify-content: flex-start;
 }
 
-.loading {
-  text-align: center;
-  margin: 50px auto;
-  font-size: 18px;
-  color: #666;
-}
-
 .series-title {
   color: var(--pink);
   font-size: 3rem;

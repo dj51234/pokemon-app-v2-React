@@ -4,6 +4,7 @@ import '../styles/explosion.css';
 import closeIcon from '../assets/close-icon.png'; // Import close icon image
 import defaultImage from '../assets/default-image.png'; // Import default card image
 import NormalCard from './NormalCard'; // Import the NormalCard component
+import loadingGif from '../assets/loading-gif.gif';
 
 const isRare = (rarity) => {
   const rareRarities = [
@@ -71,10 +72,15 @@ const Overlay = ({ onClose, cards }) => {
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const [initialAnimation, setInitialAnimation] = useState(true);
   const [overlayVisible, setOverlayVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const cardStackRef = useRef(null);
 
   useEffect(() => {
+    const scrollTop = document.documentElement.scrollTop;
+    document.body.style.setProperty('--st', `-${scrollTop}px`);
+    document.body.classList.add('noscroll');
     setOverlayVisible(true);
+  
     const initialCardStack = cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
@@ -87,25 +93,12 @@ const Overlay = ({ onClose, cards }) => {
       id: card.id
     }));
     setCardStack(initialCardStack);
-
-    const timers = [];
-
-    // Trigger the animation class addition with delays
-    initialCardStack.forEach((card, index) => {
-      const timer = setTimeout(() => {
-        document.getElementById(card.id)?.classList.add('slide-down');
-      }, index * 200 + 200); // Minimum 200ms delay for the first card
-      timers.push(timer);
-    });
-
-    // Remove the initial animation class after the animation completes
-    const clearInitialAnimation = setTimeout(() => {
-      setInitialAnimation(false);
-    }, (cards.length * 200) + 800); // Ensure all cards complete their animation
-
+  
+    // Removed animation triggering code here
+  
     return () => {
-      timers.forEach(clearTimeout);
-      clearTimeout(clearInitialAnimation);
+      document.body.classList.remove('noscroll');
+      document.documentElement.scrollTop = scrollTop; // Restore the scroll position
     };
   }, [cards]);
 

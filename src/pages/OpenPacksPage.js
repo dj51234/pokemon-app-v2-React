@@ -131,7 +131,7 @@ const OpenPacksPage = () => {
       />
       <div className="open-packs-page">
         {isLoading ? (
-          <div className="loading">
+          <div className="loading-container">
             <img src={loadingGif} alt="Loading..." />
           </div>
         ) : (
