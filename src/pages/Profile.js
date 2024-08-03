@@ -9,7 +9,6 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import loadingGif from '../assets/loading-gif.gif';
-import { isLightColor } from '../utils/colorUtils';
 
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
@@ -171,8 +170,6 @@ const Profile = () => {
       adjustInputWidth(usernameInputRef.current);
     }
   }, [newUsername]);
-
-  const textColor = isLightColor(profileColor) ? 'black' : 'white';
 
   return (
     <>

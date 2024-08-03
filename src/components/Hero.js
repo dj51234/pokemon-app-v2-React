@@ -5,7 +5,7 @@ import NormalCard from './NormalCard';
 import { AuthContext } from '../App';
 import ParticlesBackground from './ParticlesBackground';
 import '../styles/Hero.css';
-import pikachu from '../assets/card-front.png'; // Replace with your back image path
+import pikachu from '../assets/card-test-1.png'; // Replace with your back image path
 
 const Hero = () => {
   const { currentUser, profileColor } = useContext(AuthContext);

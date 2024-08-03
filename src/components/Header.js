@@ -61,7 +61,7 @@ const Header = ({ secondary }) => {
       <header>
         <div className="logo">
           <Link to="/">
-            <h2><span className='gradient-text'>Pokemon</span></h2>
+            <h2><span className='gradient-text'>MASTERSET</span></h2>
           </Link>
         </div>
         <nav>

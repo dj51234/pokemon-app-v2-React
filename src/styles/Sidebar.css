@@ -21,9 +21,9 @@
     width: 100%;
   }
   
-  .close-btn {
+  .sidebar-content .close-btn {
     font-size: 3rem;
-    color: var(--yellow);
+    color: var(--pink);
     background: none;
     border: none;
     cursor: pointer;
@@ -50,8 +50,8 @@
     box-sizing: border-box;
   }
   
-  .menu-item:hover {
-    color: var(--yellow);
+  .sidebar-content .menu-item:hover {
+    color: var(--pink);
     background-color: rgb(29, 29, 29);
   }
   

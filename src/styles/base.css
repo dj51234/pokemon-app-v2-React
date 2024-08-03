@@ -64,6 +64,7 @@ span.gradient-text {
 .logo a {
     text-decoration: none;
     font-size: 3rem;
+    text-transform: uppercase;
 }
 
 .gradient-btn {

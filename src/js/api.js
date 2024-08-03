@@ -1,5 +1,7 @@
 // src/js/api.js
+
 import pokemon from 'pokemontcgsdk';
+import allSetData from './pack_algorithm/allSetData.json';
 
 pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
 
@@ -21,38 +23,36 @@ export async function fetchCardData(cardIDs) {
   }
 }
 
-async function fetchSetLength(setCode) {
-  try {
-    const setDetails = await pokemon.set.find(setCode);
-    return setDetails.printedTotal; // Use printedTotal instead of totalCards
-  } catch (error) {
-    console.error('Error fetching set details:', error);
-    throw error;
-  }
-}
+// Removed fetchSetLength as it's no longer needed
 
 export async function fetchRandomPokemonCards(setCode) {
   try {
     const numberOfCards = 10; // Number of random cards to fetch
 
-    // Fetch the length of the set
-    const totalCards = await fetchSetLength(setCode);
-    console.log(`Total cards in set ${setCode}:`, totalCards);
-
-    // Use a Set to ensure unique random numbers
-    const uniqueCardNumbers = new Set();
-    while (uniqueCardNumbers.size < numberOfCards) {
-      const randomNum = Math.floor(Math.random() * totalCards) + 1;
-      uniqueCardNumbers.add(randomNum);
-      console.log(`Generated random number: ${randomNum}, Unique numbers so far:`, [...uniqueCardNumbers]);
+    // Use allSetData.json to fetch card IDs
+    const setData = allSetData[setCode];
+    if (!setData) {
+      console.error(`Set ID ${setCode} not found in JSON data.`);
+      return [];
     }
 
-    console.log(`Final set of unique card numbers:`, [...uniqueCardNumbers]);
+    const allCardIds = Object.values(setData).flat();
+    console.log(`Total cards in set ${setCode}:`, allCardIds.length);
 
-    // Convert Set to Array and fetch card data for each random card number
-    const randomCardData = await Promise.all([...uniqueCardNumbers].map(number => pokemon.card.find(`${setCode}-${number}`)));
+    // Use a Set to ensure unique random numbers
+    const uniqueCardIds = new Set();
+    while (uniqueCardIds.size < numberOfCards) {
+      const randomId = allCardIds[Math.floor(Math.random() * allCardIds.length)];
+      uniqueCardIds.add(randomId);
+      console.log(`Generated random card ID: ${randomId}, Unique IDs so far:`, [...uniqueCardIds]);
+    }
 
-    console.log(`Fetched card data:`, randomCardData);
+    console.log('Final set of unique card IDs:', [...uniqueCardIds]);
+
+    // Fetch card data for each random card ID
+    const randomCardData = await Promise.all([...uniqueCardIds].map(id => pokemon.card.find(id)));
+
+    console.log('Fetched card data:', randomCardData);
 
     return randomCardData;
   } catch (error) {
@@ -155,4 +155,3 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 10) {
     throw error;
   }
 }
-

@@ -5,7 +5,7 @@ pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
 // Function to fetch all sets
 async function fetchAllSets() {
   try {
-    const response = await pokemon.set.all();
+    const response = await pokemon.set.all(); // update when new sets come out
     return response;
   } catch (error) {
     console.error('Error fetching all sets:', error);

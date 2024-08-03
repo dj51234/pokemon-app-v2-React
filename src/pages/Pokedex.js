@@ -1,14 +1,22 @@
 // src/pages/Pokedex.js
+
 import React, { useEffect, useState, useContext } from 'react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
 import Footer from '../components/Footer';
 import loadingGif from '../assets/loading-gif.gif';
-import { fetchSetData, fetchCardData, fetchPokemonCardsByName, fetchAllPokemonNames, fetchRandomPokemonCardsForPokedex } from '../js/api';
+import {
+  fetchSetData,
+  fetchCardData,
+  fetchPokemonCardsByName,
+  fetchAllPokemonNames,
+  fetchRandomPokemonCardsForPokedex,
+} from '../js/api';
 import leven from 'leven';
 import '../styles/Grid.css';
 import { AuthContext } from '../App';
+import allSetData from '../js/pack_algorithm/allSetData.json'; // Import the JSON file
 
 const PokedexPage = () => {
   const { profileColor } = useContext(AuthContext);
@@ -30,21 +38,25 @@ const PokedexPage = () => {
   const [pokemonNames, setPokemonNames] = useState([]);
 
   useEffect(() => {
-    fetchSetData().then(data => {
-      const filteredData = data.filter(set => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id));
-      const sortedData = filteredData.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
-      const updatedData = sortedData.map(set => ({
-        ...set,
-        cardIDs: Array.from({ length: set.printedTotal }, (_, i) => `${set.id}-${i + 1}`)
-      }));
-      setSets(updatedData);
-      setOriginalSets(updatedData);
-      setSeries([...new Set(updatedData.map(set => set.series))]);
-      setIsLoadingSets(false);
-    }).catch(error => {
-      console.error(error);
-      setIsLoadingSets(false);
-    });
+    fetchSetData()
+      .then((data) => {
+        const filteredData = data.filter(
+          (set) => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id)
+        );
+        const sortedData = filteredData.sort(
+          (a, b) => new Date(a.releaseDate) - new Date(b.releaseDate)
+        );
+
+        // We no longer need to generate cardIDs here since they're in allSetData.json
+        setSets(sortedData);
+        setOriginalSets(sortedData);
+        setSeries([...new Set(sortedData.map((set) => set.series))]);
+        setIsLoadingSets(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setIsLoadingSets(false);
+      });
 
     const fetchNames = async () => {
       try {
@@ -62,7 +74,7 @@ const PokedexPage = () => {
     if (searchBy === 'set') {
       let filteredSets = sets;
       if (selectedSeries !== 'all') {
-        filteredSets = filteredSets.filter(set => set.series === selectedSeries);
+        filteredSets = filteredSets.filter((set) => set.series === selectedSeries);
       }
       setDisplayedSets(filteredSets);
     }
@@ -70,7 +82,9 @@ const PokedexPage = () => {
 
   useEffect(() => {
     if (searchBy === 'set') {
-      const filteredSets = sets.filter(set => set.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      const filteredSets = sets.filter((set) =>
+        set.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
       setDisplayedSets(filteredSets);
     }
   }, [searchTerm, sets, searchBy]);
@@ -106,20 +120,20 @@ const PokedexPage = () => {
   };
 
   const specialCases = {
-    "farfetchd": "farfetch'd",
-    "sirfetchd": "sirfetch'd",
-    "ho oh": "ho-oh",
-    "mr mime": "mr. mime",
-    "mime jr": "mime jr.",
-    "porygon2": "porygon2",
-    "porygonz": "porygon-z",
-    "type null": "type: null",
-    "nidoran f": "nidoran♀",
-    "nidoran m": "nidoran♂",
-    "wo chien": "wo-chien",
-    "chi yu": "chi-yu",
-    "chien pao": "chien-pao",
-    "ting lu": "ting-lu",
+    farfetchd: "farfetch'd",
+    sirfetchd: "sirfetch'd",
+    'ho oh': 'ho-oh',
+    'mr mime': 'mr. mime',
+    'mime jr': 'mime jr.',
+    porygon2: 'porygon2',
+    porygonz: 'porygon-z',
+    'type null': 'type: null',
+    'nidoran f': 'nidoran♀',
+    'nidoran m': 'nidoran♂',
+    'wo chien': 'wo-chien',
+    'chi yu': 'chi-yu',
+    'chien pao': 'chien-pao',
+    'ting lu': 'ting-lu',
   };
 
   const normalizeName = (name) => {
@@ -133,14 +147,14 @@ const PokedexPage = () => {
       return [];
     }
 
-    const matches = pokemonNames.map(name => ({
+    const matches = pokemonNames.map((name) => ({
       name,
-      distance: leven(term.toLowerCase(), name.toLowerCase())
+      distance: leven(term.toLowerCase(), name.toLowerCase()),
     }));
 
     matches.sort((a, b) => a.distance - b.distance);
 
-    return matches.slice(0, limit).map(match => match.name);
+    return matches.slice(0, limit).map((match) => match.name);
   };
 
   const handleSearch = async (term = searchTerm) => {
@@ -150,7 +164,9 @@ const PokedexPage = () => {
         const normalizedTerm = normalizeName(term);
         const specialSearchTerm = specialCases[normalizedTerm] || term;
         let cardData = await fetchPokemonCardsByName(specialSearchTerm);
-        cardData = cardData.filter(card => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id));
+        cardData = cardData.filter(
+          (card) => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(card.set.id)
+        );
         setCards(cardData);
         setViewMode('cards');
         setIsLoading(false);
@@ -171,7 +187,20 @@ const PokedexPage = () => {
 
   const handleSetClick = async (set) => {
     setIsLoading(true);
-    const cardData = await fetchCardData(set.cardIDs);
+    
+    // Aggregate all card IDs from the different rarity categories
+    const setCardData = allSetData[set.id]; // Get data for the specific set ID
+    if (!setCardData) {
+      console.error(`Set ID ${set.id} not found in JSON data.`);
+      setIsLoading(false);
+      return;
+    }
+
+    // Combine all card IDs from all rarity categories
+    const cardIDs = Object.values(setCardData).flat();
+    console.log(`Fetching card data for set ${set.id}:`, cardIDs);
+
+    const cardData = await fetchCardData(cardIDs);
     setCards(cardData);
     setSelectedSet(set);
     setViewMode('cards');
@@ -222,7 +251,7 @@ const PokedexPage = () => {
   return (
     <div className="container">
       <Header secondary />
-      <div className="content" style={{background: '#080B12'}}>
+      <div className="content" style={{ background: '#080B12' }}>
         <SearchBar
           sortSets={sortSets}
           series={series}
@@ -239,46 +268,49 @@ const PokedexPage = () => {
           <div className="loading-container">
             <img src={loadingGif} alt="Loading..." />
           </div>
-        ) : (
-          viewMode === 'sets' ? (
-            Object.keys(seriesSets).map(seriesName => (
-              <div key={seriesName}>
-                <h2 className="series-title-main">{seriesName}</h2>
-                <Grid
-                  sets={seriesSets[seriesName]}
-                  viewMode={viewMode}
-                  onSetClick={handleSetClick}
-                />
-              </div>
-            ))
-          ) : noResults ? (
-            <div className="no-results">
-              No Pokémon found
-              {suggestedPokemon.length > 0 && (
-                <div>
-                  Did you mean 
-                  {suggestedPokemon.map((name, index) => (
-                    <span
-                      key={index}
-                      onClick={() => handleSuggestedPokemonClick(name)}
-                      style={{ cursor: 'pointer', color: '#BC4CCE', marginLeft: '5px', fontWeight: 500}}
-                    >
-                      {name}
-                      {index < suggestedPokemon.length - 1 ? ',' : ''}
-                    </span>
-                  ))}
-                  ?
-                </div>
-              )}
+        ) : viewMode === 'sets' ? (
+          Object.keys(seriesSets).map((seriesName) => (
+            <div key={seriesName}>
+              <h2 className="series-title-main">{seriesName}</h2>
+              <Grid
+                sets={seriesSets[seriesName]}
+                viewMode={viewMode}
+                onSetClick={handleSetClick}
+              />
             </div>
-          ) : (
-            <Grid
-              sets={displayedSets}
-              viewMode={viewMode}
-              cards={cards}
-              onSetClick={handleSetClick}
-            />
-          )
+          ))
+        ) : noResults ? (
+          <div className="no-results">
+            No Pokémon found
+            {suggestedPokemon.length > 0 && (
+              <div>
+                Did you mean
+                {suggestedPokemon.map((name, index) => (
+                  <span
+                    key={index}
+                    onClick={() => handleSuggestedPokemonClick(name)}
+                    style={{
+                      cursor: 'pointer',
+                      color: '#BC4CCE',
+                      marginLeft: '5px',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {name}
+                    {index < suggestedPokemon.length - 1 ? ',' : ''}
+                  </span>
+                ))}
+                ?
+              </div>
+            )}
+          </div>
+        ) : (
+          <Grid
+            sets={displayedSets}
+            viewMode={viewMode}
+            cards={cards}
+            onSetClick={handleSetClick}
+          />
         )}
       </div>
       <Footer />
