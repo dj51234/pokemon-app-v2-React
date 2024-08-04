@@ -206,18 +206,3 @@ input[type="file"] {
   }
 }
 
-@media screen and (max-width: 410px) {
-  .username-edit {
-    flex-direction: column;
-  }
-
-  .username-edit button {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 2000px) {
-  .profile-container {
-    width: 65%;
-  }
-}
