@@ -1,8 +1,11 @@
+// File: /src/pages/Profile.js
+
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ProfileHeader from '../components/ProfileHeader'; // Import the new ProfileHeader
 import '../styles/Profile.css';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -30,6 +33,15 @@ const Profile = () => {
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -173,7 +185,7 @@ const Profile = () => {
 
   return (
     <>
-      <Header secondary />
+      <ProfileHeader onLogout={handleLogout} /> {/* Add ProfileHeader component */}
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">
@@ -184,7 +196,7 @@ const Profile = () => {
             <div className="profile-header">
               <div className={`profile-image-wrapper ${profileImage ? 'no-border' : ''}`}>
                 {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="profile-image" />
+                  <img src={profileImage} alt="Profile" className="profile-image profile-image--main" />
                 ) : (
                   <div className="default-image gradient-background">
                     {username.charAt(0)}

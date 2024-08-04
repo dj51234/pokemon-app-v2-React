@@ -1,32 +1,66 @@
+// File: /components/PackOpening.jsx
+
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/PackOpening.css';
 import '../styles/explosion.css';
 import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 
+// Function to check if a rarity is considered rare
 const isRare = (rarity) => {
   const rareRarities = [
-    'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
-    'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
-    'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
-    'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
-    'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
-    'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
+    'special illustration rare',
+    'ace spec rare',
+    'amazing rare',
+    'hyper rare',
+    'double rare',
+    'radiant rare',
+    'illustration rare',
+    'rare ace',
+    'rare holo',
+    'rare break',
+    'rare holo ex',
+    'rare holo gx',
+    'rare holo lv.x',
+    'rare holo vstar',
+    'rare v',
+    'rare holo vmax',
+    'rare rare holo vstar',
+    'rare prime',
+    'rare prism star',
+    'rare rainbow',
+    'rare shining',
+    'rare holo shiny',
+    'rare shiny gx',
+    'rare ultra',
+    'shiny rare',
+    'shiny ultra rare',
+    'trainer gallery rare holo',
+    'ultra rare',
   ];
   return rareRarities.includes(rarity);
 };
 
+// Define rarity colors
 const rarityColors = {
   'ace spec rare': '#F700C1',
   'hyper rare': '#FFD913',
   'rare holo': '#FFFFFF',
   'rare secret': '#FFD913',
-  'illustration rare': '#FFFFFF'
+  'illustration rare': '#FFFFFF',
   // Add more colors for other rarities as needed
 };
 
-const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) => {
-  const [leftStack, setLeftStack] = useState(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
+const PackOpening = ({
+  show,
+  randomCards,
+  onBack,
+  onNext,
+  addRevealedCards,
+}) => {
+  const [leftStack, setLeftStack] = useState(
+    Array(10).fill({ back: defaultImage, front: null, flipped: false })
+  );
   const [cardsToShow, setCardsToShow] = useState([]);
   const [animating, setAnimating] = useState(false);
   const [allFlipped, setAllFlipped] = useState(false);
@@ -41,9 +75,22 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
   useEffect(() => {
     if (randomCards.length > 0) {
-      setCardsToShow(randomCards);
+      // Separate rare and non-rare cards
+      const nonRareCards = randomCards.filter(
+        (card) => !isRare(card.rarity?.toLowerCase())
+      );
+      const rareCards = randomCards.filter((card) =>
+        isRare(card.rarity?.toLowerCase())
+      );
+
+      // Combine non-rare cards first, then rare cards
+      const reorderedCards = [ ...rareCards, ...nonRareCards,];
+
+      setCardsToShow(reorderedCards);
       setHideStack(false);
-      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
+      setLeftStack(
+        Array(10).fill({ back: defaultImage, front: null, flipped: false })
+      );
       setAllFlipped(false);
       setHideNextButton(false);
     }
@@ -88,8 +135,8 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
     const directionX = startX - centerX;
     const directionY = startY - centerY;
     const distance = Math.random() * 500 + 300; // Increase the explosion distance
-    const tx = directionX * distance / cardWidth + 'px';
-    const ty = directionY * distance / cardHeight + 'px';
+    const tx = (directionX * distance) / cardWidth + 'px';
+    const ty = (directionY * distance) / cardHeight + 'px';
 
     const size = Math.random() * 12; // Random size between 10px and 30px
     particle.style.setProperty('--start-x', `${startX}px`);
@@ -129,15 +176,20 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       const updatedStack = newLeftStack.map((card, i) => {
         if (!card.flipped && cardsToShow.length > 0) {
           const randomCard = cardsToShow.pop();
-          const newCard = { 
-            ...card, 
-            front: randomCard.images.large, 
-            flipped: true, 
+          const newCard = {
+            ...card,
+            front: randomCard.images.large,
+            flipped: true,
             rarity: randomCard.rarity?.toLowerCase() || '',
-            subtypes: randomCard.subtypes?.map(subtype => subtype.toLowerCase()) || [],
+            subtypes:
+              randomCard.subtypes?.map((subtype) => subtype.toLowerCase()) ||
+              [],
             setId: randomCard.setId?.toLowerCase() || '',
-            supertypes: randomCard.supertypes?.map(supertype => supertype.toLowerCase()) || [],
-            id: randomCard.id // Add the card id here
+            supertypes:
+              randomCard.supertypes?.map((supertype) =>
+                supertype.toLowerCase()
+              ) || [],
+            id: randomCard.id, // Add the card id here
           };
           return newCard;
         }
@@ -156,16 +208,20 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
       setMovingCard(index);
 
       // Check the next top card's rarity before moving the current top card to the back
-      const nextTopCardElement = Array.from(cardStackRef.current.children).find((child) => 
-        parseInt(child.style.zIndex, 10) === 9
-      ); // Select the second-to-top card
+      const nextTopCardElement = Array.from(
+        cardStackRef.current.children
+      ).find((child) => parseInt(child.style.zIndex, 10) === 9); // Select the second-to-top card
       if (nextTopCardElement) {
-        const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity');
+        const nextTopCardRarity =
+          nextTopCardElement.getAttribute('data-rarity');
         if (isRare(nextTopCardRarity)) {
           // Set the next top card rarity to apply box shadow after the current top card is clicked
           setNextTopCardRarity(nextTopCardRarity);
           // Trigger the explosion animation on the next top card
-          triggerExplosion(nextTopCardElement.querySelector('.explosion-container'), nextTopCardRarity);
+          triggerExplosion(
+            nextTopCardElement.querySelector('.explosion-container'),
+            nextTopCardRarity
+          );
         }
       }
 
@@ -186,7 +242,9 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
   const handleBackClick = () => {
     setTimeout(() => {
-      setLeftStack(Array(10).fill({ back: defaultImage, front: null, flipped: false }));
+      setLeftStack(
+        Array(10).fill({ back: defaultImage, front: null, flipped: false })
+      );
       setCardsToShow([]);
       setAllFlipped(false);
       setMovingCard(null);
@@ -198,7 +256,9 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
 
   const handleNextClick = () => {
     setSendingToBinder(true);
-    const newRevealedCards = leftStack.filter(card => card.flipped).map(card => ({ image: card.front }));
+    const newRevealedCards = leftStack
+      .filter((card) => card.flipped)
+      .map((card) => ({ image: card.front }));
     addRevealedCards(newRevealedCards);
 
     setTimeout(() => {
@@ -213,8 +273,15 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
       <div className="pack-opening-content">
-        <h2><span className='gradient-text'>Step 2:</span> Open Your Pack</h2>
-        <div ref={cardStackRef} className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${hideStack ? 'hide' : ''}`}>
+        <h2>
+          <span className="gradient-text">Step 2:</span> Open Your Pack
+        </h2>
+        <div
+          ref={cardStackRef}
+          className={`card-stack ${
+            sendingToBinder ? 'move-to-binder' : ''
+          } ${hideStack ? 'hide' : ''}`}
+        >
           {leftStack.map((card, index) => (
             <div
               key={index}
@@ -242,8 +309,19 @@ const PackOpening = ({ show, randomCards, onBack, onNext, addRevealedCards }) =>
           ))}
         </div>
         <div className="pack-opening-buttons">
-          <button className={`back-button btn-primary ${highlightBackButton ? 'highlighted' : ''}`} onClick={handleBackClick}>Open New Pack</button>
-          {allFlipped && !hideNextButton && <button className="next-button btn-primary" onClick={handleNextClick}>Add to Binder</button>}
+          <button
+            className={`back-button btn-primary ${
+              highlightBackButton ? 'highlighted' : ''
+            }`}
+            onClick={handleBackClick}
+          >
+            Open New Pack
+          </button>
+          {allFlipped && !hideNextButton && (
+            <button className="next-button btn-primary" onClick={handleNextClick}>
+              Add to Binder
+            </button>
+          )}
         </div>
       </div>
     </div>

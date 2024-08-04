@@ -11,8 +11,8 @@ const PackSelection = ({ onSelect, show, onFetchCards, onNext }) => {
     const getSets = async () => {
       try {
         const setData = await fetchSetsForPackSelection();
-        const twilightMasquerade = setData.find(set => set.id === 'sv6');
-        const popularSets = setData.filter(set => ["sv3pt5", "swsh12pt5", "base1"].includes(set.id));
+        const twilightMasquerade = setData.find(set => set.id === 'sv6pt5');
+        const popularSets = setData.filter(set => ["sv6", "sv3pt5", "swsh12pt5"].includes(set.id));
         setSets([twilightMasquerade, ...popularSets]);
       } catch (error) {
         console.error('Error fetching set data:', error);

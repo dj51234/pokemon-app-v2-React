@@ -8,6 +8,10 @@
     --subtext: rgb(157, 157, 158);
     --black: #080B12;
     --secondary-color: #363e6442;
+    --secondary-link: #6a7285;
+    --secondary-color-solid: #1a1e31;
+    --border-color: #282C42;
+    --hover: #1C212A;
 }
 
 * {

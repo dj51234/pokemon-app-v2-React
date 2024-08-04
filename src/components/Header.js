@@ -1,13 +1,12 @@
+// ./src/components/Header.js
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import logo from '../assets/logo.png';
 import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
 import Sidebar from './Sidebar';
 import HamburgerMenuSidebar from './HamburgerMenuSidebar';
-import { isLightColor } from '../utils/colorUtils';
 
 const Header = ({ secondary }) => {
   const location = useLocation();
