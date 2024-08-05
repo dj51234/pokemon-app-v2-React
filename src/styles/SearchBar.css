@@ -231,6 +231,10 @@
   filter:brightness(1.5);
 }
 
+#search-container.search-container--profile {
+  max-width: 95%;
+}
+
 @media screen and (max-width: 1200px) {
   #sort-options,
   #series-options {

@@ -7,7 +7,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import OpenPacksPage from './pages/OpenPacksPage'; // Import the new page
-import Sidebar from './components/Sidebar'; // Make sure to include Sidebar
 import { auth, firestore } from './js/firebase';
 import './index.css';
 import { doc, getDoc } from 'firebase/firestore';
@@ -42,14 +41,13 @@ const App = () => {
     <AuthContext.Provider value={{ currentUser, profileColor }}>
       <Router>
         <div className="app">
-          <Sidebar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/pokedex" element={<Pokedex />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/open-packs" element={<OpenPacksPage />} /> {/* Add the new route */}
+            <Route path="/packs/view-all" element={<OpenPacksPage />} />
           </Routes>
         </div>
       </Router>

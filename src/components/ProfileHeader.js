@@ -1,14 +1,15 @@
 // File: /src/components/ProfileHeader.js
 
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import '../styles/ProfileHeader.css';
 import { AuthContext } from '../App';
-import { FaCog, FaSignOutAlt } from 'react-icons/fa'; // Importing Font Awesome icons
+import { FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 const ProfileHeader = ({ onLogout }) => {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [initial, setInitial] = useState('');
@@ -38,6 +39,17 @@ const ProfileHeader = ({ onLogout }) => {
     navigate(path);
   };
 
+  const handleSetLinkClick = (setId) => {
+    if (location.pathname === '/packs/view-all') {
+      // Dispatch a custom event if already on OpenPacksPage
+      const event = new CustomEvent('openPackOverlay', { detail: { setId } });
+      window.dispatchEvent(event);
+    } else {
+      // Navigate to OpenPacksPage with the setId query parameter
+      navigate(`/packs/view-all?setId=${setId}`);
+    }
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -59,12 +71,13 @@ const ProfileHeader = ({ onLogout }) => {
     <div className="profile-header-sidebar">
       <Link to="/" className="logo">
         <div className="logo">
-            <h2><span className='gradient-text'>MASTERSET</span></h2>
+          <h2><span className='gradient-text'>MASTERSET</span></h2>
         </div>
       </Link>
+
       <div className="user-info" ref={dropdownRef}>
-        <div 
-          className={`user-email ${isDropdownOpen ? 'active' : ''}`} 
+        <div
+          className={`user-email ${isDropdownOpen ? 'active' : ''}`}
           onClick={toggleDropdown}
         >
           {getProfileImage()} {/* Dynamic Profile Image */}
@@ -72,25 +85,27 @@ const ProfileHeader = ({ onLogout }) => {
           <span className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`}>▼</span>
         </div>
 
-        <div className={`profile-dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
-          <div className="profile-dropdown-header">
-            {getProfileImage()} {/* Dynamic Profile Image */}
-            <div className="profile-dropdown-user-info">
-              <span className="profile-dropdown-user-name">{currentUser?.displayName || 'User Name'}</span>
-              <span className="profile-dropdown-user-email">{currentUser?.email || 'User Email'}</span>
+        {isDropdownOpen && (
+          <div className={`profile-dropdown-menu ${isDropdownOpen ? 'open' : ''}`}>
+            <div className="profile-dropdown-header">
+              {getProfileImage()} {/* Dynamic Profile Image */}
+              <div className="profile-dropdown-user-info">
+                <span className="profile-dropdown-user-name">{currentUser?.displayName || 'User Name'}</span>
+                <span className="profile-dropdown-user-email">{currentUser?.email || 'User Email'}</span>
+              </div>
+            </div>
+            <div className="profile-dropdown-option" onClick={() => handleNavigation('/settings')}>
+              <FaCog className="profile-dropdown-option-icon" /> Settings
+            </div>
+            <div className="profile-dropdown-option" onClick={onLogout}>
+              <FaSignOutAlt className="profile-dropdown-option-icon" /> Logout
             </div>
           </div>
-          <div className="profile-dropdown-option" onClick={() => handleNavigation('/settings')}>
-            <FaCog className="profile-dropdown-option-icon" /> Settings
-          </div>
-          <div className="profile-dropdown-option" onClick={onLogout}>
-            <FaSignOutAlt className="profile-dropdown-option-icon" /> Logout
-          </div>
-        </div>
+        )}
       </div>
 
       <ul className="sidebar-menu">
-        <li onClick={() => handleNavigation('/home')}>
+        <li onClick={() => handleNavigation('/')}>
           Home
         </li>
 
@@ -101,23 +116,23 @@ const ProfileHeader = ({ onLogout }) => {
         <li className="menu-header">
           Open Packs
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/pack1')}>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6pt5')}>
           Shrouded Fable
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/pack2')}>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6')}>
           Twilight Masquerade
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/pack3')}>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv5')}>
           Temporal Forces
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/pack4')}>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv4pt5')}>
           Paldean Fates
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/pack5')}>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv4')}>
           Paradox Rift
         </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/packs/view-all')}>
-          View All
+        <li className="menu-item menu-item--secondary">
+          <Link to="/packs/view-all">View All</Link>
         </li>
 
         <li className="menu-header">

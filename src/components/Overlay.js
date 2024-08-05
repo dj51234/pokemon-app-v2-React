@@ -24,7 +24,31 @@ const rarityColors = {
   'rare holo': '#FFFFFF',
   'rare secret': '#FFD913',
   'illustration rare': '#ffffff',
-  'rare rainbow': 'rainbow'
+  'rare rainbow': 'rainbow',
+  'amazing rare': '#FFFFFF',
+  'double rare': '#FFFFFF',
+  'radiant rare': '#FFFFFF',
+  'rare ace': '#FFFFFF',
+  'rare break': '#FFFFFF',
+  'rare holo ex': '#FFFFFF',
+  'rare holo gx': '#FFFFFF',
+  'rare holo lv.x': '#FFFFFF',
+  'rare holo vstar': '#FFFFFF',
+  'rare holo v': '#FFFFFF',
+  'rare v': '#FFFFFF',
+  'rare holo vmax': '#FFFFFF',
+  'rare rare holo vstar': '#FFFFFF',
+  'rare prime': '#FFFFFF',
+  'rare prism star': '#FFFFFF',
+  'rare rainbow': '#FFFFFF',
+  'rare shining': '#FFFFFF',
+  'rare holo shiny': '#FFFFFF',
+  'rare shiny gx': '#FFFFFF',
+  'rare ultra': '#FFFFFF',
+  'shiny rare': '#FFFFFF',
+  'shiny ultra rare': '#FFFFFF',
+  'trainer gallery rare holo': '#FFFFFF',
+  'ultra rare': '#FFFFFF',
   // Add more colors for other rarities as needed
 };
 
@@ -47,6 +71,8 @@ const getBoxShadowForRarity = (rarity) => {
     case 'rare ultra':
       return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
     case 'rare holo vmax':
+      return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
+    case 'rare holo v':
       return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';
     default:
       return '0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white';

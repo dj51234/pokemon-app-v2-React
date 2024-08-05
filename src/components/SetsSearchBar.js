@@ -48,7 +48,7 @@ const SetsSearchBar = ({
 
   return (
     <div className="search-wrapper">
-      <div id="search-container">
+      <div id="search-container" className='search-container--profile'>
         <div id="search-group">
           <div className="search-input-container">
             <input

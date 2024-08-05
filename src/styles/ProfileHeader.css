@@ -1,75 +1,82 @@
 /* File: /src/styles/ProfileHeader.css */
 
 .profile-header-sidebar {
-    width: 26.5rem;
-    background-color: var(--black);
-    padding: 20px;
-    border-right: 1px solid #282C42;
-    position: fixed;
-    height: 100vh;
-    overflow-y: auto;
-  }
-  
-  .profile-header-sidebar .logo {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .user-info {
-    position: relative;
-    text-align: left;
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
-  
-  .user-email {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: var(--black);
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .user-email:hover, .user-email.active {
-    background-color: var(--secondary-color);
-  }
-  
-  .profile-image, .default-profile-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
+  width: 26.5rem; /* Ensure width matches margin offset */
+  background-color: var(--black);
+  padding: 20px;
+  border-right: 1px solid #282C42;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
 
-  .profile-image--main {
-    margin-right: 0;
-  }
-  
-  .default-profile-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(122deg, #fa5560 0.01%, #b14bf4 49.9%, #4d91ff 100%);
-    color: #fff;
-    font-size: 16px;
-  }
-  
-  .user-name {
-    flex-grow: 1;
-    font-weight: bold;
-  }
-  
-  .dropdown-icon {
-    font-size: 0.8em;
-    transition: transform 0.3s ease;
-  }
-  
-  .dropdown-icon.open {
-    transform: rotate(180deg);
-  }
-  
-  /* Slide Down Effect */
+.profile-header-sidebar .logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  position: relative;
+  text-align: left;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.user-email {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--black);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.user-email:hover,
+.user-email.active {
+  background-color: var(--secondary-color);
+}
+
+.profile-image,
+.default-profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-image--main {
+  margin-right: 0;
+}
+
+.default-profile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    122deg,
+    #fa5560 0.01%,
+    #b14bf4 49.9%,
+    #4d91ff 100%
+  );
+  color: #fff;
+  font-size: 16px;
+}
+
+.user-name {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.dropdown-icon {
+  font-size: 0.8em;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+}
+
+/* Slide Down Effect */
 .profile-dropdown-menu {
   position: absolute;
   top: 100%;
@@ -90,90 +97,93 @@
   max-height: 200px; /* Or set to a specific height to allow content */
 }
 
-  
-  .profile-dropdown-header {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid var(--border-color);
-    pointer-events: none;
-  }
-  
-  .profile-dropdown-profile-image {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .profile-dropdown-user-info {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .profile-dropdown-user-name {
-    font-weight: bold;
-    color: var(--text-color);
-  }
-  
-  .profile-dropdown-user-email {
-    color: var(--text-secondary-color);
-    font-size: 12px;
-  }
-  
-  .profile-dropdown-option {
-    display: flex;
-    align-items: center;
-    padding: 12px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .profile-dropdown-option:hover {
-    background-color: var(--secondary-color);
-  }
-  
-  .profile-dropdown-option .profile-dropdown-option-icon {
-    margin-right: 8px;
-  }
-  
-  .sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .sidebar-menu li {
-    padding: 10px;
-    cursor: pointer;
-    position: relative;
-    border-radius: 4px;
-    margin-bottom: 5px;
-    transition: background-color 0.3s;
-  }
-  
-  .sidebar-menu .menu-header {
-    font-weight: bold;
-    pointer-events: none;
-  }
-  
-  .sidebar-menu li:hover:not(.menu-header) {
-    background-color: var(--secondary-color);
-    color: var(--pink);
-  }
-  
-  .menu-item--secondary {
-    color: var(--secondary-link);
-    font-style: italic;
-  }
+.profile-dropdown-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  pointer-events: none;
+}
 
-  .profile-header-sidebar .profile-image {
-    width: 50px;
-    height: 50px;
-  }
+.profile-dropdown-profile-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
 
-  .profile-header-sidebar .logo {
-    text-decoration: none;
-    font-size: 2rem;
-  }
-  
+.profile-dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown-user-name {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.profile-dropdown-user-email {
+  color: var(--text-secondary-color);
+  font-size: 12px;
+}
+
+.profile-dropdown-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-dropdown-option:hover {
+  background-color: var(--secondary-color);
+}
+
+.profile-dropdown-option .profile-dropdown-option-icon {
+  margin-right: 8px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  transition: background-color 0.3s;
+}
+
+.sidebar-menu .menu-header {
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.sidebar-menu li:hover:not(.menu-header) {
+  background-color: var(--secondary-color);
+  color: var(--pink);
+}
+
+.sidebar-menu li:hover:not(.menu-header) a {
+  color: var(--pink);
+}
+
+.menu-item--secondary, .menu-item--secondary a {
+  color: var(--secondary-link);
+  font-style: italic;
+  text-decoration: none;
+}
+
+.profile-header-sidebar .profile-image {
+  width: 50px;
+  height: 50px;
+}
+
+.profile-header-sidebar .logo {
+  text-decoration: none;
+  font-size: 2rem;
+}

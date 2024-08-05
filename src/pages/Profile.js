@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import loadingGif from '../assets/loading-gif.gif';
+import { fetchSetData } from '../js/api'; // Import fetchSetData function
 
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
@@ -30,6 +31,7 @@ const Profile = () => {
   const [newBio, setNewBio] = useState(bio);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [forYouSets, setForYouSets] = useState([]); // State for "For You" sets
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -183,6 +185,24 @@ const Profile = () => {
     }
   }, [newUsername]);
 
+  // Fetch set data for the "For You" section
+  useEffect(() => {
+    const setIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5']; // First four IDs for the last released sets
+
+    const fetchForYouSets = async () => {
+      try {
+        const allSets = await fetchSetData();
+        const filteredSets = allSets.filter((set) => setIds.includes(set.id));
+        const sortedSets = filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id)); // Sort by setIds order
+        setForYouSets(sortedSets);
+      } catch (error) {
+        console.error('Error fetching "For You" sets:', error);
+      }
+    };
+
+    fetchForYouSets();
+  }, []);
+
   return (
     <>
       <ProfileHeader onLogout={handleLogout} /> {/* Add ProfileHeader component */}
@@ -248,6 +268,18 @@ const Profile = () => {
                   </div>
                 )}
               </div>
+            </div>
+            {/* "For You" Section */}
+            <div className="profile-for-you">
+              <h2><span className='gradient-text'>For</span> You</h2>
+              <div className="for-you-grid">
+                {forYouSets.map((set) => (
+                  <div className="set-item" key={set.id}>
+                    <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
+                  </div>
+                ))}
+              </div>
+              <button>Edit Your Sets</button>
             </div>
             <div className="profile-stats">
               <div className="stat-item">
