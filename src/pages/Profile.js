@@ -3,15 +3,14 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProfileHeader from '../components/ProfileHeader'; // Import the new ProfileHeader
 import '../styles/Profile.css';
+import loadingGif from '../assets/loading-gif.gif';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import loadingGif from '../assets/loading-gif.gif';
 import { fetchSetData } from '../js/api'; // Import fetchSetData function
 
 const MAX_USERNAME_LENGTH = 16;
@@ -32,6 +31,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [forYouSets, setForYouSets] = useState([]); // State for "For You" sets
+  const [forYouLoading, setForYouLoading] = useState(true); // State for loading skeletons
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -195,13 +195,22 @@ const Profile = () => {
         const filteredSets = allSets.filter((set) => setIds.includes(set.id));
         const sortedSets = filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id)); // Sort by setIds order
         setForYouSets(sortedSets);
+        setForYouLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error('Error fetching "For You" sets:', error);
+        setForYouLoading(false); // Handle loading state in case of error
       }
     };
 
     fetchForYouSets();
   }, []);
+
+  // Handle set click to navigate and open overlay
+  const handleForYouSetClick = (setId) => {
+    // Reset overlay state before navigation
+    sessionStorage.removeItem('overlayOpened'); 
+    navigate(`/packs/view-all?setId=${setId}`);
+  };
 
   return (
     <>
@@ -273,11 +282,25 @@ const Profile = () => {
             <div className="profile-for-you">
               <h2><span className='gradient-text'>For</span> You</h2>
               <div className="for-you-grid">
-                {forYouSets.map((set) => (
-                  <div className="set-item" key={set.id}>
-                    <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
-                  </div>
-                ))}
+                {forYouLoading ? (
+                  // Render skeleton placeholders when loading
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <div className="skeleton-item" key={index}>
+                      <div className="skeleton-logo"></div>
+                    </div>
+                  ))
+                ) : (
+                  // Render actual set items when loaded
+                  forYouSets.map((set) => (
+                    <div
+                      className="set-item"
+                      key={set.id}
+                      onClick={() => handleForYouSetClick(set.id)} // Handle click to navigate
+                    >
+                      <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
+                    </div>
+                  ))
+                )}
               </div>
               <button>Edit Your Sets</button>
             </div>

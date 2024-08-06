@@ -145,7 +145,7 @@ const ProfileHeader = ({ onLogout }) => {
           Organize
         </li>
 
-        <li onClick={() => handleNavigation('/sets')}>
+        <li onClick={() => handleNavigation('/pokedex')}>
           Browse All Sets
         </li>
 

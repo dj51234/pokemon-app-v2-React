@@ -28,6 +28,7 @@ const OpenPacksPage = () => {
   const [searchParams] = useSearchParams();
   const setIdFromUrl = searchParams.get('setId');
 
+  // Fetch set data
   useEffect(() => {
     fetchSetData()
       .then((data) => {
@@ -48,6 +49,7 @@ const OpenPacksPage = () => {
       });
   }, []);
 
+  // Handle filtering and pagination
   useEffect(() => {
     let filteredSets = sets;
     if (selectedSeries !== 'all') {
@@ -61,13 +63,17 @@ const OpenPacksPage = () => {
     setDisplayedSets(filteredSets.slice(0, (currentChunk + 1) * CHUNK_SIZE));
   }, [searchTerm, selectedSeries, sets, currentChunk]);
 
+  // Handle opening pack from URL
   useEffect(() => {
-    // If setId is provided in the URL, automatically open that pack
-    if (setIdFromUrl) {
+    // If setId is provided in the URL, open the pack only if it's not a refresh
+    const overlayOpened = sessionStorage.getItem('overlayOpened');
+    if (setIdFromUrl && overlayOpened !== 'true') {
       openSelectedPack(setIdFromUrl);
+      sessionStorage.setItem('overlayOpened', 'true');
     }
   }, [setIdFromUrl]);
 
+  // Set up event listener for opening overlay
   useEffect(() => {
     const handleOpenPackOverlay = async (e) => {
       const { setId } = e.detail;
@@ -81,10 +87,13 @@ const OpenPacksPage = () => {
     };
   }, []);
 
+  // Handle set click
   const handleSetClick = async (setId) => {
     await openSelectedPack(setId);
+    sessionStorage.setItem('overlayOpened', 'true'); // Mark overlay as opened
   };
 
+  // Open selected pack
   const openSelectedPack = async (setId) => {
     console.log(`Set ID: ${setId}`);
     setSelectedSetId(setId);
@@ -94,10 +103,13 @@ const OpenPacksPage = () => {
     setIsOverlayVisible(true); // Show the overlay
   };
 
+  // Close overlay
   const closeOverlay = () => {
     setIsOverlayVisible(false); // Hide the overlay
+    sessionStorage.removeItem('overlayOpened'); // Clear overlay open state
   };
 
+  // Sorting and filtering functions
   const sortSets = (order) => {
     const sortedSets = [...sets];
     sortedSets.sort((a, b) => {

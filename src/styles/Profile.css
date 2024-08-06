@@ -10,7 +10,7 @@
 .profile-content {
   flex: 1;
   padding: 2rem;
-  margin-left: 270px; /* Added margin to account for sidebar width + padding */
+  margin-left: 27rem; /* Added margin to account for sidebar width + padding */
   overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
@@ -106,7 +106,6 @@ input[type="file"] {
   align-items: center;
   flex-grow: 0.8;
   gap: 1rem;
-  
 }
 
 .profile-details h2 {
@@ -199,6 +198,7 @@ input[type="file"] {
 .profile-for-you h2 {
   margin-bottom: 1rem;
   color: var(--text-primary);
+  font-size: 3.2rem;
 }
 
 .profile-for-you .for-you-grid {
@@ -207,13 +207,14 @@ input[type="file"] {
   gap: 1rem;
 }
 
-.profile-for-you .set-item {
+.profile-for-you .set-item,
+.profile-for-you .skeleton-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 2rem;
+  padding: 5rem 2rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   background-color: var(--card-background);
@@ -222,11 +223,12 @@ input[type="file"] {
 }
 
 .profile-for-you .set-item:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  background: var(--secondary-color-solid);
 }
 
 .profile-for-you .set-logo {
-  width: 150px;
+  width: 200px;
   height: auto;
   margin-bottom: 1rem;
 }
@@ -278,3 +280,45 @@ input[type="file"] {
   }
 }
 
+/* Skeleton Styles */
+.skeleton-item {
+  background-color: var(--skeleton-background); /* Use a lighter background for skeletons */
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 2rem; /* Same padding as set-item */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.skeleton-logo {
+  width: 200px; /* Same width as set-logo */
+  height: 100px; /* Adjust to match logo aspect ratio */
+  background-color: var(--skeleton-logo-background); /* Different color for logo area */
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.skeleton-item::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+  position: absolute;
+  top: 0;
+  left: -100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}

@@ -6,6 +6,8 @@
   padding: 20px;
   border-right: 1px solid #282C42;
   position: fixed;
+  top: 0; /* Always start at the top */
+  left: 0;
   height: 100vh;
   overflow-y: auto;
 }
