@@ -117,9 +117,6 @@ input[type="file"] {
   cursor: pointer;
   transition: background-color 0.3s ease;
   padding-inline: .5rem;
-  background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .profile-details h2:hover {

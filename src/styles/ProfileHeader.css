@@ -189,3 +189,8 @@
   text-decoration: none;
   font-size: 2rem;
 }
+
+.menu-item--secondary .gradient-text {
+  padding-inline: .2rem;
+  font-size: 1.7rem;
+}

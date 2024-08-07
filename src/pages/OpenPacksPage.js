@@ -1,4 +1,4 @@
-// File: /src/pages/OpenPacksPage.js
+// src/pages/OpenPacksPage.js
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -8,7 +8,7 @@ import Overlay from '../components/Overlay';
 import { fetchSetData } from '../js/api'; // Import fetchSetData function
 import { openPack } from '../js/pack_algorithm/packAlgorithm'; // Import openPack function
 import '../styles/OpenPacksPage.css';
-import loadingGif from '../assets/loading-gif.gif';
+import SkeletonGridItem from '../components/SkeletonGridItem'; // Import SkeletonGridItem component
 
 const CHUNK_SIZE = 10; // Number of sets to load at a time
 
@@ -173,8 +173,14 @@ const OpenPacksPage = () => {
         />
         <div className="open-packs-page">
           {isLoading ? (
-            <div className="loading-container">
-              <img src={loadingGif} alt="Loading..." />
+            <div className="open-packs-page-series-container">
+              <h2 className="series-title">Loading...</h2>
+              <div className="open-packs-page-grid">
+                {/* Render skeletons */}
+                {Array.from({ length: CHUNK_SIZE }).map((_, index) => (
+                  <SkeletonGridItem key={index} />
+                ))}
+              </div>
             </div>
           ) : (
             Object.keys(seriesSets).map((seriesName) => (

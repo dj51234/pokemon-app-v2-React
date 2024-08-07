@@ -117,7 +117,7 @@ const ProfileHeader = ({ onLogout }) => {
           Open Packs
         </li>
         <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6pt5')}>
-          Shrouded Fable
+         Shrouded Fable <span className="gradient-text">NEW</span> 
         </li>
         <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6')}>
           Twilight Masquerade
