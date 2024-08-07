@@ -13,6 +13,7 @@ const SearchBar = ({
   handleToggleSearchBy,
   handleSearch,
   sortSets,
+  isAuthenticated
 }) => {
   const inputRef = useRef(null);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -53,7 +54,7 @@ const SearchBar = ({
 
   return (
     <div className="search-wrapper">
-      <div id="search-container">
+      <div id="search-container" className={`search-container ${isAuthenticated ? 'search-container--profile' : ''}`}>
         <div id="search-group">
           <select
             id="search-by-dropdown"

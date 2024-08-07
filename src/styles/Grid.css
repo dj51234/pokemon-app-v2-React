@@ -14,6 +14,10 @@
   margin: 2rem auto;
 }
 
+.sets-grid--profile {
+  max-width: 95%; /* Adjust width for authenticated users */
+}
+
 .cards-grid {
   max-width: 90%;
   display: flex;
@@ -21,6 +25,10 @@
   justify-content: center;
   gap: 1rem;
   margin: 3rem auto;
+}
+
+.cards-grid--profile {
+  max-width: 100%;
 }
 
 #grid .grid-item {
@@ -171,4 +179,8 @@
   margin: 2rem auto 1rem;
   color: var(--pink);
   font-size: 3rem;
+}
+
+.series-title-main--profile {
+  width: 95%;
 }

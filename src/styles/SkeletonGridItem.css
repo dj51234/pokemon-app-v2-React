@@ -81,6 +81,10 @@
     max-width: 75%;
     margin: 2rem auto;
   }
+
+  .sets-grid.sets-grid--profile {
+    max-width: 95%;
+  }
   
   /* Placeholder for the title */
   .series-title-placeholder {

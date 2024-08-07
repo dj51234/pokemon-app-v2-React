@@ -15,6 +15,10 @@
   margin: 0 auto;
 }
 
+#search-container.search-container--profile {
+  max-width: 95%; /* Adjust width for authenticated users */
+}
+
 #search-type-toggle {
   display: flex;
   gap: 1rem;

@@ -5,7 +5,7 @@ import GridItem from './GridItem';
 import CardItem from './CardItem';
 import '../styles/Grid.css';
 
-const Grid = ({ sets, viewMode, cards = [], onSetClick }) => {
+const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated }) => { // Add isAuthenticated prop
   const [loadedCount, setLoadedCount] = useState(0); // State to track loaded images
   const totalCards = cards.length; // Total number of cards
 
@@ -19,7 +19,11 @@ const Grid = ({ sets, viewMode, cards = [], onSetClick }) => {
     setLoadedCount(0);
   }, [cards]);
 
-  const gridClass = viewMode === 'sets' ? 'sets-grid' : 'cards-grid';
+  // Conditionally apply the sets-grid--profile class if authenticated
+  const gridClass =
+    viewMode === 'sets'
+      ? `sets-grid ${isAuthenticated ? 'sets-grid--profile' : ''}`
+      : `cards-grid ${isAuthenticated ? 'cards-grid--profile' : ''}`;
 
   return (
     <div id="grid" className={gridClass}>

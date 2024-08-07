@@ -254,6 +254,16 @@ const Profile = () => {
                     {username}
                   </h2>
                 )}
+                <div className="profile-stats">
+                  <div className="stat-item">
+                    <h3>{stats.cards}</h3>
+                    <p>Cards</p>
+                  </div>
+                  <div className="stat-item">
+                    <h3>{stats.trades}</h3>
+                    <p>Trades</p>
+                  </div>
+                </div>
                 {isEditingBio ? (
                   <div className="bio-edit">
                     <textarea
@@ -303,16 +313,6 @@ const Profile = () => {
                 )}
               </div>
               <button>Edit Your Sets</button>
-            </div>
-            <div className="profile-stats">
-              <div className="stat-item">
-                <h3>{stats.cards}</h3>
-                <p>Cards</p>
-              </div>
-              <div className="stat-item">
-                <h3>{stats.trades}</h3>
-                <p>Trades</p>
-              </div>
             </div>
             <div className="profile-messages">
               <h3>Messages</h3>

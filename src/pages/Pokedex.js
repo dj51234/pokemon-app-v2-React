@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState, useContext } from 'react';
 import Header from '../components/Header';
+import ProfileHeader from '../components/ProfileHeader';
 import SearchBar from '../components/SearchBar';
-import Grid from '../components/Grid';
+import Grid from '../components/Grid'; 
 import Footer from '../components/Footer';
-import SkeletonGridItem from '../components/SkeletonGridItem'; // Import SkeletonGridItem
+import SkeletonGridItem from '../components/SkeletonGridItem';
+import loadingGif from '../assets/loading-gif.gif';
 import {
   fetchSetData,
   fetchCardData,
@@ -19,7 +21,7 @@ import { AuthContext } from '../App';
 import allSetData from '../js/pack_algorithm/allSetData.json';
 
 const PokedexPage = () => {
-  const { profileColor } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext); // Use AuthContext to get the current user
   const [sets, setSets] = useState([]);
   const [originalSets, setOriginalSets] = useState([]);
   const [series, setSeries] = useState([]);
@@ -247,8 +249,8 @@ const PokedexPage = () => {
 
   return (
     <div className="container">
-      <Header secondary />
-      <div className="content" style={{ background: '#080B12' }}>
+      {currentUser ? <ProfileHeader /> : <Header />}
+      <div className={`content ${currentUser ? 'profile-content' : ''}`} style={{ background: '#080B12' }}>
         <SearchBar
           sortSets={sortSets}
           series={series}
@@ -260,11 +262,14 @@ const PokedexPage = () => {
           searchBy={searchBy}
           handleToggleSearchBy={handleToggleSearchBy}
           handleSearch={() => handleSearch(searchTerm)}
+          isAuthenticated={!!currentUser} // Pass authentication status to SearchBar
         />
         {isLoading || isLoadingSets ? (
           <>
-            <div className="series-title-placeholder"></div>
-            <div id="grid" className="sets-grid">
+            <div className="series-title-placeholder">
+              {/* Title Placeholder */}
+            </div>
+            <div id="grid" className={`sets-grid ${currentUser ? 'sets-grid--profile' : ''}`}>
               {Array.from({ length: 10 }).map((_, index) => (
                 <SkeletonGridItem key={index} />
               ))}
@@ -273,11 +278,12 @@ const PokedexPage = () => {
         ) : viewMode === 'sets' ? (
           Object.keys(seriesSets).map((seriesName) => (
             <div key={seriesName}>
-              <h2 className="series-title-main">{seriesName}</h2>
+              <h2 className={`series-title-main ${currentUser ? 'series-title-main--profile' : ''}`}>{seriesName}</h2>
               <Grid
                 sets={seriesSets[seriesName]}
                 viewMode={viewMode}
                 onSetClick={handleSetClick}
+                isAuthenticated={!!currentUser} // Pass authentication status to Grid
               />
             </div>
           ))
@@ -312,6 +318,7 @@ const PokedexPage = () => {
             viewMode={viewMode}
             cards={cards}
             onSetClick={handleSetClick}
+            isAuthenticated={!!currentUser} // Pass authentication status to Grid
           />
         )}
       </div>
