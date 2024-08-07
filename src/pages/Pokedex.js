@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
 import Footer from '../components/Footer';
-import loadingGif from '../assets/loading-gif.gif';
+import SkeletonGridItem from '../components/SkeletonGridItem'; // Import SkeletonGridItem
 import {
   fetchSetData,
   fetchCardData,
@@ -16,7 +16,7 @@ import {
 import leven from 'leven';
 import '../styles/Grid.css';
 import { AuthContext } from '../App';
-import allSetData from '../js/pack_algorithm/allSetData.json'; // Import the JSON file
+import allSetData from '../js/pack_algorithm/allSetData.json';
 
 const PokedexPage = () => {
   const { profileColor } = useContext(AuthContext);
@@ -47,7 +47,6 @@ const PokedexPage = () => {
           (a, b) => new Date(a.releaseDate) - new Date(b.releaseDate)
         );
 
-        // We no longer need to generate cardIDs here since they're in allSetData.json
         setSets(sortedData);
         setOriginalSets(sortedData);
         setSeries([...new Set(sortedData.map((set) => set.series))]);
@@ -110,13 +109,13 @@ const PokedexPage = () => {
     setReleaseDateSortOrder(order);
     sortSets(order);
     setViewMode('sets');
-    setCards([]); // Clear cards when switching to sets view
+    setCards([]);
   };
 
   const handleSeriesChange = (e) => {
     setSelectedSeries(e.target.value);
     setViewMode('sets');
-    setCards([]); // Clear cards when switching to sets view
+    setCards([]);
   };
 
   const specialCases = {
@@ -187,16 +186,14 @@ const PokedexPage = () => {
 
   const handleSetClick = async (set) => {
     setIsLoading(true);
-    
-    // Aggregate all card IDs from the different rarity categories
-    const setCardData = allSetData[set.id]; // Get data for the specific set ID
+
+    const setCardData = allSetData[set.id];
     if (!setCardData) {
       console.error(`Set ID ${set.id} not found in JSON data.`);
       setIsLoading(false);
       return;
     }
 
-    // Combine all card IDs from all rarity categories
     const cardIDs = Object.values(setCardData).flat();
     console.log(`Fetching card data for set ${set.id}:`, cardIDs);
 
@@ -225,7 +222,7 @@ const PokedexPage = () => {
       setCards(randomPokemonCards);
       setIsLoading(false);
     } else {
-      setCards([]); // Clear cards when switching to sets view
+      setCards([]);
     }
     setViewMode(value === 'pokemon' ? 'cards' : 'sets');
   };
@@ -265,9 +262,14 @@ const PokedexPage = () => {
           handleSearch={() => handleSearch(searchTerm)}
         />
         {isLoading || isLoadingSets ? (
-          <div className="loading-container">
-            <img src={loadingGif} alt="Loading..." />
-          </div>
+          <>
+            <div className="series-title-placeholder"></div>
+            <div id="grid" className="sets-grid">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <SkeletonGridItem key={index} />
+              ))}
+            </div>
+          </>
         ) : viewMode === 'sets' ? (
           Object.keys(seriesSets).map((seriesName) => (
             <div key={seriesName}>

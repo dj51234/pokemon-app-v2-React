@@ -1,0 +1,93 @@
+/* src/styles/SkeletonGridItem.css */
+
+.skeleton-grid-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: var(--secondary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    gap: 1rem;
+    min-height: 200px;
+  }
+  
+  .skeleton-image {
+    width: 200px;
+    height: 150px;
+    background-color: #e0e0e0;
+    border-radius: 0.5rem;
+  }
+  
+  .skeleton-text {
+    width: 80%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+  }
+  
+  .skeleton-title {
+    width: 60%;
+    height: 25px;
+  }
+  
+  .skeleton-subtitle {
+    width: 50%;
+  }
+  
+  .skeleton-id {
+    width: 40%;
+  }
+  
+  /* Shimmer animation */
+  .skeleton-grid-item,
+  .skeleton-image,
+  .skeleton-text {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .skeleton-grid-item::after,
+  .skeleton-image::after,
+  .skeleton-text::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      left: -150%;
+    }
+    50% {
+      left: 100%;
+    }
+    100% {
+      left: 150%;
+    }
+  }
+  
+  /* Ensure the skeleton items match the grid layout */
+  .sets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    max-width: 75%;
+    margin: 2rem auto;
+  }
+  
+  /* Placeholder for the title */
+  .series-title-placeholder {
+    width: 75%;
+    margin: 2rem auto 1rem;
+    height: 3rem;
+
+    border-radius: 4px;
+  }
+  

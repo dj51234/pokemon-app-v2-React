@@ -1,8 +1,9 @@
 /* src/styles/Grid.css */
+
 #grid {
   width: 100%;
   margin-bottom: 3rem;
-
+  position: relative; /* Position relative for the skeleton overlay */
 }
 
 .sets-grid {
@@ -28,7 +29,7 @@
   justify-content: space-around;
   align-items: center;
   padding: 2rem;
-  background:  var(--secondary-color);
+  background: var(--secondary-color);
   border-radius: 0.5rem;
   text-align: center;
   text-decoration: none;
@@ -67,6 +68,12 @@
   max-width: 300px;
   max-height: 100%;
   background: var(--black);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-wrapper.loaded .skeleton-loader {
+  display: none; /* Hide skeleton loader when image is loaded */
 }
 
 .card-wrapper::after {
@@ -93,7 +100,53 @@
   display: block;
   max-width: 100%;
   height: auto;
-  border-radius: inherit; /* Inherit border radius if needed */
+  border-radius: inherit;
+  background: var(--black);
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.card-image.visible {
+  opacity: 1; /* Fade in the image when it's loaded */
+}
+
+.card-image.hidden {
+  display: none; /* Hide image until it's fully loaded */
+}
+
+.skeleton-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #333; /* Match this with your desired loading background */
+  border-radius: inherit;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -150%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 150%;
+  }
+}
+
+.grid-skeleton-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1); /* Semi-transparent background for entire grid */
+  z-index: 10; /* Ensure it overlays the grid */
+  pointer-events: none; /* Allow interactions with grid items */
 }
 
 .loading-container {

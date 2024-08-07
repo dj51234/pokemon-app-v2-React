@@ -1,18 +1,38 @@
 // src/components/CardItem.js
-import React from 'react';
 
-const CardItem = ({ image, rarity }) => {
-  console.log("Card Item Props:", { image, rarity }); // Log props to check if rarity is received
+import React, { useState } from 'react';
+
+const CardItem = ({ image, rarity, onLoadComplete }) => {
+  const [isLoaded, setIsLoaded] = useState(false); // Track image loading state
+
   const lowerCaseRarity = rarity ? rarity.toLowerCase() : 'unknown';
-  const isHolographic = lowerCaseRarity !== "rare" && lowerCaseRarity !== "common" && lowerCaseRarity !== "uncommon";
+
+  // Set image loaded state to true when image finishes loading
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+    onLoadComplete(); // Notify parent that this image has loaded
+  };
 
   return (
     <div
       className="grid-item--card"
-      style={{ backgroundSize: 'contain', backgroundPosition: 'center', background: '#080B12' }}
+      style={{
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        background: 'var(--black)',
+      }}
     >
-      <div className="card-wrapper" data-rarity={lowerCaseRarity}>
-        <img src={image} alt="Card" className="card-image" />
+      <div
+        className={`card-wrapper ${isLoaded ? 'loaded' : ''}`} // Add a class for loaded state
+        data-rarity={lowerCaseRarity}
+      >
+        {!isLoaded && <div className="skeleton-loader"></div>} {/* Show skeleton until image loads */}
+        <img
+          src={image}
+          alt="Card"
+          className={`card-image ${isLoaded ? 'visible' : 'hidden'}`} // Hide image until loaded
+          onLoad={handleImageLoad} // Trigger image load handler
+        />
       </div>
     </div>
   );
