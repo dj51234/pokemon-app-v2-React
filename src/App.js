@@ -6,13 +6,15 @@ import Pokedex from './pages/Pokedex';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import OpenPacksPage from './pages/OpenPacksPage'; // Import the new page
+import OpenPacksPage from './pages/OpenPacksPage'; 
+import WishlistPage from './components/WishlistPage';
 import { auth, firestore } from './js/firebase';
 import './index.css';
 import { doc, getDoc } from 'firebase/firestore';
 // Import your pack algorithm script
 import { openPack } from './js/pack_algorithm/packAlgorithm';
 // import { fetchAndGroupCardsForAllSets } from './js/pack_algorithm/fetchAllSetData'; // uncomment to fetch new full set data json
+import ProtectedRoute from './ProtectedRoute'; 
 
 export const AuthContext = React.createContext();
 
@@ -46,8 +48,46 @@ const App = () => {
             <Route path="/pokedex" element={<Pokedex />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/packs/view-all" element={<OpenPacksPage />} />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/packs/view-all" 
+              element={
+                <ProtectedRoute>
+                  <OpenPacksPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/binder/wishlist" 
+              element={
+                <ProtectedRoute>
+                  <WishlistPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/binder" 
+              element={
+                <ProtectedRoute>
+                  
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/binder/organize" 
+              element={
+                <ProtectedRoute>
+                  
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </div>
       </Router>

@@ -1,27 +1,26 @@
-// File: /src/components/ProfileHeader.js
+// src/components/ProfileHeader.js
 
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import '../styles/ProfileHeader.css';
 import { AuthContext } from '../App';
 import { FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { auth } from '../js/firebase';
 
-const ProfileHeader = ({ onLogout }) => {
+const ProfileHeader = () => {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [initial, setInitial] = useState('');
 
-  // Get user initial
   useEffect(() => {
     if (currentUser && currentUser.displayName) {
       setInitial(currentUser.displayName.charAt(0).toUpperCase());
     }
   }, [currentUser]);
 
-  // Handle click outside to close the dropdown
   const handleOutsideClick = (e) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setIsDropdownOpen(false);
@@ -41,11 +40,9 @@ const ProfileHeader = ({ onLogout }) => {
 
   const handleSetLinkClick = (setId) => {
     if (location.pathname === '/packs/view-all') {
-      // Dispatch a custom event if already on OpenPacksPage
       const event = new CustomEvent('openPackOverlay', { detail: { setId } });
       window.dispatchEvent(event);
     } else {
-      // Navigate to OpenPacksPage with the setId query parameter
       navigate(`/packs/view-all?setId=${setId}`);
     }
   };
@@ -54,17 +51,20 @@ const ProfileHeader = ({ onLogout }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   const getProfileImage = () => {
     if (currentUser && currentUser.photoURL) {
-      return (
-        <img src={currentUser.photoURL} alt="Profile" className="profile-image" />
-      );
+      return <img src={currentUser.photoURL} alt="Profile" className="profile-image" />;
     }
-    return (
-      <div className="default-profile-image gradient-background">
-        {initial}
-      </div>
-    );
+    return <div className="default-profile-image gradient-background">{initial}</div>;
   };
 
   return (
@@ -76,10 +76,7 @@ const ProfileHeader = ({ onLogout }) => {
       </Link>
 
       <div className="user-info" ref={dropdownRef}>
-        <div
-          className={`user-email ${isDropdownOpen ? 'active' : ''}`}
-          onClick={toggleDropdown}
-        >
+        <div className={`user-email ${isDropdownOpen ? 'active' : ''}`} onClick={toggleDropdown}>
           {getProfileImage()} {/* Dynamic Profile Image */}
           <span className="user-name">{currentUser?.displayName || 'User Name'}</span>
           <span className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`}>▼</span>
@@ -97,7 +94,7 @@ const ProfileHeader = ({ onLogout }) => {
             <div className="profile-dropdown-option" onClick={() => handleNavigation('/settings')}>
               <FaCog className="profile-dropdown-option-icon" /> Settings
             </div>
-            <div className="profile-dropdown-option" onClick={onLogout}>
+            <div className="profile-dropdown-option" onClick={handleLogout}>
               <FaSignOutAlt className="profile-dropdown-option-icon" /> Logout
             </div>
           </div>
@@ -105,17 +102,9 @@ const ProfileHeader = ({ onLogout }) => {
       </div>
 
       <ul className="sidebar-menu">
-        <li onClick={() => handleNavigation('/')}>
-          Home
-        </li>
-
-        <li onClick={() => handleNavigation('/profile')}>
-          Profile (Detailed)
-        </li>
-
-        <li className="menu-header">
-          Open Packs
-        </li>
+        <li onClick={() => handleNavigation('/')}>Home</li>
+        <li onClick={() => handleNavigation('/profile')}>Profile (Detailed)</li>
+        <li className="menu-header">Open Packs</li>
         <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6pt5')}>
          Shrouded Fable <span className="gradient-text">NEW</span> 
         </li>
@@ -134,28 +123,13 @@ const ProfileHeader = ({ onLogout }) => {
         <li className="menu-item menu-item--secondary">
           <Link to="/packs/view-all">View All</Link>
         </li>
-
-        <li className="menu-header">
-          My Binder
-        </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/view')}>
-          View
-        </li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/organize')}>
-          Organize
-        </li>
-
-        <li onClick={() => handleNavigation('/pokedex')}>
-          Browse All Sets
-        </li>
-
-        <li onClick={() => handleNavigation('/messages')}>
-          Messages
-        </li>
-
-        <li onClick={() => handleNavigation('/trade')}>
-          Trade With Others
-        </li>
+        <li className="menu-header">My Binder</li>
+        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/view')}>View</li>
+        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/organize')}>Organize</li>
+        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/wishlist')}>Wishlist</li>
+        <li onClick={() => handleNavigation('/pokedex')}>Browse All Sets</li>
+        <li onClick={() => handleNavigation('/messages')}>Messages</li>
+        <li onClick={() => handleNavigation('/trade')}>Trade With Others</li>
       </ul>
     </div>
   );

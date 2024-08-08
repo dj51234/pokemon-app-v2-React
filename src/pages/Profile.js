@@ -214,7 +214,7 @@ const Profile = () => {
 
   return (
     <>
-      <ProfileHeader onLogout={handleLogout} /> {/* Add ProfileHeader component */}
+      <ProfileHeader /> {/* Add ProfileHeader component */}
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">

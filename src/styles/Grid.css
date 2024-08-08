@@ -100,9 +100,9 @@
   overflow: hidden;
 } */
 
-.card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
+/* .card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
   opacity: 1; 
-}
+} */
 
 .card-image {
   display: block;
@@ -184,3 +184,22 @@
 .series-title-main--profile {
   width: 95%;
 }
+
+.wishlist-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-wrapper:hover .wishlist-button {
+  opacity: 1;
+}
+

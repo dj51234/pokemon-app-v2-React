@@ -35,8 +35,7 @@ const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated }) => { 
         cards.map((card) => (
           <CardItem
             key={card.id}
-            image={card.images.large}
-            rarity={card.rarity}
+            card={card}
             onLoadComplete={handleImageLoadComplete} // Pass the onLoad handler
           />
         ))
