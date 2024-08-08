@@ -19,7 +19,7 @@
 }
 
 .cards-grid {
-  max-width: 90%;
+  max-width: 80%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -73,7 +73,7 @@
 .card-wrapper {
   position: relative;
   display: inline-block;
-  max-width: 300px;
+  max-width: 250px;
   max-height: 100%;
   background: var(--black);
   border-radius: 10px;
@@ -84,7 +84,7 @@
   display: none; /* Hide skeleton loader when image is loaded */
 }
 
-.card-wrapper::after {
+/* .card-wrapper::after {
   content: "";
   display: block;
   position: absolute;
@@ -95,10 +95,10 @@
   background: url(../assets/sparkles.webp) no-repeat center center, url(../assets/holo.webp) no-repeat center center;
   mix-blend-mode: color-dodge;
   opacity: 0;
-  pointer-events: none; /* Ensure it doesn't block interactions */
+  pointer-events: none; 
   border-radius: 15px;
   overflow: hidden;
-}
+} */
 
 .card-wrapper[data-rarity]:not([data-rarity="unknown"]):not([data-rarity="rare"]):not([data-rarity="common"]):not([data-rarity="uncommon"])::after {
   opacity: 1; 

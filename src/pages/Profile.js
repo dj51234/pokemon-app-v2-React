@@ -218,7 +218,7 @@ const Profile = () => {
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">
-            <img src={loadingGif} alt="Loading..." />
+            
           </div>
         ) : (
           <div className="profile-content">
