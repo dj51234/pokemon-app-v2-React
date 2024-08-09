@@ -11,7 +11,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  perspective: 1000px; /* Ensure a good perspective for 3D transforms */
+  perspective: 1000px;
 }
 
 .normal-card-outer {
@@ -30,7 +30,6 @@
   -webkit-backface-visibility: hidden; /* Ensuring the backface is hidden */
   backface-visibility: hidden; /* Ensuring the backface is hidden */
   z-index: 1;
-
 }
 
 .normal-card-inner {

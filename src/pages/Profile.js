@@ -3,19 +3,18 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
-import Footer from '../components/Footer';
-import ProfileHeader from '../components/ProfileHeader'; // Import the new ProfileHeader
+import ProfileHeader from '../components/ProfileHeader';
 import '../styles/Profile.css';
-import loadingGif from '../assets/loading-gif.gif';
+import bronze from '../assets/diamond.png';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { fetchSetData } from '../js/api'; // Import fetchSetData function
+import { fetchSetData } from '../js/api'; 
 
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
-const MAX_BIO_LENGTH = 200;
+const MAX_BIO_LENGTH = 350;
 const defaultBio = "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...";
 
 const Profile = () => {
@@ -251,7 +250,7 @@ const Profile = () => {
                   </div>
                 ) : (
                   <h2 onClick={handleEditClick}>
-                    {username}
+                    {username} <img src={bronze} alt="Edit" className="rank" />
                   </h2>
                 )}
                 <div className="profile-stats">
@@ -324,9 +323,6 @@ const Profile = () => {
             </div>
           </div>
         )}
-      </div>
-      <div className="footer-secondary">
-        <Footer />
       </div>
     </>
   );

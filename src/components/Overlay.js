@@ -49,7 +49,6 @@ const rarityColors = {
   'shiny ultra rare': '#FFFFFF',
   'trainer gallery rare holo': '#FFFFFF',
   'ultra rare': '#FFFFFF',
-  // Add more colors for other rarities as needed
 };
 
 const getBoxShadowForRarity = (rarity) => {
