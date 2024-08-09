@@ -1,16 +1,16 @@
-// src/components/CardItem.js
-
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../App';
 import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 import { fetchCardData } from '../js/api';
+import CustomAlert from './CustomAlert'; // Import the CustomAlert component
 
 const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
-  const { currentUser } = useContext(AuthContext); // Use AuthContext to get the current user
-  const [isLoaded, setIsLoaded] = useState(false); // Track image loading state
+  const { currentUser } = useContext(AuthContext);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [cardData, setCardData] = useState(card || {});
-  const [inWishlist, setInWishlist] = useState(false); // Track if the card is in the wishlist
+  const [inWishlist, setInWishlist] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert message
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +48,7 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
         wishlist: arrayUnion(cardData.id),
       });
       setInWishlist(true);
-      alert('Card added to wishlist!');
+      setAlertMessage('Card added to wishlist!'); // Trigger custom alert
     }
   };
 
@@ -60,8 +60,12 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
       });
       setInWishlist(false);
       removeCard(cardData.id); // Call the removeCard function passed as a prop
-      alert('Card removed from wishlist!');
+      setAlertMessage('Card removed from wishlist!'); // Trigger custom alert
     }
+  };
+
+  const closeAlert = () => {
+    setAlertMessage(null); // Close the alert
   };
 
   if (!cardData.id) {
@@ -97,6 +101,7 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
           </button>
         )}
       </div>
+      {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };

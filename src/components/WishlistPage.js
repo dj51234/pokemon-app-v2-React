@@ -1,5 +1,3 @@
-// src/pages/WishlistPage.js
-
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../App';
@@ -8,12 +6,14 @@ import { firestore } from '../js/firebase';
 import CardItem from '../components/CardItem';
 import Header from '../components/Header';
 import ProfileHeader from '../components/ProfileHeader';
+import CustomAlert from '../components/CustomAlert'; // Import CustomAlert
 import '../styles/WishlistPage.css';
 
 const WishlistPage = () => {
   const { currentUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert message
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -34,6 +34,11 @@ const WishlistPage = () => {
 
   const removeCard = (cardId) => {
     setWishlist((prevWishlist) => prevWishlist.filter((id) => id !== cardId));
+    setAlertMessage('Card removed from wishlist!'); // Trigger custom alert
+  };
+
+  const closeAlert = () => {
+    setAlertMessage(null); // Close the alert
   };
 
   return (
@@ -57,6 +62,7 @@ const WishlistPage = () => {
           )}
         </div>
       </div>
+      {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };
