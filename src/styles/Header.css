@@ -96,6 +96,7 @@ nav ul a {
 @media screen and (min-width: 1201px) {
   nav ul {
     display: flex;
+    margin-right: 1rem;
   }
 
   .hamburger {

@@ -309,6 +309,7 @@ input[type="file"] {
   }
 }
 
+
 /* Skeleton Styles */
 .skeleton-item {
   background-color: var(--skeleton-background); /* Use a lighter background for skeletons */

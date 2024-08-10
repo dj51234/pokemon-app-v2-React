@@ -103,4 +103,11 @@
   .profile-content .card-wrapper:hover::after {
     opacity: .5;
   }
+
+  @media screen and (max-width: 1320px) {
+    .wishlist-container {
+      margin: 6rem auto 0;
+      padding: 2rem;
+    }
+  }
   
