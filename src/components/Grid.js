@@ -5,7 +5,7 @@ import GridItem from './GridItem';
 import CardItem from './CardItem';
 import '../styles/Grid.css';
 
-const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated }) => { // Add isAuthenticated prop
+const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated, removeCard }) => { // Add removeCard prop
   const [loadedCount, setLoadedCount] = useState(0); // State to track loaded images
   const totalCards = cards.length; // Total number of cards
 
@@ -37,6 +37,7 @@ const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated }) => { 
             key={card.id}
             card={card}
             onLoadComplete={handleImageLoadComplete} // Pass the onLoad handler
+            removeCard={removeCard} // Pass the removeCard prop
           />
         ))
       )}

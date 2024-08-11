@@ -118,6 +118,29 @@
   opacity: 1;
 }
 
+.static-image-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.static-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.image-container.loaded {
+  display: block;
+}
+
+.image-container:not(.loaded) {
+  display: none;
+}
+
+
+
 
 @keyframes animate {
   0% {

@@ -1,0 +1,81 @@
+/* File: /src/styles/MobileHeader.css */
+
+.mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5rem;
+    background-color: var(--black);
+    width: 100%;
+    top: 0;
+    z-index: 150;
+    margin: 0 auto;
+  }
+  
+  .mobileheader-mobile--logo {
+    font-size: 2.5rem;
+    color: var(--white);
+    text-decoration: none;
+    z-index: 200;
+  }
+  
+  .profile-hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    z-index: 251;
+    position: relative;
+  }
+  
+  .bar {
+    width: 100%;
+    height: 0.25rem;
+    background-color: var(--white);
+    transition: all 0.4s ease;
+    position: absolute;
+    transform-origin: center;
+  }
+  
+  .top-bar {
+    transform: translateY(-10px); /* Move the top bar up */
+  }
+  
+  .middle-bar {
+    transform: translateY(0); /* Middle bar stays in place */
+  }
+  
+  .bottom-bar {
+    transform: translateY(10px); /* Move the bottom bar down */
+  }
+  
+  .profile-hamburger-menu.open .top-bar {
+    transform: rotate(45deg); /* Rotate and move the top bar to form the "X" */
+    height: .5rem;
+  }
+  
+  .profile-hamburger-menu.open .middle-bar {
+    opacity: 0; /* Hide the middle bar */
+  }
+  
+  .profile-hamburger-menu.open .bottom-bar {
+    transform: rotate(-45deg); /* Rotate and move the bottom bar to form the "X" */
+    height: .5rem;
+  }
+  
+  /* Media Queries */
+  @media (min-width: 1321px) {
+    .mobile-header {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 1320px) {
+    .mobile-header {
+      display: flex;
+    }
+  }
+  

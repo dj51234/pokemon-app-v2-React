@@ -1,8 +1,9 @@
 // src/pages/OpenPacksPage.js
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import ProfileHeader from '../components/ProfileHeader'; // Use ProfileHeader for the sidebar
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import ProfileHeader from '../components/ProfileHeader'; // Desktop Header
+import MobileHeader from '../components/MobileHeader'; // Mobile Header
 import SetsSearchBar from '../components/SetsSearchBar';
 import Overlay from '../components/Overlay';
 import { fetchSetData } from '../js/api'; // Import fetchSetData function
@@ -25,6 +26,7 @@ const OpenPacksPage = () => {
   const [openedCards, setOpenedCards] = useState([]);
   const observer = useRef();
 
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const setIdFromUrl = searchParams.get('setId');
 
@@ -161,92 +163,96 @@ const OpenPacksPage = () => {
   );
 
   return (
-    <div className="open-packs-page-container">
-      <ProfileHeader /> {/* Include the ProfileHeader for the sidebar */}
-      <div className="open-packs-page-content">
-        <SetsSearchBar
-          setSearchTerm={setSearchTerm}
-          series={series}
-          setSelectedSeries={handleSeriesChange}
-          handleReleaseDateSortChange={handleReleaseDateSortChange}
-          sortSets={sortSets}
-        />
-        <div className="open-packs-page">
-          {isLoading ? (
-            <div className="open-packs-page-series-container">
-              <h2 className="series-title">Loading...</h2>
-              <div className="open-packs-page-grid">
-                {/* Render skeletons */}
-                {Array.from({ length: CHUNK_SIZE }).map((_, index) => (
-                  <SkeletonGridItem key={index} />
-                ))}
-              </div>
-            </div>
-          ) : (
-            Object.keys(seriesSets).map((seriesName) => (
-              <div className="open-packs-page-series-container" key={seriesName}>
-                <h2 className="series-title">{seriesName}</h2>
+    <>
+      <ProfileHeader /> {/* Desktop Header */}
+      <MobileHeader /> {/* Mobile Header */}
+
+      <div className="open-packs-page-container">
+        <div className="open-packs-page-content">
+          <SetsSearchBar
+            setSearchTerm={setSearchTerm}
+            series={series}
+            setSelectedSeries={handleSeriesChange}
+            handleReleaseDateSortChange={handleReleaseDateSortChange}
+            sortSets={sortSets}
+          />
+          <div className="open-packs-page">
+            {isLoading ? (
+              <div className="open-packs-page-series-container">
+                <h2 className="series-title">Loading...</h2>
                 <div className="open-packs-page-grid">
-                  {seriesSets[seriesName].map((set, index) => {
-                    if (index === seriesSets[seriesName].length - 1) {
-                      return (
-                        <div
-                          key={set.id}
-                          ref={lastSetElementRef}
-                          className="open-packs-page-grid-item"
-                          onClick={() => handleSetClick(set.id)}
-                        >
-                          <img
-                            src={set.images.logo}
-                            className="logo"
-                            alt={`${set.name} logo`}
-                          />
-                          <div className="set-info">
-                            <img
-                              src={set.images.symbol}
-                              className="symbol"
-                              alt={`${set.name} symbol`}
-                            />
-                            <h2>{set.name}</h2>
-                          </div>
-                          <p>Release date: {set.releaseDate}</p>
-                          <p>ID: {set.id}</p>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div
-                          key={set.id}
-                          className="open-packs-page-grid-item"
-                          onClick={() => handleSetClick(set.id)}
-                        >
-                          <img
-                            src={set.images.logo}
-                            className="logo"
-                            alt={`${set.name} logo`}
-                          />
-                          <div className="set-info">
-                            <img
-                              src={set.images.symbol}
-                              className="symbol"
-                              alt={`${set.name} symbol`}
-                            />
-                            <h2>{set.name}</h2>
-                          </div>
-                          <p>Release date: {set.releaseDate}</p>
-                          <p>ID: {set.id}</p>
-                        </div>
-                      );
-                    }
-                  })}
+                  {/* Render skeletons */}
+                  {Array.from({ length: CHUNK_SIZE }).map((_, index) => (
+                    <SkeletonGridItem key={index} />
+                  ))}
                 </div>
               </div>
-            ))
-          )}
+            ) : (
+              Object.keys(seriesSets).map((seriesName) => (
+                <div className="open-packs-page-series-container" key={seriesName}>
+                  <h2 className="series-title">{seriesName}</h2>
+                  <div className="open-packs-page-grid">
+                    {seriesSets[seriesName].map((set, index) => {
+                      if (index === seriesSets[seriesName].length - 1) {
+                        return (
+                          <div
+                            key={set.id}
+                            ref={lastSetElementRef}
+                            className="open-packs-page-grid-item"
+                            onClick={() => handleSetClick(set.id)}
+                          >
+                            <img
+                              src={set.images.logo}
+                              className="logo"
+                              alt={`${set.name} logo`}
+                            />
+                            <div className="set-info">
+                              <img
+                                src={set.images.symbol}
+                                className="symbol"
+                                alt={`${set.name} symbol`}
+                              />
+                              <h2>{set.name}</h2>
+                            </div>
+                            <p>Release date: {set.releaseDate}</p>
+                            <p>ID: {set.id}</p>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div
+                            key={set.id}
+                            className="open-packs-page-grid-item"
+                            onClick={() => handleSetClick(set.id)}
+                          >
+                            <img
+                              src={set.images.logo}
+                              className="logo"
+                              alt={`${set.name} logo`}
+                            />
+                            <div className="set-info">
+                              <img
+                                src={set.images.symbol}
+                                className="symbol"
+                                alt={`${set.name} symbol`}
+                              />
+                              <h2>{set.name}</h2>
+                            </div>
+                            <p>Release date: {set.releaseDate}</p>
+                            <p>ID: {set.id}</p>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
+        {isOverlayVisible && <Overlay onClose={closeOverlay} cards={openedCards} />}
       </div>
-      {isOverlayVisible && <Overlay onClose={closeOverlay} cards={openedCards} />}
-    </div>
+    </>
   );
 };
 

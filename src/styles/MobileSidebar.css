@@ -1,0 +1,94 @@
+/* File: /src/styles/MobileSidebar.css */
+
+.mobile-header-sidebar {
+    position: fixed; /* Fixed position keeps it anchored to the viewport */
+    top: 0;
+    right: -100%; /* Start off-screen from the right */
+    width: 100%;
+    height: 100vh;
+    background-color: var(--black);
+    padding: 3.3rem 2rem 2rem 2rem;
+    z-index: 200;
+    transition: right 0.4s ease; /* Animate the right property */
+    overflow-y: auto;
+  }
+  
+  .mobile-header-sidebar.open {
+    right: 0; /* Slide in when the sidebar is open */
+  }
+  
+  .mobile-header-sidebar.closed {
+    right: -100%; /* Slide out when the sidebar is closed */
+  }
+  
+  .mobile-header-sidebar .close-sidebar {
+    position: absolute;
+    top: 30px;
+    right: 20px; /* Positioned in the top-right corner */
+    font-size: 2.7rem;
+    cursor: pointer;
+    z-index: 201;
+    color: var(--white); /* Ensure visibility */
+  }
+  
+  .mobile-header-sidebar .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: var(--black);
+    border-radius: 4px;
+  }
+  
+  .mobile-header-sidebar .profile-image,
+  .mobile-header-sidebar .default-profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; /* Space between image and username */
+  }
+  
+  .mobile-header-sidebar .default-profile-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(122deg, #fa5560 0.01%, #b14bf4 49.9%, #4d91ff 100%);
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  .mobile-header-sidebar .user-email {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+    cursor:none;
+  }
+  
+  .mobile-header-sidebar .user-name {
+    font-weight: bold;
+    color: var(--white);
+  }
+  
+  .mobile-header-sidebar .mobile-sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .mobile-header-sidebar .mobile-sidebar-menu li {
+    padding: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .mobile-header-sidebar .mobile-sidebar-menu li:hover {
+    background-color: var(--secondary-color);
+    color: var(--pink);
+  }
+  
+  .mobile-header-sidebar .menu-header {
+    font-weight: bold;
+    pointer-events: none;
+  }
+  

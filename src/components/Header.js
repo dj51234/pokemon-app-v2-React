@@ -1,4 +1,3 @@
-// ./src/components/Header.js
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -6,6 +5,7 @@ import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
 import Sidebar from './Sidebar';
+import MobileSidebar from './MobileSidebar'; // Import MobileSidebar
 import HamburgerMenuSidebar from './HamburgerMenuSidebar';
 
 const Header = ({ secondary }) => {
@@ -64,7 +64,7 @@ const Header = ({ secondary }) => {
           </Link>
         </div>
         <nav>
-          {!currentUser && (
+          {!currentUser ? (
             <>
               <ul className="nav-links">
                 <li><Link to="/register" className='gradient-btn'>Register</Link></li>
@@ -79,11 +79,16 @@ const Header = ({ secondary }) => {
                 <span></span>
               </div>
             </>
+          ) : (
+            getProfileImage()
           )}
-          {currentUser && getProfileImage()}
         </nav>
       </header>
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} handleLogout={handleLogout} />
+      {!currentUser ? (
+        <Sidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} handleLogout={handleLogout} />
+      ) : (
+        <MobileSidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} />
+      )}
       <HamburgerMenuSidebar isOpen={hamburgerSidebarOpen} toggleSidebar={setHamburgerSidebarOpen} />
     </div>
   );

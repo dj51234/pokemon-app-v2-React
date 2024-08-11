@@ -1,8 +1,7 @@
-// src/pages/PokedexPage.js
-
 import React, { useEffect, useState, useContext } from 'react';
 import Header from '../components/Header';
 import ProfileHeader from '../components/ProfileHeader';
+import MobileHeader from '../components/MobileHeader';
 import SearchBar from '../components/SearchBar';
 import Grid from '../components/Grid';
 import Footer from '../components/Footer';
@@ -18,6 +17,8 @@ import leven from 'leven';
 import '../styles/Grid.css';
 import { AuthContext } from '../App';
 import allSetData from '../js/pack_algorithm/allSetData.json';
+import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { firestore } from '../js/firebase';
 
 const PokedexPage = () => {
   const { currentUser } = useContext(AuthContext);
@@ -45,7 +46,7 @@ const PokedexPage = () => {
           (set) => !['mcd14', 'mcd15', 'mcd17', 'mcd18'].includes(set.id)
         );
         const sortedData = filteredData.sort(
-          (a, b) =>  new Date(b.releaseDate) - new Date(a.releaseDate)
+          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
         );
 
         setSets(sortedData);
@@ -246,9 +247,21 @@ const PokedexPage = () => {
 
   const seriesSets = groupSetsBySeries(displayedSets);
 
+  const removeCardFromWishlist = async (cardId) => {
+    if (currentUser) {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      await updateDoc(userDocRef, {
+        wishlist: arrayRemove(cardId),
+      });
+      // Don't modify the state of cards in the Pokedex page
+    }
+  };
+
   return (
     <div className="container">
       {currentUser ? <ProfileHeader /> : <Header />}
+      <MobileHeader /> {/* Add MobileHeader component */}
+
       <div className={`content ${currentUser ? 'profile-content' : ''}`} style={{ background: '#080B12' }}>
         <SearchBar
           sortSets={sortSets}
@@ -317,6 +330,7 @@ const PokedexPage = () => {
             cards={cards}
             onSetClick={handleSetClick}
             isAuthenticated={!!currentUser} // Pass authentication status to Grid
+            removeCard={removeCardFromWishlist} // Pass removeCard function
           />
         )}
       </div>

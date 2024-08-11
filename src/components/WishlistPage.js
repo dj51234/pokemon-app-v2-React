@@ -6,6 +6,7 @@ import { firestore } from '../js/firebase';
 import CardItem from '../components/CardItem';
 import Header from '../components/Header';
 import ProfileHeader from '../components/ProfileHeader';
+import MobileHeader from '../components/MobileHeader'; // Import MobileHeader
 import CustomAlert from '../components/CustomAlert'; // Import CustomAlert
 import '../styles/WishlistPage.css';
 
@@ -42,28 +43,32 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="wishlist-page">
+    <>
       {currentUser ? <ProfileHeader /> : <Header />}
-      <div className="wishlist-container">
-        <div className="wishlist-content">
-          <h1>Your Wishlist</h1>
-          {loading ? (
-            <div className="loading-container">
-              <p>Loading...</p>
-            </div>
-          ) : wishlist.length === 0 ? (
-            <p>No cards in your wishlist yet. <Link to="/pokedex">Add cards now <span>+</span></Link></p>
-          ) : (
-            <div className="wishlist-grid">
-              {wishlist.map((cardId) => (
-                <CardItem key={cardId} cardId={cardId} removeCard={removeCard} />
-              ))}
-            </div>
-          )}
+      <MobileHeader /> {/* Add MobileHeader component */}
+
+      <div className="wishlist-page">
+        <div className="wishlist-container">
+          <div className="wishlist-content">
+            <h1>Your Wishlist</h1>
+            {loading ? (
+              <div className="loading-container">
+                <p>Loading...</p>
+              </div>
+            ) : wishlist.length === 0 ? (
+              <p>No cards in your wishlist yet. <Link to="/pokedex">Add cards now <span>+</span></Link></p>
+            ) : (
+              <div className="wishlist-grid">
+                {wishlist.map((cardId) => (
+                  <CardItem key={cardId} cardId={cardId} removeCard={removeCard} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+        {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
       </div>
-      {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
-    </div>
+    </>
   );
 };
 

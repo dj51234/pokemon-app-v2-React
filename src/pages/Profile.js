@@ -4,13 +4,14 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import ProfileHeader from '../components/ProfileHeader';
+import MobileHeader from '../components/MobileHeader'; // Import MobileHeader
 import '../styles/Profile.css';
 import bronze from '../assets/diamond.png';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { fetchSetData } from '../js/api'; 
+import { fetchSetData } from '../js/api';
 
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
@@ -213,11 +214,13 @@ const Profile = () => {
 
   return (
     <>
-      <ProfileHeader /> {/* Add ProfileHeader component */}
+      <ProfileHeader /> {/* Desktop Header */}
+      <MobileHeader /> {/* Mobile Header */}
+      
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">
-            
+            {/* Loading Spinner or Skeleton */}
           </div>
         ) : (
           <div className="profile-content">

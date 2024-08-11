@@ -120,5 +120,12 @@
   overflow-y: scroll;
 }
 
+@media screen and (max-width: 1320px) {
+  .overlay {
+    left: 0;
+  }
+  
+}
+
 
 

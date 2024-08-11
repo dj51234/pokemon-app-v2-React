@@ -9,7 +9,7 @@
 
 .profile-content {
   flex: 1;
-  padding: 2rem;
+  padding: 0 2rem 2rem 2rem;;
   margin-left: 27rem; /* Added margin to account for sidebar width + padding */
   overflow-x: hidden; /* Prevent horizontal overflow */
 }
@@ -306,6 +306,13 @@ input[type="file"] {
   /* Adjust margin for small screens */
   .profile-content {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 1320px) {
+
+  .profile-content {
+    margin-left: 0; /* Remove margin for smaller screens */
   }
 }
 

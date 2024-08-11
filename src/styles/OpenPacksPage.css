@@ -101,3 +101,9 @@
     max-width: 65%;
   }
 }
+
+@media (max-width: 1320px) {
+  .open-packs-page-content {
+    margin-left: 0; 
+  }
+}
