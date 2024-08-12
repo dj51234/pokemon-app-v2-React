@@ -42,10 +42,7 @@ const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated, removeC
         ))
       )}
 
-      {/* Show grid skeleton until all images are loaded */}
-      {loadedCount !== totalCards && viewMode === 'cards' && (
-        <div className="grid-skeleton-loader"></div>
-      )}
+      
     </div>
   );
 };

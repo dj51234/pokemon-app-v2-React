@@ -1,10 +1,8 @@
-// File: /src/pages/Profile.js
-
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
 import ProfileHeader from '../components/ProfileHeader';
-import MobileHeader from '../components/MobileHeader'; // Import MobileHeader
+import MobileHeader from '../components/MobileHeader';
 import '../styles/Profile.css';
 import bronze from '../assets/diamond.png';
 import { auth, storage, firestore } from '../js/firebase';
@@ -19,7 +17,7 @@ const MAX_BIO_LENGTH = 350;
 const defaultBio = "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...";
 
 const Profile = () => {
-  const { currentUser, profileColor } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const [profileImage, setProfileImage] = useState(currentUser?.photoURL || '');
   const [username, setUsername] = useState(currentUser?.displayName || '');
   const [bio, setBio] = useState(defaultBio);
@@ -30,8 +28,13 @@ const Profile = () => {
   const [newBio, setNewBio] = useState(bio);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [forYouSets, setForYouSets] = useState([]); // State for "For You" sets
-  const [forYouLoading, setForYouLoading] = useState(true); // State for loading skeletons
+  const [forYouSets, setForYouSets] = useState([]);
+  const [forYouLoading, setForYouLoading] = useState(true);
+  const [isSliderVisible, setIsSliderVisible] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isLeftArrowVisible, setIsLeftArrowVisible] = useState(false);
+  const [isRightArrowVisible, setIsRightArrowVisible] = useState(true);
+  const forYouRef = useRef(null);
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
@@ -185,38 +188,104 @@ const Profile = () => {
     }
   }, [newUsername]);
 
-  // Fetch set data for the "For You" section
   useEffect(() => {
-    const setIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5']; // First four IDs for the last released sets
+    const setIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
 
     const fetchForYouSets = async () => {
       try {
         const allSets = await fetchSetData();
         const filteredSets = allSets.filter((set) => setIds.includes(set.id));
-        const sortedSets = filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id)); // Sort by setIds order
+        const sortedSets = filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id));
         setForYouSets(sortedSets);
-        setForYouLoading(false); // Set loading to false once data is fetched
+        setForYouLoading(false);
       } catch (error) {
         console.error('Error fetching "For You" sets:', error);
-        setForYouLoading(false); // Handle loading state in case of error
+        setForYouLoading(false);
       }
     };
 
     fetchForYouSets();
   }, []);
 
-  // Handle set click to navigate and open overlay
   const handleForYouSetClick = (setId) => {
-    // Reset overlay state before navigation
-    sessionStorage.removeItem('overlayOpened'); 
+    sessionStorage.removeItem('overlayOpened');
     navigate(`/packs/view-all?setId=${setId}`);
   };
 
+  const handleScrollRight = () => {
+    if (forYouRef.current) {
+      forYouRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      setScrollPosition(forYouRef.current.scrollLeft + 300);
+    }
+  };
+
+  const handleScrollLeft = () => {
+    if (forYouRef.current) {
+      forYouRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+      setScrollPosition(forYouRef.current.scrollLeft - 300);
+    }
+  };
+
+  const updateArrowsVisibility = () => {
+  if (forYouRef.current) {
+    const maxScrollLeft = forYouRef.current.scrollWidth - forYouRef.current.clientWidth;
+    const wrapper = forYouRef.current.closest('.for-you-wrapper');
+
+    // Show or hide arrows based on the scroll position
+    const isLeftVisible = forYouRef.current.scrollLeft > 0;
+    const isRightVisible = forYouRef.current.scrollLeft < maxScrollLeft;
+
+    setIsLeftArrowVisible(isLeftVisible);
+    setIsRightArrowVisible(isRightVisible);
+
+    // Toggle gradient visibility
+    if (wrapper) {
+      if (isLeftVisible) {
+        wrapper.classList.add('show-left-gradient');
+      } else {
+        wrapper.classList.remove('show-left-gradient');
+      }
+
+      if (isRightVisible) {
+        wrapper.classList.add('show-right-gradient');
+      } else {
+        wrapper.classList.remove('show-right-gradient');
+      }
+    }
+  }
+};
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1039) {
+        setIsSliderVisible(true);
+        updateArrowsVisibility();
+      } else {
+        setIsSliderVisible(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    if (forYouRef.current) {
+      updateArrowsVisibility();
+      forYouRef.current.addEventListener('scroll', updateArrowsVisibility);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (forYouRef.current) {
+        forYouRef.current.removeEventListener('scroll', updateArrowsVisibility);
+      }
+    };
+  }, [scrollPosition]);
+
   return (
     <>
-      <ProfileHeader /> {/* Desktop Header */}
-      <MobileHeader /> {/* Mobile Header */}
-      
+      <ProfileHeader />
+      <MobileHeader />
+
       <div className="profile-container">
         {loading ? (
           <div className="loading-container">
@@ -290,32 +359,48 @@ const Profile = () => {
                 )}
               </div>
             </div>
+
             {/* "For You" Section */}
             <div className="profile-for-you">
-              <h2><span className='gradient-text'>For</span> You</h2>
-              <div className="for-you-grid">
-                {forYouLoading ? (
-                  // Render skeleton placeholders when loading
-                  Array.from({ length: 4 }).map((_, index) => (
-                    <div className="skeleton-item" key={index}>
-                      <div className="skeleton-logo"></div>
-                    </div>
-                  ))
-                ) : (
-                  // Render actual set items when loaded
-                  forYouSets.map((set) => (
-                    <div
-                      className="set-item"
-                      key={set.id}
-                      onClick={() => handleForYouSetClick(set.id)} // Handle click to navigate
-                    >
-                      <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
-                    </div>
-                  ))
+              <h2><span className="gradient-text">For</span> You</h2>
+              <div className="for-you-wrapper">
+                {isSliderVisible && (
+                  <>
+                    {isLeftArrowVisible && (
+                      <button className="scroll-left-arrow" onClick={handleScrollLeft}>
+                        &#8249;
+                      </button>
+                    )}
+                    {isRightArrowVisible && (
+                      <button className="scroll-right-arrow" onClick={handleScrollRight}>
+                        &#8250;
+                      </button>
+                    )}
+                  </>
                 )}
+                <div className="for-you-grid" ref={forYouRef}>
+                  {forYouLoading ? (
+                    Array.from({ length: 4 }).map((_, index) => (
+                      <div className="skeleton-item" key={index}>
+                        <div className="skeleton-logo"></div>
+                      </div>
+                    ))
+                  ) : (
+                    forYouSets.map((set) => (
+                      <div
+                        className="set-item"
+                        key={set.id}
+                        onClick={() => handleForYouSetClick(set.id)}
+                      >
+                        <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-              <button>Edit Your Sets</button>
+              <button className="profile-edit-sets">Edit Your Sets</button>
             </div>
+
             <div className="profile-messages">
               <h3>Messages</h3>
               {/* Messaging system UI here */}

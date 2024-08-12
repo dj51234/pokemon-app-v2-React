@@ -1,17 +1,16 @@
-/* File: /src/styles/Profile.css */
-
 .profile-container {
-  display: flex; /* Use flexbox to create a row layout */
-  flex-direction: row; /* Ensure content flows from left to right */
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
   color: var(--white);
 }
 
 .profile-content {
   flex: 1;
-  padding: 0 2rem 2rem 2rem;;
-  margin-left: 27rem; /* Added margin to account for sidebar width + padding */
-  overflow-x: hidden; /* Prevent horizontal overflow */
+  padding: 0 2rem 2rem 2rem;
+  margin-left: 27rem;
+  overflow-x: hidden;  /* Ensure horizontal scrolling is hidden */
+  overflow-y: visible;  /* Allow vertical overflow */
 }
 
 .profile-header {
@@ -24,6 +23,7 @@
   position: relative;
   border-radius: 2rem;
   z-index: 1;
+  overflow-y: visible;  /* Ensure vertical overflow is allowed */
 }
 
 .profile-header::before {
@@ -62,7 +62,7 @@
 .profile-image-wrapper {
   position: relative;
   cursor: pointer;
-  transition: all 0.3s ease; /* Ensures smoothness for all changes */
+  transition: all 0.3s ease;
 }
 
 .profile-image-wrapper::after {
@@ -72,7 +72,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0); /* Initially transparent */
+  background-color: rgba(255, 255, 255, 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,11 +81,11 @@
   border-radius: 50%;
   opacity: 0;
   transition: background-color 0.1s ease, color 0.3s ease, opacity 0.1s ease;
-  pointer-events: none; /* Allows clicks to pass through */
+  pointer-events: none;
 }
 
 .profile-image-wrapper:hover::after {
-  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+  background-color: rgba(255, 255, 255, 0.7);
   color: black;
   opacity: 1;
 }
@@ -106,8 +106,8 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  text-transform: uppercase; /* Ensure letter is uppercase */
-  background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%)
+  text-transform: uppercase;
+  background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
 }
 
 input[type="file"] {
@@ -137,11 +137,11 @@ input[type="file"] {
   position: relative;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  padding-inline: .5rem;
+  padding-inline: 0.5rem;
 }
 
 .profile-details h2:hover {
-  background-color: #242349; /* Light grey background on hover */
+  background-color: #242349;
 }
 
 .username-edit {
@@ -153,7 +153,7 @@ input[type="file"] {
 .username-edit input {
   font-size: 2rem;
   padding: 0.2rem 0.5rem;
-  min-width: 200px; /* Add min-width to prevent shrinking */
+  min-width: 200px;
 }
 
 .bio-edit {
@@ -180,18 +180,18 @@ input[type="file"] {
   align-items: center;
   cursor: pointer;
   position: relative;
-  padding: .5rem;
+  padding: 0.5rem;
   transition: background-color 0.3s ease;
 }
 
 .bio-container:hover {
-  background-color: #242349; /* Light grey background on hover */
+  background-color: #242349;
 }
 
 .bio {
   margin-left: 0;
   transition: margin-left 0.3s ease;
-  padding-inline: .5rem;
+  padding-inline: 0.5rem;
   text-align: center;
 }
 
@@ -207,7 +207,7 @@ input[type="file"] {
 }
 
 .stat-item h3 {
- font-size: 3rem;
+  font-size: 3rem;
 }
 
 .stat-item p {
@@ -222,6 +222,8 @@ input[type="file"] {
 
 .profile-for-you {
   margin: 2rem 0;
+  position: relative;
+  overflow-y: visible; /* Ensure vertical overflow is allowed */
 }
 
 .profile-for-you h2 {
@@ -230,10 +232,61 @@ input[type="file"] {
   font-size: 3.2rem;
 }
 
+.for-you-wrapper {
+  position: relative;
+  overflow-x: hidden;  /* Hide horizontal overflow */
+  overflow-y: visible; /* Ensure vertical overflow is allowed */
+}
+
+/* Left Gradient */
+.for-you-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150px;  /* Adjust width as needed */
+  height: 100%;
+  background: linear-gradient(to right, #080b12, rgba(0, 0, 0, 0));
+  z-index: 5;
+  pointer-events: none;
+  display: none;  /* Hidden by default */
+}
+
+/* Right Gradient */
+.for-you-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;  /* Adjust width as needed */
+  height: 100%;
+  background: linear-gradient(to left, #080B12, rgba(0, 0, 0, 0));
+  z-index: 5;
+  pointer-events: none;
+  display: none;  /* Hidden by default */
+}
+
+/* Show the gradients when arrows are visible */
+.for-you-wrapper.show-left-gradient::before {
+  display: block;
+}
+
+.for-you-wrapper.show-right-gradient::after {
+  display: block;
+}
+
 .profile-for-you .for-you-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.profile-for-you .for-you-grid::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 .profile-for-you .set-item,
@@ -249,10 +302,10 @@ input[type="file"] {
   background-color: var(--card-background);
   transition: transform 0.3s ease;
   cursor: pointer;
+  overflow-y: visible; /* Ensure vertical overflow within each item */
 }
 
 .profile-for-you .set-item:hover {
-  transform: translateY(-5px);
   background: var(--secondary-color-solid);
 }
 
@@ -277,7 +330,7 @@ input[type="file"] {
   background-color: var(--primary-hover-color);
 }
 
-.profile-for-you button {
+.profile-for-you .profile-edit-sets {
   margin-top: 1rem;
   padding: 0.7rem 1.5rem;
   background-color: var(--secondary-color);
@@ -288,50 +341,83 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.profile-for-you button:hover {
+.profile-for-you .profile-edit-sets:hover {
   background-color: var(--secondary-hover-color);
 }
 
+/* Slider arrows */
+.scroll-left-arrow,
+.scroll-right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;  /* Transparent background */
+  color: var(--white);  /* Keep the arrow icon white */
+  border: none;  /* Remove the border */
+  padding: 1rem 2rem; /* Increased padding */
+  font-size: 5rem; /* Increased font size */
+  cursor: pointer;
+  z-index: 10;
+  display: none; /* Hide arrows by default */
+  font-weight: 900;
+}
+
+/* Show arrows when screen width is 1039px or below */
+@media screen and (max-width: 1039px) {
+  .scroll-left-arrow,
+  .scroll-right-arrow {
+    display: block;
+  }
+}
+
+.scroll-left-arrow {
+  left: 0;
+}
+
+.scroll-right-arrow {
+  right: 0;
+}
+
+/* Responsive styles */
 @media screen and (max-width: 550px) {
   .profile-header {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
+    overflow-y: visible;  /* Ensure vertical overflow is allowed */
   }
 
   .profile-details {
     align-items: center;
   }
 
-  /* Adjust margin for small screens */
+  .profile-content {
+    margin-left: 0;
+    overflow-y: visible;  /* Ensure vertical overflow is allowed */
+  }
+}
+
+@media (max-width: 1320px) {
   .profile-content {
     margin-left: 0;
   }
 }
 
-@media (max-width: 1320px) {
-
-  .profile-content {
-    margin-left: 0; /* Remove margin for smaller screens */
-  }
-}
-
-
 /* Skeleton Styles */
 .skeleton-item {
-  background-color: var(--skeleton-background); /* Use a lighter background for skeletons */
+  background-color: var(--skeleton-background);
   position: relative;
   overflow: hidden;
-  padding: 5rem 2rem; /* Same padding as set-item */
+  padding: 5rem 2rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   transition: transform 0.3s ease;
 }
 
 .skeleton-logo {
-  width: 200px; /* Same width as set-logo */
-  height: 100px; /* Adjust to match logo aspect ratio */
-  background-color: var(--skeleton-logo-background); /* Different color for logo area */
+  width: 200px;
+  height: 100px;
+  background-color: var(--skeleton-logo-background);
   border-radius: 8px;
   margin-bottom: 1rem;
 }
@@ -341,7 +427,7 @@ input[type="file"] {
   display: block;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
   position: absolute;
   top: 0;
   left: -100%;
@@ -359,4 +445,3 @@ input[type="file"] {
     left: 100%;
   }
 }
-
