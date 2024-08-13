@@ -1,3 +1,4 @@
+// src/components/Header.js
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -5,7 +6,7 @@ import '../styles/Header.css';
 import { AuthContext } from '../App';
 import { auth } from '../js/firebase';
 import Sidebar from './Sidebar';
-import MobileSidebar from './MobileSidebar'; // Import MobileSidebar
+import MobileSidebar from './MobileSidebar';
 import HamburgerMenuSidebar from './HamburgerMenuSidebar';
 
 const Header = ({ secondary }) => {
@@ -85,7 +86,12 @@ const Header = ({ secondary }) => {
         </nav>
       </header>
       {!currentUser ? (
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} handleLogout={handleLogout} />
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          toggleSidebar={setSidebarOpen} 
+          handleLogout={handleLogout} 
+          showCloseButton={location.pathname === '/'}
+        />
       ) : (
         <MobileSidebar isOpen={sidebarOpen} toggleSidebar={setSidebarOpen} />
       )}

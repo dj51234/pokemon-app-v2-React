@@ -91,4 +91,15 @@
     font-weight: bold;
     pointer-events: none;
   }
+
+  .mobile-header-sidebar .close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    background: none;
+    border: none;
+    font-size: 4rem;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it appears on top */
+  }
   

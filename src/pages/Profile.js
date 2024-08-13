@@ -1,3 +1,5 @@
+// File: /src/pages/Profile.js
+
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../App';
@@ -34,10 +36,19 @@ const Profile = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isLeftArrowVisible, setIsLeftArrowVisible] = useState(false);
   const [isRightArrowVisible, setIsRightArrowVisible] = useState(true);
+  const [isEditingSets, setIsEditingSets] = useState(false);
+  const [availableSets, setAvailableSets] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredSets, setFilteredSets] = useState([]);
+  const [selectedSet, setSelectedSet] = useState(null);  // The new set selected by the user
+  const [setToReplace, setSetToReplace] = useState(null); // The set to be replaced
+  const [showReplacementOptions, setShowReplacementOptions] = useState(false); // Toggle between search and replacement options
   const forYouRef = useRef(null);
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
+
+  const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
 
   const handleLogout = async () => {
     try {
@@ -145,6 +156,14 @@ const Profile = () => {
     }
   };
 
+  const fetchDefaultForYouSets = async (setIds) => {
+    const allSets = await fetchSetData();
+    const filteredSets = allSets.filter((set) => setIds.includes(set.id));
+
+    // Sort the sets explicitly according to the order in `setIds`
+    return filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id));
+  };
+
   useEffect(() => {
     if (currentUser && currentUser.photoURL) {
       setProfileImage(currentUser.photoURL);
@@ -167,13 +186,26 @@ const Profile = () => {
             setUsername(userData.displayName);
             setNewUsername(userData.displayName);
           }
+          if (userData.forYouSets) {
+            const fetchedSets = await fetchSetData();
+            const sortedSets = userData.forYouSets.map(({ id }) => fetchedSets.find(set => set.id === id));
+            setForYouSets(sortedSets);
+          } else {
+            // If "For You" sets don't exist, load defaults and save to Firestore
+            const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+            setForYouSets(defaultForYouSets);
+            await setDoc(userDocRef, { forYouSets: defaultForYouSets.map(set => ({ id: set.id })) }, { merge: true });
+          }
         }
+        setForYouLoading(false);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
+        setForYouLoading(false);
         setLoading(false);
       }
     };
+    
 
     if (currentUser) {
       fetchUserData();
@@ -188,27 +220,22 @@ const Profile = () => {
     }
   }, [newUsername]);
 
-  useEffect(() => {
-    const setIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
-
-    const fetchForYouSets = async () => {
-      try {
-        const allSets = await fetchSetData();
-        const filteredSets = allSets.filter((set) => setIds.includes(set.id));
-        const sortedSets = filteredSets.sort((a, b) => setIds.indexOf(a.id) - setIds.indexOf(b.id));
-        setForYouSets(sortedSets);
-        setForYouLoading(false);
-      } catch (error) {
-        console.error('Error fetching "For You" sets:', error);
-        setForYouLoading(false);
-      }
-    };
-
-    fetchForYouSets();
-  }, []);
+  // Search and filter sets based on the search term
+  const handleSetSearch = async (e) => {
+    setSearchTerm(e.target.value);
+    if (e.target.value.length > 2) {  // Start searching after 3 characters
+      const allSets = await fetchSetData();
+      const filtered = allSets.filter((set) =>
+        set.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredSets(filtered);
+    } else {
+      setFilteredSets([]);
+    }
+  };  
 
   const handleForYouSetClick = (setId) => {
-    sessionStorage.removeItem('overlayOpened');
+    sessionStorage.removeItem('overlayOpened'); // Ensure overlay state is reset
     navigate(`/packs/view-all?setId=${setId}`);
   };
 
@@ -227,33 +254,31 @@ const Profile = () => {
   };
 
   const updateArrowsVisibility = () => {
-  if (forYouRef.current) {
-    const maxScrollLeft = forYouRef.current.scrollWidth - forYouRef.current.clientWidth;
-    const wrapper = forYouRef.current.closest('.for-you-wrapper');
+    if (forYouRef.current) {
+      const maxScrollLeft = forYouRef.current.scrollWidth - forYouRef.current.clientWidth;
+      const wrapper = forYouRef.current.closest('.for-you-wrapper');
 
-    // Show or hide arrows based on the scroll position
-    const isLeftVisible = forYouRef.current.scrollLeft > 0;
-    const isRightVisible = forYouRef.current.scrollLeft < maxScrollLeft;
+      const isLeftVisible = forYouRef.current.scrollLeft > 0;
+      const isRightVisible = forYouRef.current.scrollLeft < maxScrollLeft;
 
-    setIsLeftArrowVisible(isLeftVisible);
-    setIsRightArrowVisible(isRightVisible);
+      setIsLeftArrowVisible(isLeftVisible);
+      setIsRightArrowVisible(isRightVisible);
 
-    // Toggle gradient visibility
-    if (wrapper) {
-      if (isLeftVisible) {
-        wrapper.classList.add('show-left-gradient');
-      } else {
-        wrapper.classList.remove('show-left-gradient');
-      }
+      if (wrapper) {
+        if (isLeftVisible) {
+          wrapper.classList.add('show-left-gradient');
+        } else {
+          wrapper.classList.remove('show-left-gradient');
+        }
 
-      if (isRightVisible) {
-        wrapper.classList.add('show-right-gradient');
-      } else {
-        wrapper.classList.remove('show-right-gradient');
+        if (isRightVisible) {
+          wrapper.classList.add('show-right-gradient');
+        } else {
+          wrapper.classList.remove('show-right-gradient');
+        }
       }
     }
-  }
-};
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -281,17 +306,89 @@ const Profile = () => {
     };
   }, [scrollPosition]);
 
+  const handleEditSetsClick = async () => {
+    if (isEditingSets) {
+      // Save the updated set order to Firestore when the user clicks "Save"
+      if (selectedSet && setToReplace) {
+        const indexToReplace = forYouSets.findIndex(set => set.id === setToReplace.id);
+        if (indexToReplace !== -1) {
+          const updatedSets = [...forYouSets];
+          updatedSets[indexToReplace] = selectedSet;
+          setForYouSets(updatedSets);
+  
+          try {
+            const userDocRef = doc(firestore, 'users', currentUser.uid);
+            await setDoc(userDocRef, { forYouSets: updatedSets.map(set => ({ id: set.id })) }, { merge: true });
+          } catch (error) {
+            console.error('Error saving "For You" sets:', error);
+          }
+  
+          setSelectedSet(null);
+          setSetToReplace(null);
+          setShowReplacementOptions(false);
+        }
+      }
+      // Toggle off editing mode
+      setIsEditingSets(false);
+    } else {
+      // Start editing mode
+      setIsEditingSets(true);
+      try {
+        const sets = await fetchSetData();
+        setAvailableSets(sets);
+      } catch (error) {
+        console.error('Error fetching sets for editing:', error);
+      }
+    }
+  };
+  
+
+  // When a set is selected from search, show the replacement options
+  const handleSetSelect = (set) => {
+    setSelectedSet(set);
+    setShowReplacementOptions(true);
+  };
+
+  // When a set to replace is chosen, update the "For You" sets while maintaining the order
+  const handleReplaceSet = async () => {
+    if (selectedSet && setToReplace) {
+      const indexToReplace = forYouSets.findIndex(set => set.id === setToReplace.id);
+  
+      if (indexToReplace !== -1) {
+        const updatedSets = [...forYouSets];
+        updatedSets[indexToReplace] = selectedSet;
+  
+        setForYouSets(updatedSets);
+  
+        try {
+          const userDocRef = doc(firestore, 'users', currentUser.uid);
+          // Save the updated set order to Firestore
+          await setDoc(userDocRef, { forYouSets: updatedSets.map(set => ({ id: set.id })) }, { merge: true });
+        } catch (error) {
+          console.error('Error saving "For You" sets:', error);
+        }
+  
+        setIsEditingSets(false);
+        setShowReplacementOptions(false);
+        setSelectedSet(null);
+        setSetToReplace(null);
+      }
+    }
+  };
+  
+
+  const handleCancelEdit = () => {
+    setIsEditingSets(false);
+    setSelectedSet(null);
+    setSetToReplace(null);
+    setShowReplacementOptions(false);
+  };
+
   return (
     <>
       <ProfileHeader />
       <MobileHeader />
-
       <div className="profile-container">
-        {loading ? (
-          <div className="loading-container">
-            {/* Loading Spinner or Skeleton */}
-          </div>
-        ) : (
           <div className="profile-content">
             <div className="profile-header">
               <div className={`profile-image-wrapper ${profileImage ? 'no-border' : ''}`}>
@@ -388,9 +485,15 @@ const Profile = () => {
                   ) : (
                     forYouSets.map((set) => (
                       <div
-                        className="set-item"
+                        className={`set-item ${setToReplace && setToReplace.id === set.id ? 'selected' : ''}`}
                         key={set.id}
-                        onClick={() => handleForYouSetClick(set.id)}
+                        onClick={() => {
+                          if (isEditingSets) {
+                            setSetToReplace(set);
+                          } else {
+                            handleForYouSetClick(set.id);
+                          }
+                        }}
                       >
                         <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
                       </div>
@@ -398,9 +501,65 @@ const Profile = () => {
                   )}
                 </div>
               </div>
-              <button className="profile-edit-sets">Edit Your Sets</button>
+              {isEditingSets && (
+              <div className="edit-sets-carousel">
+                {!showReplacementOptions ? (
+                  <>
+                    <h3>Select a Set to Add</h3>
+                    <input
+                      type="text"
+                      placeholder="Search for a set"
+                      value={searchTerm}
+                      onChange={handleSetSearch}
+                    />
+                    <div className="grid-wrapper">
+                      {filteredSets.length > 0 ? (
+                        filteredSets.map((set) => {
+                          const isSetInForYou = forYouSets.some(forYouSet => forYouSet.id === set.id);
+                          return (
+                            <div
+                              key={set.id}
+                              className={`grid-item ${selectedSet && selectedSet.id === set.id ? 'selected' : ''} ${isSetInForYou ? 'disabled' : ''}`}
+                              onClick={() => !isSetInForYou && handleSetSelect(set)}  // Prevent click if already in "For You"
+                            >
+                              <img src={set.images.logo} alt={set.name} />
+                              <p>{set.name}</p>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <p>No sets found.</p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3>Select a Set to Replace</h3>
+                    <div className="grid-wrapper">
+                      {forYouSets.map((set) => (
+                        <div
+                          key={set.id}
+                          className={`grid-item ${setToReplace && setToReplace.id === set.id ? 'selected' : ''}`}
+                          onClick={() => setSetToReplace(set)}
+                        >
+                          <img src={set.images.logo} alt={set.name} />
+                          <p>{set.name}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+              <button className="profile-edit-sets" onClick={handleEditSetsClick}>
+                {isEditingSets ? 'Save' : 'Edit Your Sets'}
+              </button>
+              {isEditingSets && (
+                <button className="profile-edit-sets profile-cancel-edit" style={{ marginLeft: '1rem' }} onClick={handleCancelEdit}>
+                  Cancel
+                </button>
+              )}
             </div>
-
             <div className="profile-messages">
               <h3>Messages</h3>
               {/* Messaging system UI here */}
@@ -410,7 +569,6 @@ const Profile = () => {
               {/* Binder preview UI here */}
             </div>
           </div>
-        )}
       </div>
     </>
   );

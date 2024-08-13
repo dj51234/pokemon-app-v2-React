@@ -1,17 +1,18 @@
-// src/pages/Register.js
+// File: /src/pages/Register.js
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
 import { auth, googleProvider, facebookProvider, firestore } from '../js/firebase';
 import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 import '../styles/Register.css';
 import '../styles/google.css';
 import faceBookLogo from '../assets/facebook_icon.png';
 import googleLogo from '../assets/google_icon.png';
 import getErrorMessage from '../js/firebaseErrorMessages';
 import { getRandomColor } from '../utils/colorUtils';
+import { fetchSetData } from '../js/api'; // Assuming you have this API function to fetch all sets
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +20,8 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
 
   useEffect(() => {
     document.body.classList.add('auth-background');
@@ -45,6 +48,11 @@ const Register = () => {
       uppercaseCount >= 2 &&
       numberCount >= 2
     );
+  };
+
+  const fetchDefaultForYouSets = async (setIds) => {
+    const allSets = await fetchSetData();
+    return allSets.filter((set) => setIds.includes(set.id));
   };
 
   const handleSubmit = async (e) => {
@@ -74,6 +82,10 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: username });
+
+      // Fetch default "For You" sets
+      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+
       const userDocRef = doc(firestore, 'users', user.uid);
       await setDoc(userDocRef, {
         uid: user.uid,
@@ -81,8 +93,10 @@ const Register = () => {
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
         bio: '',
-        profileColor: randomColor // Store the generated random color
+        profileColor: randomColor, // Store the generated random color
+        forYouSets: defaultForYouSets, // Store the default "For You" sets
       });
+
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -100,6 +114,10 @@ const Register = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       await updateProfile(user, { displayName: username });
+
+      // Fetch default "For You" sets
+      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+
       const userDocRef = doc(firestore, 'users', user.uid);
       await setDoc(userDocRef, {
         uid: user.uid,
@@ -107,8 +125,10 @@ const Register = () => {
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
         bio: '',
-        profileColor: getRandomColor() // Store the generated random color
+        profileColor: getRandomColor(), // Store the generated random color
+        forYouSets: defaultForYouSets, // Store the default "For You" sets
       });
+
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));
@@ -126,6 +146,10 @@ const Register = () => {
       const result = await signInWithPopup(auth, facebookProvider);
       const user = result.user;
       await updateProfile(user, { displayName: username });
+
+      // Fetch default "For You" sets
+      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+
       const userDocRef = doc(firestore, 'users', user.uid);
       await setDoc(userDocRef, {
         uid: user.uid,
@@ -133,8 +157,10 @@ const Register = () => {
         displayName: username,
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
         bio: '',
-        profileColor: getRandomColor() // Store the generated random color
+        profileColor: getRandomColor(), // Store the generated random color
+        forYouSets: defaultForYouSets, // Store the default "For You" sets
       });
+
       navigate('/profile');
     } catch (error) {
       setError(getErrorMessage(error.code));

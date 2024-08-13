@@ -51,7 +51,9 @@ const WishlistPage = () => {
         <div className="wishlist-container">
           <div className="wishlist-content">
             <h1>Your Wishlist</h1>
-            <Link to="/pokedex" className='add-wishlist-link'>Add more cards +</Link>
+            {!loading && wishlist.length > 0 && (
+              <Link to="/pokedex" className='add-wishlist-link'>Add more cards +</Link>
+            )}
             {loading ? (
               <div className="loading-container">
                 <p>Loading...</p>

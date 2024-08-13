@@ -53,6 +53,11 @@ const MobileSidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div className={`mobile-header-sidebar ${isOpen ? 'open' : 'closed'}`}>
+      {location.pathname === '/' && (
+        <button className="close-btn" onClick={() => toggleSidebar(false)}>
+          <FaTimes />
+        </button>
+      )}
       <div className="user-info">
         {getProfileImage()} {/* Dynamic Profile Image */}
         <div className="user-email">

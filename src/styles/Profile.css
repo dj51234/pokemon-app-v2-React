@@ -331,9 +331,9 @@ input[type="file"] {
 }
 
 .profile-for-you .profile-edit-sets {
-  margin-top: 1rem;
+  margin-top: 2rem;
   padding: 0.7rem 1.5rem;
-  background-color: var(--secondary-color);
+  background-color: var(--pink);
   color: var(--white);
   border: none;
   border-radius: 4px;
@@ -341,8 +341,8 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.profile-for-you .profile-edit-sets:hover {
-  background-color: var(--secondary-hover-color);
+.profile-for-you .profile-edit-sets.profile-cancel-edit {
+  background-color: var(--secondary-color);
 }
 
 /* Slider arrows */
@@ -444,4 +444,111 @@ input[type="file"] {
   100% {
     left: 100%;
   }
+}
+
+.profile-container .grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-container .grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--secondary-color-solid);
+}
+
+.profile-container .grid-item img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.profile-container .grid-item p {
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+.profile-container .grid-item.selected {
+  border-color: var(--pink); /* Highlight selected item */
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container .grid-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container .edit-sets-carousel {
+  margin-top: 30px;
+}
+
+.profile-container .edit-sets-carousel input {
+  width: 25%;
+  padding: 1rem;
+  margin-top: 1rem;
+  outline: none;
+  border: 2px solid var(--pink);
+  border-radius: 8px;
+}
+
+.profile-container .edit-sets-carousel input:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--pink);
+}
+
+.profile-container .set-to-replace {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.profile-container .replaceable-set-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 10px;
+}
+
+.profile-container .replaceable-set-item img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.profile-container .replaceable-set-item p {
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+.profile-container .replaceable-set-item.selected {
+  border-color: #ff4500;
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container .replaceable-set-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-container .grid-item.disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
