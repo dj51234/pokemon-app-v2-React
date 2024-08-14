@@ -6,7 +6,8 @@
   align-items: center;
   justify-content: center;
   overflow: visible; /* Allow overflow */
-  background: var(--black);
+
+  z-index: 6;
 }
 
 .pack-opening h2 {

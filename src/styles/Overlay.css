@@ -26,8 +26,29 @@
   padding: 20px;
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.overlay-buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.overlay-buttons button {
+  font-size: clamp(1.3rem, 1vw, 4rem);
+  padding-inline: clamp(2rem, .5vw, 2.5rem);
+  padding-block: clamp(1rem, .6vw, 1.5rem);
+  border: none;
+  cursor: pointer;
+}
+
+.overlay-buttons.visible {
+  opacity: 1;
 }
 
 .overlay-close-button {
@@ -124,7 +145,6 @@
   .overlay {
     left: 0;
   }
-  
 }
 
 

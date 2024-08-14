@@ -8,10 +8,11 @@
     gap: 8rem;
     color: var(--white); /* Use a white color for text */
     margin: 0 auto;
+    z-index: 6;
   }
   
   .feature {
-    background-color: rgba(0, 0, 0, 0.726);
+    background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
     padding: 5rem;
     border-radius: 0.5rem;
     max-width: 800px;
@@ -19,8 +20,8 @@
     opacity: 1; /* Ensure items are visible by default */
     transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
     transform: scale(1.05);
-    box-shadow: 0 0 10px var(--yellow);
-    border: 2px solid var(--yellow);
+    box-shadow: 0 0 10px var(--white);
+    border: 2px solid var(--white);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,11 +40,12 @@
     font-size: 3rem;
     font-weight: 600;
     margin-bottom: 1rem;
+    color: var(--black);
   }
   
   .feature p {
     font-size: 1.6rem;
-    color: var(--subtext);
+    color: var(--black);
   }
   
   @keyframes pulse {

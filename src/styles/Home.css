@@ -10,6 +10,7 @@ body {
   display: flex;
   width: 300vw; /* Three slides */
   transition: transform 0.5s ease-in-out;
+  background: var(--black);
 }
 
 .app {

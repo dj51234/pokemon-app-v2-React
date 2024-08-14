@@ -5,7 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--black);
+
+  z-index: 6;
 }
 
 .demo-binder-content {

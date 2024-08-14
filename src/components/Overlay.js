@@ -95,17 +95,18 @@ const Overlay = ({ onClose, cards }) => {
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
-  const [initialAnimation, setInitialAnimation] = useState(true);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastCardFlipped, setLastCardFlipped] = useState(false); // Track when the last card becomes the first card
   const cardStackRef = useRef(null);
+  const lastCardIdRef = useRef(null); // Store the ID of the last card in initialCardStack
 
   useEffect(() => {
     const scrollTop = document.documentElement.scrollTop;
     document.body.style.setProperty('--st', `-${scrollTop}px`);
     document.body.classList.add('noscroll');
     setOverlayVisible(true);
-  
+
     const initialCardStack = cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
@@ -117,10 +118,12 @@ const Overlay = ({ onClose, cards }) => {
       zIndex: cards.length - cards.indexOf(card),
       id: card.id
     }));
+
+    // Store the ID of the last card in the initial stack
+    lastCardIdRef.current = initialCardStack[initialCardStack.length - 1].id;
+
     setCardStack(initialCardStack);
-  
-    // Removed animation triggering code here
-  
+
     return () => {
       document.body.classList.remove('noscroll');
       document.documentElement.scrollTop = scrollTop; // Restore the scroll position
@@ -202,17 +205,16 @@ const Overlay = ({ onClose, cards }) => {
 
   const handleCardClick = (index) => {
     if (animating) return;
-    setAnimating(true);
 
     if (!allFlipped) {
       const updatedStack = cardStack.map(card => ({ ...card, flipped: true }));
       setCardStack(updatedStack);
       setAllFlipped(true);
-
       setTimeout(() => {
         setAnimating(false);
       }, 600);
     } else {
+      setAnimating(true);
       setMovingCard(index);
 
       const nextTopCardElement = Array.from(cardStackRef.current.children).find((child) =>
@@ -240,6 +242,11 @@ const Overlay = ({ onClose, cards }) => {
         setMovingCard(null);
         setNextTopCardRarity(null);
         setAnimating(false);
+
+        // Check if the first card in the new stack is the last card from the initial stack
+        if (newCardStack[0].id === lastCardIdRef.current) {
+          setLastCardFlipped(true);
+        }
       }, 700);
     }
   };
@@ -253,12 +260,12 @@ const Overlay = ({ onClose, cards }) => {
             <div
               key={index}
               id={card.id}
-              className={`overlay-card ${initialAnimation ? '' : ''} ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-card-moving-to-back' : ''}`}
+              className={`overlay-card ${card.flipped ? 'overlay-flipped' : ''} ${movingCard === index ? 'overlay-card-moving-to-back' : ''}`}
               data-rarity={card.rarity}
               style={{ zIndex: cardStack.length - index }}
             >
               <NormalCard
-                id={card.id} // Pass the id to the NormalCard component
+                id={card.id}
                 isFlipped={card.flipped}
                 frontImage={card.front}
                 backImage={card.back}
@@ -269,12 +276,16 @@ const Overlay = ({ onClose, cards }) => {
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
-                isInteractable={cardStack.length - index === 10} // Pass interactable prop
+                isInteractable={cardStack.length - index === 10}
                 boxShadow={index === 1 && !!nextTopCardRarity ? getBoxShadowForRarity(card.rarity) : ''}
               />
               <div className="explosion-container"></div>
             </div>
           ))}
+        </div>
+        <div className={`overlay-buttons ${lastCardFlipped ? 'visible' : ''}`}>
+          <button className='btn-primary'>Add to Binder</button>
+          <button className='gradient-btn btn-primary--pulse btn-open-again'>Open Another Pack</button>
         </div>
       </div>
     </div>

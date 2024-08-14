@@ -51,6 +51,48 @@ html, body {
     height: 100vh;
 }
 
+.main-container--features {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8rem;
+    color: var(--white);
+    margin: 0 auto;
+    background: var(--black);
+}
+
+.main-container--features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;  /* Adjust width as needed */
+    height: 100%;
+    background: linear-gradient(to bottom, #080b12, rgba(0, 0, 0, 0));
+    z-index: 5;
+    pointer-events: none;
+}
+
+.main-container--features::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;  /* Adjust width as needed */
+    height: 100%;
+    background: linear-gradient(to top, #080b12, rgba(0, 0, 0, 0));
+    z-index: 5;
+    pointer-events: none;
+}
+
 .main-container--cta {
     position: relative;
     width: 100vw;
@@ -145,6 +187,26 @@ span.gradient-text {
 
 .btn-primary.highlighted::after {
     background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
+}
+
+.btn-primary--pulse {
+    animation: btnPrimaryPulse 2s infinite !important;
+}
+
+.btn-primary--pulse:hover {
+    filter: brightness(1.1);
+}
+
+@keyframes btnPrimaryPulse {
+    0% {
+        box-shadow: 0 0 10px #B14BF4;
+    }
+    50% {
+        box-shadow: 0 0 20px #B14BF4;
+    }
+    100% {
+        box-shadow: 0 0 10px #B14BF4;
+    }
 }
 
 

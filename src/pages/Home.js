@@ -29,7 +29,6 @@ const Home = () => {
         <PackOpening onBack={handleBack} show={currentIndex === 1} randomCards={randomCards} onNext={handleNext} addRevealedCards={handleAddRevealedCards} />
         <DemoBinder show={currentIndex === 2} revealedCards={revealedCards} onBack={handleBack} />
       </div>
-
     </div>
   );
 };

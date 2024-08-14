@@ -85,7 +85,7 @@ const Register = () => {
 
       // Fetch default "For You" sets
       const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
-
+      console.log(defaultForYouSets)
       const userDocRef = doc(firestore, 'users', user.uid);
       await setDoc(userDocRef, {
         uid: user.uid,
@@ -94,7 +94,7 @@ const Register = () => {
         lowercaseUsername: username.toLowerCase(), // Store lowercase username
         bio: '',
         profileColor: randomColor, // Store the generated random color
-        forYouSets: defaultForYouSets, // Store the default "For You" sets
+        forYouSets: defaultForYouSets.reverse(), // Store the default "For You" sets
       });
 
       navigate('/profile');
