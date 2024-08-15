@@ -1,9 +1,11 @@
+// src/components/Overlay.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Overlay.css';
 import '../styles/explosion.css';
-import closeIcon from '../assets/close-icon.png'; // Import close icon image
-import defaultImage from '../assets/default-image.png'; // Import default card image
-import NormalCard from './NormalCard'; // Import the NormalCard component
+import closeIcon from '../assets/close-icon.png';
+import defaultImage from '../assets/default-image.png';
+import NormalCard from './NormalCard';
 import loadingGif from '../assets/loading-gif.gif';
 
 const isRare = (rarity) => {
@@ -12,8 +14,8 @@ const isRare = (rarity) => {
     'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
     'rare holo gx', 'rare holo lv.x', 'rare holo vstar', 'rare v', 'rare holo vmax',
     'rare rare holo vstar', 'rare prime', 'rare prism star', 'rare rainbow', 'rare secret',
-    'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 'shiny rare', 
-    'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
+    'rare shining', 'rare holo shiny', 'rare shiny gx', 'rare ultra', 
+    'shiny rare', 'shiny ultra rare', 'trainer gallery rare holo', 'ultra rare'
   ];
   return rareRarities.includes(rarity);
 };
@@ -40,7 +42,6 @@ const rarityColors = {
   'rare rare holo vstar': '#FFFFFF',
   'rare prime': '#FFFFFF',
   'rare prism star': '#FFFFFF',
-  'rare rainbow': '#FFFFFF',
   'rare shining': '#FFFFFF',
   'rare holo shiny': '#FFFFFF',
   'rare shiny gx': '#FFFFFF',
@@ -78,28 +79,18 @@ const getBoxShadowForRarity = (rarity) => {
   }
 };
 
-const Overlay = ({ onClose, cards }) => {
+const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
   const [aspectRatio, setAspectRatio] = useState(640 / 892);
-  const [cardStack, setCardStack] = useState(cards.map(card => ({
-    back: defaultImage,
-    front: card.imageUrl,
-    flipped: false,
-    rarity: card.rarity,
-    subtypes: card.subtypes,
-    setId: card.setId,
-    supertypes: card.supertypes,
-    zIndex: cards.length - cards.indexOf(card),
-    id: card.id
-  })));
+  const [cardStack, setCardStack] = useState([]);
   const [allFlipped, setAllFlipped] = useState(false);
   const [animating, setAnimating] = useState(false);
   const [movingCard, setMovingCard] = useState(null);
   const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [lastCardFlipped, setLastCardFlipped] = useState(false); // Track when the last card becomes the first card
+  const [lastCardFlipped, setLastCardFlipped] = useState(false);
   const cardStackRef = useRef(null);
-  const lastCardIdRef = useRef(null); // Store the ID of the last card in initialCardStack
+  const lastCardIdRef = useRef(null);
 
   useEffect(() => {
     const scrollTop = document.documentElement.scrollTop;
@@ -107,7 +98,8 @@ const Overlay = ({ onClose, cards }) => {
     document.body.classList.add('noscroll');
     setOverlayVisible(true);
 
-    const initialCardStack = cards.map(card => ({
+    // Reset state variables
+    setCardStack(cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
       flipped: false,
@@ -117,22 +109,20 @@ const Overlay = ({ onClose, cards }) => {
       supertypes: card.supertypes,
       zIndex: cards.length - cards.indexOf(card),
       id: card.id
-    }));
-
-    // Store the ID of the last card in the initial stack
-    lastCardIdRef.current = initialCardStack[initialCardStack.length - 1].id;
-
-    setCardStack(initialCardStack);
+    })));
+    
+    lastCardIdRef.current = cards[cards.length - 1].id;
+    setIsLoading(false);
 
     return () => {
       document.body.classList.remove('noscroll');
-      document.documentElement.scrollTop = scrollTop; // Restore the scroll position
+      document.documentElement.scrollTop = scrollTop;
     };
   }, [cards]);
 
   const handleClose = () => {
     setOverlayVisible(false);
-    setTimeout(onClose, 500); // Match this duration with the overlay transition duration
+    setTimeout(onClose, 500);
   };
 
   const createParticle = (explosionContainer, color) => {
@@ -251,11 +241,28 @@ const Overlay = ({ onClose, cards }) => {
     }
   };
 
+  const handleOpenAnotherPack = async () => {
+    // Reset necessary state variables, but do not reset refs
+    setAspectRatio(640 / 892);
+    setCardStack([]);
+    setAllFlipped(false);
+    setAnimating(false);
+    setMovingCard(null);
+    setNextTopCardRarity(null);
+    
+    setIsLoading(true);
+    setLastCardFlipped(false);
+
+    // Fetch the new pack
+    await openSelectedPack(setId);
+  };
+
   return (
     <div className={`overlay ${overlayVisible ? 'visible' : 'hidden'}`}>
       <img src={closeIcon} className="overlay-close-button" alt="Close" onClick={handleClose} />
       <div className="overlay-content">
         <div ref={cardStackRef} className="overlay-card-stack" style={{ aspectRatio }}>
+          {isLoading && <div><img src={loadingGif} className="overlay-loading" alt="Loading" /></div>}
           {cardStack.map((card, index) => (
             <div
               key={index}
@@ -285,7 +292,7 @@ const Overlay = ({ onClose, cards }) => {
         </div>
         <div className={`overlay-buttons ${lastCardFlipped ? 'visible' : ''}`}>
           <button className='btn-primary'>Add to Binder</button>
-          <button className='gradient-btn btn-primary--pulse btn-open-again'>Open Another Pack</button>
+          <button className='gradient-btn btn-primary--pulse btn-open-again' onClick={handleOpenAnotherPack}>Open Another Pack</button>
         </div>
       </div>
     </div>

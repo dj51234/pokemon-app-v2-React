@@ -250,7 +250,14 @@ const OpenPacksPage = () => {
             )}
           </div>
         </div>
-        {isOverlayVisible && <Overlay onClose={closeOverlay} cards={openedCards} />}
+        {isOverlayVisible && (
+          <Overlay 
+            onClose={closeOverlay} 
+            cards={openedCards} 
+            setId={selectedSetId} 
+            openSelectedPack={openSelectedPack} 
+          />
+        )}
       </div>
     </>
   );

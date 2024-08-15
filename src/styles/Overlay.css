@@ -29,6 +29,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  transition:all 0.5s ease;
+}
+
+.overlay.visible .overlay-content {
+  opacity: 1;
 }
 
 .overlay-buttons {
@@ -139,6 +145,13 @@
   top: var(--st, 0);
   inline-size: 100%;
   overflow-y: scroll;
+}
+
+.overlay-loading {
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%, -50%);
 }
 
 @media screen and (max-width: 1320px) {

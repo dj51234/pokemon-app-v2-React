@@ -209,5 +209,10 @@ span.gradient-text {
     }
 }
 
+span.pink-text {
+    color: var(--pink);
+    font-weight: 900;
+}
+
 
 

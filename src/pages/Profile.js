@@ -505,7 +505,7 @@ const Profile = () => {
               <div className="edit-sets-carousel">
                 {!showReplacementOptions ? (
                   <>
-                    <h3>Select a Set to Add</h3>
+                    <h2>Select a Set to <span className='pink-text'>Add</span></h2>
                     <input
                       type="text"
                       placeholder="Search for a set"
@@ -534,7 +534,7 @@ const Profile = () => {
                   </>
                 ) : (
                   <>
-                    <h3>Select a Set to Replace</h3>
+                    <h2>Select a Set to <span className='pink-text'>Replace</span></h2>
                     <div className="grid-wrapper">
                       {forYouSets.map((set) => (
                         <div
