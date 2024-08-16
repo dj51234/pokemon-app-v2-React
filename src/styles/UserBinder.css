@@ -1,0 +1,105 @@
+/* src/styles/UserBinder.css */
+
+.binder-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--black);
+  }
+  
+  .binder-container {
+    display: flex;
+    flex: 1;
+    margin-left: 26.5rem; /* Adjust for the profile sidebar */
+  }
+  
+  .binder-content {
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .binder-content h1 {
+    font-size: 3rem;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+  }
+  
+  .binder-content p {
+    padding-left: 1rem;
+  }
+  
+  .binder-content a {
+    text-decoration: none;
+    color: var(--pink);
+  }
+  
+  .binder-content a:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
+  }
+  
+  .binder-content span {
+    font-weight: 900;
+  }
+  
+  .binder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+    margin-top: 4rem;
+    padding: 1rem;
+  }
+  
+  .add-binder-link {
+    font-size: 2rem;
+    font-weight: 400;
+    display: inline-block;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .binder-page .sets-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 2rem 0 ;
+  }
+
+  .binder-page .set-card {
+    cursor: pointer;
+    margin: 10px;
+    text-align: center;
+    border: 2px solid var(--border-color);
+    padding: 2rem;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+  }
+
+  .binder-page .set-card.view-all h2  {
+    min-width: 150px;
+  }
+
+  .binder-page .set-card:hover {
+    background: var(--secondary-color);
+  }
+  
+  .binder-page .set-logo {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+  }
+  
+  .set-card img {
+    width: 100%;
+    height: auto;
+  }
+  
+  @media screen and (max-width: 1320px) {
+    .binder-container {
+      margin-left: 0;
+      padding: 2rem;
+    }
+  }

@@ -1,4 +1,4 @@
-// src/components/Overlay.js
+// File: /src/components/Overlay.js
 
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Overlay.css';
@@ -7,6 +7,9 @@ import closeIcon from '../assets/close-icon.png';
 import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 import loadingGif from '../assets/loading-gif.gif';
+
+import { doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { firestore } from '../js/firebase';
 
 const isRare = (rarity) => {
   const rareRarities = [
@@ -79,7 +82,7 @@ const getBoxShadowForRarity = (rarity) => {
   }
 };
 
-const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
+const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, currentUser }) => {
   const [aspectRatio, setAspectRatio] = useState(640 / 892);
   const [cardStack, setCardStack] = useState([]);
   const [allFlipped, setAllFlipped] = useState(false);
@@ -98,10 +101,10 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
     document.body.classList.add('noscroll');
     setOverlayVisible(true);
 
-    // Reset state variables
     setCardStack(cards.map(card => ({
       back: defaultImage,
       front: card.imageUrl,
+      name: card.name, 
       flipped: false,
       rarity: card.rarity,
       subtypes: card.subtypes,
@@ -133,23 +136,22 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
     const cardWidth = rect.width;
     const cardHeight = rect.height;
 
-    // Determine a random starting position around the border of the card
     let startX, startY;
     const borderSide = Math.floor(Math.random() * 4);
     switch (borderSide) {
-      case 0: // Top border
+      case 0: 
         startX = Math.random() * cardWidth;
         startY = 0;
         break;
-      case 1: // Right border
+      case 1: 
         startX = cardWidth;
         startY = Math.random() * cardHeight;
         break;
-      case 2: // Bottom border
+      case 2: 
         startX = Math.random() * cardWidth;
         startY = cardHeight;
         break;
-      case 3: // Left border
+      case 3: 
         startX = 0;
         startY = Math.random() * cardHeight;
         break;
@@ -158,16 +160,15 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
         startY = Math.random() * cardHeight;
     }
 
-    // Calculate the target position based on direction from center
     const centerX = cardWidth / 2;
     const centerY = cardHeight / 2;
     const directionX = startX - centerX;
     const directionY = startY - centerY;
-    const distance = Math.random() * 350 + 400; // Adjust the explosion distance
+    const distance = Math.random() * 350 + 400; 
     const tx = directionX * distance / cardWidth + 'px';
     const ty = directionY * distance / cardHeight + 'px';
 
-    const size = Math.random() * 12; // Random size between 10px and 30px
+    const size = Math.random() * 12;
     particle.style.setProperty('--start-x', `${startX}px`);
     particle.style.setProperty('--start-y', `${startY}px`);
     particle.style.setProperty('--tx', tx);
@@ -178,7 +179,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
 
     explosionContainer.appendChild(particle);
 
-    particle.style.animation = 'explosion 1s forwards'; // Shorter animation duration
+    particle.style.animation = 'explosion 1s forwards';
 
     particle.addEventListener('animationend', () => {
       particle.remove();
@@ -186,8 +187,8 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
   };
 
   const triggerExplosion = (explosionContainer, rarity) => {
-    const color = rarityColors[rarity] || 'white'; // Default to white if no color specified
-    const numberOfParticles = 250; // Adjust the number of particles
+    const color = rarityColors[rarity] || 'white';
+    const numberOfParticles = 250;
     for (let i = 0; i < numberOfParticles; i++) {
       createParticle(explosionContainer, color);
     }
@@ -233,7 +234,6 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
         setNextTopCardRarity(null);
         setAnimating(false);
 
-        // Check if the first card in the new stack is the last card from the initial stack
         if (newCardStack[0].id === lastCardIdRef.current) {
           setLastCardFlipped(true);
         }
@@ -241,8 +241,44 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
     }
   };
 
+  const handleAddToBinder = async () => {
+    if (currentUser) {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+  
+      try {
+        // Filter and clean up the card data to ensure no undefined values
+        const cleanedCards = cardStack.map(card => ({
+          id: card.id || '',
+          name: card.name || '',
+          imageUrl: card.front || '',
+          rarity: card.rarity || '',
+          subtypes: card.subtypes || [],
+          setId: card.setId || '',
+          supertypes: card.supertypes || [],
+        }));
+  
+        // Log the cleaned cards to check for any issues
+        console.log('Cleaned Cards to Add:', cleanedCards);
+  
+        // Ensure no undefined or empty strings are passed to Firestore
+        await updateDoc(userDocRef, {
+          binder: arrayUnion(...cleanedCards)
+        });
+  
+        console.log('Cards added to binder successfully!');
+        
+        if (addCardsToBinder) {
+          addCardsToBinder(cleanedCards);
+          console.log('Updated binder:', cleanedCards);
+        }
+      } catch (error) {
+        console.error('Error adding cards to binder:', error);
+      }
+    }
+  };
+  
+
   const handleOpenAnotherPack = async () => {
-    // Reset necessary state variables, but do not reset refs
     setAspectRatio(640 / 892);
     setCardStack([]);
     setAllFlipped(false);
@@ -253,7 +289,6 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
     setIsLoading(true);
     setLastCardFlipped(false);
 
-    // Fetch the new pack
     await openSelectedPack(setId);
   };
 
@@ -291,7 +326,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack }) => {
           ))}
         </div>
         <div className={`overlay-buttons ${lastCardFlipped ? 'visible' : ''}`}>
-          <button className='btn-primary'>Add to Binder</button>
+          <button className='btn-primary' onClick={handleAddToBinder}>Add to Binder</button>
           <button className='gradient-btn btn-primary--pulse btn-open-again' onClick={handleOpenAnotherPack}>Open Another Pack</button>
         </div>
       </div>

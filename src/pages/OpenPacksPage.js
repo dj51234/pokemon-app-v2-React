@@ -1,6 +1,4 @@
-// src/pages/OpenPacksPage.js
-
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ProfileHeader from '../components/ProfileHeader'; // Desktop Header
 import MobileHeader from '../components/MobileHeader'; // Mobile Header
@@ -10,10 +8,12 @@ import { fetchSetData } from '../js/api'; // Import fetchSetData function
 import { openPack } from '../js/pack_algorithm/packAlgorithm'; // Import openPack function
 import '../styles/OpenPacksPage.css';
 import SkeletonGridItem from '../components/SkeletonGridItem'; // Import SkeletonGridItem component
+import { AuthContext } from '../App'; // Import AuthContext
 
 const CHUNK_SIZE = 10; // Number of sets to load at a time
 
 const OpenPacksPage = () => {
+  const { currentUser } = useContext(AuthContext); // Access currentUser from AuthContext
   const [sets, setSets] = useState([]);
   const [displayedSets, setDisplayedSets] = useState([]);
   const [currentChunk, setCurrentChunk] = useState(0); // Track the current chunk
@@ -67,11 +67,8 @@ const OpenPacksPage = () => {
 
   // Handle opening pack from URL
   useEffect(() => {
-    // If setId is provided in the URL, open the pack only if it's not a refresh
-    const overlayOpened = sessionStorage.getItem('overlayOpened');
-    if (setIdFromUrl && overlayOpened !== 'true') {
+    if (setIdFromUrl) {
       openSelectedPack(setIdFromUrl);
-      sessionStorage.setItem('overlayOpened', 'true');
     }
   }, [setIdFromUrl]);
 
@@ -97,10 +94,8 @@ const OpenPacksPage = () => {
 
   // Open selected pack
   const openSelectedPack = async (setId) => {
-    console.log(`Set ID: ${setId}`);
     setSelectedSetId(setId);
     const cards = await openPack(setId); // Call openPack with the selected set ID
-    console.log(cards); // Log the fetched cards to the console
     setOpenedCards(cards);
     setIsOverlayVisible(true); // Show the overlay
   };
@@ -108,7 +103,6 @@ const OpenPacksPage = () => {
   // Close overlay
   const closeOverlay = () => {
     setIsOverlayVisible(false); // Hide the overlay
-    sessionStorage.removeItem('overlayOpened'); // Clear overlay open state
   };
 
   // Sorting and filtering functions
@@ -256,6 +250,7 @@ const OpenPacksPage = () => {
             cards={openedCards} 
             setId={selectedSetId} 
             openSelectedPack={openSelectedPack} 
+            currentUser={currentUser} // Pass currentUser to the Overlay component
           />
         )}
       </div>

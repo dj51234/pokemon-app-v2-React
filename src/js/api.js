@@ -155,3 +155,27 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 10) {
     throw error;
   }
 }
+
+// Function to fetch sets based on user binder data
+export async function fetchUserSets(binderCards) {
+  try {
+    // Extract unique set IDs from binder cards
+    const setIds = [...new Set(binderCards.map(card => card.id.split('-')[0]))];
+
+    // Fetch set data for these set IDs
+    const setsData = await Promise.all(setIds.map(id => pokemon.set.find(id)));
+
+    // Map the fetched set data to desired format
+    const sets = setsData.map(set => ({
+      name: set.name,
+      id: set.id,
+      logo: set.images.logo,
+      releaseDate: set.releaseDate
+    }));
+
+    return sets;
+  } catch (error) {
+    console.error('Error fetching user-specific sets:', error);
+    return [];
+  }
+}

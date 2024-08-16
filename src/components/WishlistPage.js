@@ -50,7 +50,7 @@ const WishlistPage = () => {
       <div className="wishlist-page">
         <div className="wishlist-container">
           <div className="wishlist-content">
-            <h1>Your Wishlist</h1>
+            <h1>My Wishlist</h1>
             {!loading && wishlist.length > 0 && (
               <Link to="/pokedex" className='add-wishlist-link'>Add more cards +</Link>
             )}

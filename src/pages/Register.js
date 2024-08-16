@@ -55,6 +55,23 @@ const Register = () => {
     return allSets.filter((set) => setIds.includes(set.id));
   };
 
+  const createUserDocument = async (user, username, randomColor) => {
+    // Fetch default "For You" sets
+    const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+    const userDocRef = doc(firestore, 'users', user.uid);
+
+    await setDoc(userDocRef, {
+      uid: user.uid,
+      email: user.email,
+      displayName: username,
+      lowercaseUsername: username.toLowerCase(), // Store lowercase username
+      bio: '',
+      profileColor: randomColor, // Store the generated random color
+      forYouSets: defaultForYouSets.reverse(), // Store the default "For You" sets
+      binder: [] // Initialize an empty binder array
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username) {
@@ -83,19 +100,7 @@ const Register = () => {
       const user = userCredential.user;
       await updateProfile(user, { displayName: username });
 
-      // Fetch default "For You" sets
-      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
-      console.log(defaultForYouSets)
-      const userDocRef = doc(firestore, 'users', user.uid);
-      await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: username,
-        lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: '',
-        profileColor: randomColor, // Store the generated random color
-        forYouSets: defaultForYouSets.reverse(), // Store the default "For You" sets
-      });
+      await createUserDocument(user, username, randomColor);
 
       navigate('/profile');
     } catch (error) {
@@ -115,19 +120,8 @@ const Register = () => {
       const user = result.user;
       await updateProfile(user, { displayName: username });
 
-      // Fetch default "For You" sets
-      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
-
-      const userDocRef = doc(firestore, 'users', user.uid);
-      await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: username,
-        lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: '',
-        profileColor: getRandomColor(), // Store the generated random color
-        forYouSets: defaultForYouSets, // Store the default "For You" sets
-      });
+      const randomColor = getRandomColor();
+      await createUserDocument(user, username, randomColor);
 
       navigate('/profile');
     } catch (error) {
@@ -147,19 +141,8 @@ const Register = () => {
       const user = result.user;
       await updateProfile(user, { displayName: username });
 
-      // Fetch default "For You" sets
-      const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
-
-      const userDocRef = doc(firestore, 'users', user.uid);
-      await setDoc(userDocRef, {
-        uid: user.uid,
-        email: user.email,
-        displayName: username,
-        lowercaseUsername: username.toLowerCase(), // Store lowercase username
-        bio: '',
-        profileColor: getRandomColor(), // Store the generated random color
-        forYouSets: defaultForYouSets, // Store the default "For You" sets
-      });
+      const randomColor = getRandomColor();
+      await createUserDocument(user, username, randomColor);
 
       navigate('/profile');
     } catch (error) {
