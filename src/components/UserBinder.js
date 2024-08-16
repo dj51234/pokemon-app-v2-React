@@ -94,9 +94,6 @@ const UserBinder = ({ binderCards = [] }) => {
           <div className="binder-content">
             <h1>My Binder</h1>
             <div className="sets-container">
-              <div className="set-card view-all" onClick={() => handleSetClick(null)}>
-                <h2>View All</h2>
-              </div>
               {sets.map((set) => (
                 <div
                   key={set.id}
