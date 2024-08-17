@@ -10,8 +10,8 @@ import UserBinder from './components/UserBinder';
 import OpenPacksPage from './pages/OpenPacksPage';
 import WishlistPage from './components/WishlistPage';
 import { auth, firestore } from './js/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import './index.css';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { fetchUserSets } from './js/api'; // Import the function to fetch set data
 import ProtectedRoute from './ProtectedRoute';
 
@@ -35,6 +35,7 @@ const App = () => {
             setProfileColor(userData.profileColor);
           }
           if (userData.binder) {
+            console.log("User's Binder Data:", userData.binder); // Log the binder data
             setBinderCards(userData.binder);
             // Fetch sets based on the binder cards
             const fetchedSets = await fetchUserSets(userData.binder);
@@ -47,42 +48,18 @@ const App = () => {
   }, []);
 
   const handleAddCardsToBinder = async (newCards) => {
-    if (currentUser) {
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      await updateDoc(userDocRef, {
-        binder: arrayUnion(
-          ...newCards.map((card) => ({
-            id: card.id,
-            name: card.name,
-            imageUrl: card.front,
-            rarity: card.rarity,
-            subtypes: card.subtypes,
-            setId: card.setId,
-            supertypes: card.supertypes,
-          }))
-        ),
-      });
+    // Update Firestore (already handled in Overlay)
+    // Update the local state with the new cards
+    const updatedBinderCards = [
+      ...binderCards,
+      ...newCards
+    ];
 
-      // Update local state to reflect changes immediately
-      const updatedBinderCards = [
-        ...binderCards,
-        ...newCards.map((card) => ({
-          id: card.id,
-          name: card.name,
-          imageUrl: card.front,
-          rarity: card.rarity,
-          subtypes: card.subtypes,
-          setId: card.setId,
-          supertypes: card.supertypes,
-        })),
-      ];
+    setBinderCards(updatedBinderCards);
 
-      setBinderCards(updatedBinderCards);
-
-      // Re-fetch sets based on the updated binder cards
-      const updatedSets = await fetchUserSets(updatedBinderCards);
-      setSets(updatedSets);
-    }
+    // Optionally, you can also update sets if necessary
+    const updatedSets = await fetchUserSets(updatedBinderCards);
+    setSets(updatedSets);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import ProfileHeader from '../components/ProfileHeader'; // Desktop Header
 import MobileHeader from '../components/MobileHeader'; // Mobile Header
 import SetsSearchBar from '../components/SetsSearchBar';
@@ -12,7 +12,7 @@ import { AuthContext } from '../App'; // Import AuthContext
 
 const CHUNK_SIZE = 10; // Number of sets to load at a time
 
-const OpenPacksPage = () => {
+const OpenPacksPage = ({ handleAddCardsToBinder }) => {
   const { currentUser } = useContext(AuthContext); // Access currentUser from AuthContext
   const [sets, setSets] = useState([]);
   const [displayedSets, setDisplayedSets] = useState([]);
@@ -26,9 +26,13 @@ const OpenPacksPage = () => {
   const [openedCards, setOpenedCards] = useState([]);
   const observer = useRef();
 
-  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const setIdFromUrl = searchParams.get('setId');
+
+  const handleAddCards = (newCards) => {
+    handleAddCardsToBinder(newCards);
+  };
 
   // Fetch set data
   useEffect(() => {
@@ -251,6 +255,7 @@ const OpenPacksPage = () => {
             setId={selectedSetId} 
             openSelectedPack={openSelectedPack} 
             currentUser={currentUser} // Pass currentUser to the Overlay component
+            addCardsToBinder={handleAddCards}
           />
         )}
       </div>

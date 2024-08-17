@@ -1,87 +1,94 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileHeader from './ProfileHeader';
 import MobileHeader from './MobileHeader';
 import NormalCard from './NormalCard';
+import SkeletonSetItem from './SkeletonSetItem'; // Import SkeletonSetItem
 import '../styles/UserBinder.css';
 import defaultImage from '../assets/default-image.png';
 import { fetchUserSets } from '../js/api';
-
-const CHUNK_SIZE = 20; // Number of cards to load per batch
+import { isRare } from './Overlay'; // Import isRare from Overlay
 
 const UserBinder = ({ binderCards = [] }) => {
   const [sets, setSets] = useState([]);
   const [selectedSet, setSelectedSet] = useState(null);
   const [cardsToDisplay, setCardsToDisplay] = useState([]);
-  const [displayedCards, setDisplayedCards] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [allCardsLoaded, setAllCardsLoaded] = useState(false);
-  const observer = useRef();
+  const [imgsLoaded, setImgsLoaded] = useState(false);
+  const [loadingSets, setLoadingSets] = useState(true); // Track loading state for sets
+  const [cardTally, setCardTally] = useState({ userCount: 0, totalCount: 0 }); // Track card tally
 
   useEffect(() => {
     const fetchSets = async () => {
+      setLoadingSets(true);
       const fetchedSets = await fetchUserSets(binderCards);
       setSets(fetchedSets);
+      setLoadingSets(false);
     };
 
     fetchSets();
   }, [binderCards]);
 
   useEffect(() => {
-    const fetchCardsForSet = () => {
+    const loadImage = (imageUrl) => {
+      return new Promise((resolve, reject) => {
+        const loadImg = new Image();
+        loadImg.src = imageUrl;
+        loadImg.onload = () => resolve(imageUrl);
+        loadImg.onerror = (err) => reject(err);
+      });
+    };
+
+    const fetchCardsForSet = async () => {
       setLoading(true);
       let cards = [];
-      if (selectedSet === null) {
-        // View All: Show all cards
-        cards = binderCards;
-      } else if (selectedSet === 'viewAll') {
+
+      if (selectedSet === null || selectedSet === 'viewAll') {
         // View All: Show all cards
         cards = binderCards;
       } else {
         // Filter cards for the selected set
         cards = binderCards.filter(card => card.setId === selectedSet);
       }
+
+      // Sort cards so that rare cards are at the top
+      cards.sort((a, b) => {
+        const isRareA = isRare(a.rarity);
+        const isRareB = isRare(b.rarity);
+
+        if (isRareA && !isRareB) {
+          return -1;
+        } else if (!isRareA && isRareB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      // Calculate the user's card count for the selected set
+      const userCardCount = cards.length;
+      const totalCount = sets.find(set => set.id === selectedSet)?.totalCount || 0;
+      setCardTally({ userCount: userCardCount, totalCount });
+
+      try {
+        // Preload all images
+        await Promise.all(cards.map(card => loadImage(card.imageUrl)));
+        setImgsLoaded(true);
+      } catch (err) {
+        console.log('Failed to load images', err);
+      }
+
       setCardsToDisplay(cards);
-      setDisplayedCards([]);
-      setAllCardsLoaded(false); // Reset the allCardsLoaded state
       setLoading(false);
     };
 
-    fetchCardsForSet();
-  }, [selectedSet, binderCards]);
-
-  const loadMoreCards = useCallback(() => {
-    if (loading || allCardsLoaded) return;
-
-    const nextChunk = cardsToDisplay.slice(displayedCards.length, displayedCards.length + CHUNK_SIZE);
-
-    if (nextChunk.length === 0) {
-      setAllCardsLoaded(true); // No more cards to load
-      return;
+    if (selectedSet) {
+      fetchCardsForSet();
     }
-
-    setDisplayedCards(prevDisplayedCards => [
-      ...prevDisplayedCards,
-      ...nextChunk
-    ]);
-  }, [cardsToDisplay, displayedCards.length, allCardsLoaded, loading]);
-
-  const lastCardElementRef = useCallback(node => {
-    if (loading || allCardsLoaded) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        loadMoreCards();
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [loading, allCardsLoaded, loadMoreCards]);
-
-  useEffect(() => {
-    loadMoreCards(); // Load the first chunk of cards
-  }, [cardsToDisplay, loadMoreCards]);
+  }, [selectedSet, binderCards, sets]);
 
   const handleSetClick = (setId) => {
     setSelectedSet(setId === null ? 'viewAll' : setId);
+    setImgsLoaded(false); // Reset image loading state when switching sets
   };
 
   return (
@@ -94,26 +101,34 @@ const UserBinder = ({ binderCards = [] }) => {
           <div className="binder-content">
             <h1>My Binder</h1>
             <div className="sets-container">
-              {sets.map((set) => (
-                <div
-                  key={set.id}
-                  className="set-card"
-                  onClick={() => handleSetClick(set.id)}
-                >
-                  <img src={set.logo} alt={set.name} className="set-logo" />
-                </div>
-              ))}
+              {loadingSets ? (
+                Array.from({ length: 6 }).map((_, index) => (
+                  <SkeletonSetItem key={index} />
+                ))
+              ) : (
+                sets.map((set) => (
+                  <div
+                    key={set.id}
+                    className="set-card"
+                    onClick={() => handleSetClick(set.id)}
+                  >
+                    <img src={set.logo} alt={set.name} className="set-logo" />
+                  </div>
+                ))
+              )}
             </div>
             {selectedSet !== null && (
               <>
-                <h1>Cards</h1>
-                {loading && displayedCards.length === 0 ? (
-                  <p>Loading cards...</p>
+                <h1>
+                  Cards ({cardTally.userCount} of {cardTally.totalCount})
+                </h1>
+                {loading || !imgsLoaded ? (
+                  <p>Loading images...</p>
                 ) : (
                   <div className="binder-grid">
-                    {displayedCards.map((card, index) => (
+                    {cardsToDisplay.map((card, index) => (
                       <NormalCard
-                        key={card.id}
+                        key={`${card.id}-${index}`} // Ensure unique keys using index
                         id={card.id}
                         isFlipped={true}
                         frontImage={card.imageUrl}
@@ -127,10 +142,10 @@ const UserBinder = ({ binderCards = [] }) => {
                         applyBoxShadow={false}
                         isTopCard={true}
                         heroCard={true}
-                        ref={index === displayedCards.length - 1 ? lastCardElementRef : null}
+                        count={card.count} // Pass count to display how many of this card
                       />
                     ))}
-                    {allCardsLoaded && displayedCards.length === 0 && <p>No cards available in this set</p>}
+                    {cardsToDisplay.length === 0 && <p>No cards available in this set</p>}
                   </div>
                 )}
               </>

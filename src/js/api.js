@@ -165,12 +165,13 @@ export async function fetchUserSets(binderCards) {
     // Fetch set data for these set IDs
     const setsData = await Promise.all(setIds.map(id => pokemon.set.find(id)));
 
-    // Map the fetched set data to desired format
+    // Map the fetched set data to desired format, including totalCount
     const sets = setsData.map(set => ({
       name: set.name,
       id: set.id,
       logo: set.images.logo,
-      releaseDate: set.releaseDate
+      releaseDate: set.releaseDate,
+      totalCount: set.total // Include totalCount property
     }));
 
     return sets;
@@ -179,3 +180,4 @@ export async function fetchUserSets(binderCards) {
     return [];
   }
 }
+

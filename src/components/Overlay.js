@@ -8,10 +8,10 @@ import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 import loadingGif from '../assets/loading-gif.gif';
 
-import { doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 
-const isRare = (rarity) => {
+export const isRare = (rarity) => {
   const rareRarities = [
     'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
     'radiant rare', 'illustration rare', 'rare ace', 'rare holo', 'rare break', 'rare holo ex',
@@ -246,7 +246,11 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
       const userDocRef = doc(firestore, 'users', currentUser.uid);
   
       try {
-        // Filter and clean up the card data to ensure no undefined values
+        // Fetch the user's current binder data
+        const userDoc = await getDoc(userDocRef);
+        const currentBinder = userDoc.exists() ? userDoc.data().binder : [];
+  
+        // Clean and prepare the new cards data
         const cleanedCards = cardStack.map(card => ({
           id: card.id || '',
           name: card.name || '',
@@ -255,22 +259,26 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           subtypes: card.subtypes || [],
           setId: card.setId || '',
           supertypes: card.supertypes || [],
+          count: 1 // Default count for new cards
         }));
   
-        // Log the cleaned cards to check for any issues
-        console.log('Cleaned Cards to Add:', cleanedCards);
+        // Merge new cards into the binder, updating the count if the card already exists
+        const mergedBinder = [...currentBinder];
   
-        // Ensure no undefined or empty strings are passed to Firestore
-        await updateDoc(userDocRef, {
-          binder: arrayUnion(...cleanedCards)
+        cleanedCards.forEach(newCard => {
+          const existingCard = mergedBinder.find(card => card.id === newCard.id);
+          if (existingCard) {
+            existingCard.count += 1; // Increment the count for existing cards
+          } else {
+            mergedBinder.push(newCard); // Add new card with count 1
+          }
         });
   
-        console.log('Cards added to binder successfully!');
-        
-        if (addCardsToBinder) {
-          addCardsToBinder(cleanedCards);
-          console.log('Updated binder:', cleanedCards);
-        }
+        // Update Firestore with the merged binder data
+        await updateDoc(userDocRef, { binder: mergedBinder });
+  
+        // Call the addCardsToBinder function to update the state in App.js
+        addCardsToBinder(mergedBinder);
       } catch (error) {
         console.error('Error adding cards to binder:', error);
       }

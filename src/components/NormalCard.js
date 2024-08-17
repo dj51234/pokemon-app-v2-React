@@ -1,7 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
 
-const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, subtypes, setId, supertypes, startInteractive, zIndex, isTopCard, applyBoxShadow, isInteractable, heroCard, id }) => {
+const NormalCard = React.forwardRef(({
+  isFlipped, 
+  frontImage, 
+  backImage, 
+  onCardClick, 
+  rarity, 
+  subtypes, 
+  setId, 
+  supertypes, 
+  startInteractive, 
+  zIndex, 
+  isTopCard, 
+  applyBoxShadow, 
+  isInteractable, 
+  heroCard, 
+  id
+}, ref) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(startInteractive);
@@ -323,7 +339,7 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
         <div
           className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
           style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
-          ref={outerRef}
+          ref={ref || outerRef} // Use the forwarded ref or fallback to outerRef
           onClick={handleCardClick}
         >
           <div className="normal-card-inner" ref={innerRef}>
@@ -344,6 +360,6 @@ const NormalCard = ({ isFlipped, frontImage, backImage, onCardClick, rarity, sub
       </div>
     )
   );
-};
+});
 
 export default NormalCard;

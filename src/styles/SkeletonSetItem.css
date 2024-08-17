@@ -1,0 +1,42 @@
+/* src/styles/SkeletonSetItem.css */
+
+.skeleton-set-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--secondary-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    animation: shimmer 1.5s infinite;
+  }
+  
+  .skeleton-set-logo {
+    width: 200px;
+    height: 150px;
+    background: #333;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .skeleton-set-name {
+    width: 100px;
+    height: 20px;
+    background: #333;
+    border-radius: 0.25rem;
+  }
+  
+  /* Shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -150%;
+    }
+    50% {
+      background-position: 100%;
+    }
+    100% {
+      background-position: 150%;
+    }
+  }
+  
