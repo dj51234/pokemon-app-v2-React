@@ -1,5 +1,5 @@
 
-# Pokémon Card Collection App
+# MasteSet
 
 ## Overview
 
@@ -12,6 +12,9 @@ This app allows users to open packs and collect Pokémon cards in their profile.
 - Recommendations for closest Pokémon matches in case of misspellings
 - Toggle between searching for sets and Pokémon
 - Display of Pokémon cards with holographic effects
+- Card Tilting interaction, explosion effects for rare cards
+- Pack opening simulation in real life (cards are flipped over in a deck of 10, deck is flipped over, user goes through each card one by one)
+- Profile page with Binder, Wishlist, favorite sets, card/set search and Pack Opening simulation
 
 ## To-Do List
 
