@@ -192,3 +192,7 @@
   opacity: 1;
 }
 
+.grid-item--card.pink-border {
+  border: 5px solid var(--pink);
+}
+

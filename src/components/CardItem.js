@@ -84,6 +84,7 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
       <div
         className={`card-wrapper ${isLoaded ? 'loaded' : ''}`}
         data-rarity={cardData.rarity ? cardData.rarity.toLowerCase() : 'unknown'}
+        data-id={cardData.id}
       >
         {!isLoaded && <div className="skeleton-loader"></div>}
         <img
