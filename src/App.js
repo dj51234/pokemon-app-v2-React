@@ -25,8 +25,8 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      setCurrentUser(user);
       if (user) {
+        setCurrentUser(user);
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
@@ -42,6 +42,11 @@ const App = () => {
             setSets(fetchedSets);
           }
         }
+      } else {
+        // Clear state when user logs out
+        setCurrentUser(null);
+        setBinderCards([]);
+        setSets([]);
       }
     });
     return () => unsubscribe();

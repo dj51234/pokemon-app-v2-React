@@ -124,6 +124,8 @@
 .rare-ultra .normal-card-outer,
 .rare-holo-vmax .normal-card-outer,
 .rare-holo-v .normal-card-outer,
+.shiny-rare .normal-card-outer,
+.shiny-ultra-rare .normal-card-outer,
 .normal-card-wrapper[class~="rare-holo-lv.x"] .normal-card-outer  {
   box-shadow: 0 0 3px -1px white, 0 0 5px 1px white, 0 0 22px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
 }

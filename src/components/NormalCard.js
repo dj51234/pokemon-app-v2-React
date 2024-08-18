@@ -270,7 +270,7 @@ const NormalCard = React.forwardRef(({
       }
 
       const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
-      const borderRadiusValue = totalTransparentPixels > 0 ? '22px' : '0px';
+      const borderRadiusValue = totalTransparentPixels > 0 ? '12px' : '0px';
 
       setBorderRadius(borderRadiusValue);
     } catch (error) {

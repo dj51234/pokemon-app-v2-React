@@ -3,7 +3,9 @@
 .binder-page {
   display: flex;
   min-height: 100vh;
+  width: 95%;
   background-color: var(--black);
+  margin: 0 auto;
 }
 
 .binder-container {

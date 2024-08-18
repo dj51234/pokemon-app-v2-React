@@ -5,7 +5,7 @@
   left: 26.5rem;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.94); /* Black and transparent */
+  background-color: rgba(0, 0, 0, 0.92); /* Black and transparent */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,6 +19,36 @@
 
 .overlay.hidden {
   opacity: 0;
+}
+
+.overlay .custom-alert {
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% + 13.25rem); /* Add half of the profile header width */
+  transform: translateX(-50%);
+  background-color: var(--pink);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
 }
 
 .overlay-content {
@@ -157,6 +187,11 @@
 @media screen and (max-width: 1320px) {
   .overlay {
     left: 0;
+  }
+
+  .overlay .custom-alert {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 

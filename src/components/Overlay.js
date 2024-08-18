@@ -1,5 +1,3 @@
-// File: /src/components/Overlay.js
-
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Overlay.css';
 import '../styles/explosion.css';
@@ -92,6 +90,8 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [lastCardFlipped, setLastCardFlipped] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null); // State for alert message
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State to disable button
   const cardStackRef = useRef(null);
   const lastCardIdRef = useRef(null);
 
@@ -243,6 +243,8 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
 
   const handleAddToBinder = async () => {
     if (currentUser) {
+      setIsButtonDisabled(true); // Disable the button immediately upon click
+
       const userDocRef = doc(firestore, 'users', currentUser.uid);
   
       try {
@@ -273,17 +275,30 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
             mergedBinder.push(newCard); // Add new card with count 1
           }
         });
-  
+
         // Update Firestore with the merged binder data
         await updateDoc(userDocRef, { binder: mergedBinder });
   
         // Call the addCardsToBinder function to update the state in App.js
-        addCardsToBinder(mergedBinder);
+        addCardsToBinder(cleanedCards.filter(newCard => !currentBinder.find(card => card.id === newCard.id)));
+        console.log('button not disabled');
+        // Show alert message
+        setAlertMessage('Cards added to binder');
+        setTimeout(() => {
+          setAlertMessage(null); // Hide alert message after 3 seconds
+        }, 3000);
       } catch (error) {
         console.error('Error adding cards to binder:', error);
       }
     }
-  };
+};
+
+useEffect(() => {
+  if (!lastCardFlipped) {
+      setIsButtonDisabled(false); // Re-enable the button when a new pack is opened
+  }
+}, [lastCardFlipped]);
+
   
 
   const handleOpenAnotherPack = async () => {
@@ -334,10 +349,15 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           ))}
         </div>
         <div className={`overlay-buttons ${lastCardFlipped ? 'visible' : ''}`}>
-          <button className='btn-primary' onClick={handleAddToBinder}>Add to Binder</button>
-          <button className='gradient-btn btn-primary--pulse btn-open-again' onClick={handleOpenAnotherPack}>Open Another Pack</button>
+          <button className='btn-primary' onClick={handleAddToBinder} disabled={isButtonDisabled}>
+            Add to Binder
+          </button>
+          <button className='gradient-btn btn-primary--pulse btn-open-again' onClick={handleOpenAnotherPack}>
+            Open Another Pack
+          </button>
         </div>
       </div>
+      {alertMessage && <div className="custom-alert">{alertMessage}</div>}
     </div>
   );
 };
