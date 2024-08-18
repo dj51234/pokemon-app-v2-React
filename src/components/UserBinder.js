@@ -142,7 +142,7 @@ const UserBinder = ({ binderCards = [] }) => {
                         applyBoxShadow={false}
                         isTopCard={true}
                         heroCard={true}
-                        count={card.count} // Pass count to display how many of this card
+                        count={card.count} 
                       />
                     ))}
                     {cardsToDisplay.length === 0 && <p>No cards available in this set</p>}
