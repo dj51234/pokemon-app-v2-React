@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
@@ -12,7 +11,7 @@ import WishlistPage from './components/WishlistPage';
 import { auth, firestore } from './js/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import './index.css';
-import { fetchUserSets } from './js/api'; // Import the function to fetch set data
+import { fetchUserSets } from './js/api';
 import ProtectedRoute from './ProtectedRoute';
 
 export const AuthContext = React.createContext();
@@ -55,10 +54,7 @@ const App = () => {
   const handleAddCardsToBinder = async (newCards) => {
     // Update Firestore (already handled in Overlay)
     // Update the local state with the new cards
-    const updatedBinderCards = [
-      ...binderCards,
-      ...newCards
-    ];
+    const updatedBinderCards = [...binderCards, ...newCards];
 
     setBinderCards(updatedBinderCards);
 
@@ -68,7 +64,7 @@ const App = () => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, profileColor, handleAddCardsToBinder }}>
+    <AuthContext.Provider value={{ currentUser, profileColor, binderCards, handleAddCardsToBinder }}>
       <Router>
         <div className="app">
           <Routes>

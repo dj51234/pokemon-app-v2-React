@@ -21,7 +21,7 @@ import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 
 const PokedexPage = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, binderCards } = useContext(AuthContext); // Access binderCards from context
   const [sets, setSets] = useState([]);
   const [originalSets, setOriginalSets] = useState([]);
   const [series, setSeries] = useState([]);
@@ -295,6 +295,7 @@ const PokedexPage = () => {
                 viewMode={viewMode}
                 onSetClick={handleSetClick}
                 isAuthenticated={!!currentUser} // Pass authentication status to Grid
+                binderCards={binderCards} // Pass binderCards to Grid
               />
             </div>
           ))
@@ -330,6 +331,7 @@ const PokedexPage = () => {
             cards={cards}
             onSetClick={handleSetClick}
             isAuthenticated={!!currentUser} // Pass authentication status to Grid
+            binderCards={binderCards} // Pass binderCards to Grid
             removeCard={removeCardFromWishlist} // Pass removeCard function
           />
         )}

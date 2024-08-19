@@ -1,13 +1,10 @@
-// src/components/Grid.js
-
 import React, { useState, useEffect } from 'react';
 import GridItem from './GridItem';
 import CardItem from './CardItem';
 import '../styles/Grid.css';
 
-const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated, removeCard }) => { // Add removeCard prop
+const Grid = ({ sets, viewMode, cards = [], binderCards = [], onSetClick, isAuthenticated, removeCard }) => { 
   const [loadedCount, setLoadedCount] = useState(0); // State to track loaded images
-
 
   // Handle the image load complete event
   const handleImageLoadComplete = () => {
@@ -36,13 +33,12 @@ const Grid = ({ sets, viewMode, cards = [], onSetClick, isAuthenticated, removeC
           <CardItem
             key={card.id}
             card={card}
+            binderCards={binderCards} // Pass the binderCards prop
             onLoadComplete={handleImageLoadComplete} // Pass the onLoad handler
             removeCard={removeCard} // Pass the removeCard prop
           />
         ))
       )}
-
-      
     </div>
   );
 };

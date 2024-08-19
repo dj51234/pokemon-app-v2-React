@@ -4,13 +4,15 @@ import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firest
 import { firestore } from '../js/firebase';
 import { fetchCardData } from '../js/api';
 import CustomAlert from './CustomAlert'; // Import the CustomAlert component
+import '../styles/WishlistPage.css'; // Assuming the styles file is already linked
 
 const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, binderCards } = useContext(AuthContext); // Access binderCards from AuthContext
   const [isLoaded, setIsLoaded] = useState(false);
   const [cardData, setCardData] = useState(card || {});
   const [inWishlist, setInWishlist] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null); // State for custom alert message
+  const [borderRadius, setBorderRadius] = useState('0px');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +40,7 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
 
   const handleImageLoad = () => {
     setIsLoaded(true);
+    calculateBorderRadius();
     if (onLoadComplete) onLoadComplete(); // Notify parent that this image has loaded
   };
 
@@ -68,9 +71,74 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
     setAlertMessage(null); // Close the alert
   };
 
-  if (!cardData.id) {
-    return null;
-  }
+  // Check if this card exists in the user's binder
+  const isInBinder = binderCards.some(binderCard => binderCard.id === cardData.id);
+
+  // Calculate border radius using the image's transparent corners
+  const calculateBorderRadius = () => {
+    try {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = cardData.images?.large;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+        const threshold = 10;
+        const sampleSize = 50;
+        const transparentPixelCount = { topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0 };
+
+        const isTransparent = (pixelData) => pixelData[3] < threshold;
+
+        for (let y = 0; y < sampleSize; y++) {
+          for (let x = 0; x < sampleSize; x++) {
+            const pixelData = ctx.getImageData(x, y, 1, 1).data;
+            if (isTransparent(pixelData)) {
+              transparentPixelCount.topLeft++;
+            }
+          }
+        }
+
+        for (let y = 0; y < sampleSize; y++) {
+          for (let x = img.width - sampleSize; x < img.width; x++) {
+            const pixelData = ctx.getImageData(x, y, 1, 1).data;
+            if (isTransparent(pixelData)) {
+              transparentPixelCount.topRight++;
+            }
+          }
+        }
+
+        for (let y = img.height - sampleSize; y < img.height; y++) {
+          for (let x = 0; x < sampleSize; x++) {
+            const pixelData = ctx.getImageData(x, y, 1, 1).data;
+            if (isTransparent(pixelData)) {
+              transparentPixelCount.bottomLeft++;
+            }
+          }
+        }
+
+        for (let y = img.height - sampleSize; y < img.height; y++) {
+          for (let x = img.width - sampleSize; x < img.width; x++) {
+            const pixelData = ctx.getImageData(x, y, 1, 1).data;
+            if (isTransparent(pixelData)) {
+              transparentPixelCount.bottomRight++;
+            }
+          }
+        }
+
+        const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
+        const borderRadiusValue = totalTransparentPixels > 0 ? '12px' : '0px';
+
+        setBorderRadius(borderRadiusValue);
+      };
+    } catch (error) {
+      console.error("Failed to calculate border radius", error);
+    }
+  };
 
   return (
     <div
@@ -82,9 +150,10 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
       }}
     >
       <div
-        className={`card-wrapper ${isLoaded ? 'loaded' : ''}`}
+        className={`card-wrapper ${isLoaded ? 'loaded' : ''} ${isInBinder ? 'pink-border' : ''}`}
         data-rarity={cardData.rarity ? cardData.rarity.toLowerCase() : 'unknown'}
         data-id={cardData.id}
+        style={{ borderRadius }}
       >
         {!isLoaded && <div className="skeleton-loader"></div>}
         <img
@@ -96,11 +165,19 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
         {currentUser && (
           <button
             className="wishlist-button"
-            onClick={inWishlist ? removeFromWishlist : addToWishlist}
+            onClick={isInBinder ? null : inWishlist ? removeFromWishlist : addToWishlist}
+            disabled={isInBinder} // Disable button if the card is in the binder
+            style={{ cursor: isInBinder ? 'default' : 'pointer' }} // Conditionally set cursor style
           >
-            {inWishlist ? 'Remove from Wishlist -' : 'Add to Wishlist +'}
+            {isInBinder ? 'Card In Binder' : inWishlist ? 'Remove from Wishlist -' : 'Add to Wishlist +'}
           </button>
         )}
+        {/* Add dynamic border radius to ::after element */}
+        <style>{`
+          .card-wrapper::after {
+            border-radius: ${borderRadius};
+          }
+        `}</style>
       </div>
       {alertMessage && <CustomAlert message={alertMessage} onClose={closeAlert} />}
     </div>

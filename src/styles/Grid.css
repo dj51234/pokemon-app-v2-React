@@ -38,7 +38,6 @@
   align-items: center;
   padding: 2rem;
   background: var(--secondary-color);
-  border-radius: 0.5rem;
   text-align: center;
   text-decoration: none;
   color: var(--white);
@@ -76,7 +75,6 @@
   max-width: 250px;
   max-height: 100%;
   background: var(--black);
-  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -108,7 +106,6 @@
   display: block;
   max-width: 100%;
   height: auto;
-  border-radius: inherit;
   background: var(--black);
   transition: opacity 0.3s ease;
   opacity: 0;
@@ -179,7 +176,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--primary-color);
   color: var(--white);
   border: none;
   padding: 0.5rem 1rem;
@@ -192,7 +188,4 @@
   opacity: 1;
 }
 
-.grid-item--card.pink-border {
-  border: 5px solid var(--pink);
-}
 

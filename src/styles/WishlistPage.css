@@ -68,7 +68,6 @@
     position: absolute;
     top: 50%;
     left: 50%;
-
     background-color: var(--pink);
     color: var(--white);
     border: none;
@@ -93,7 +92,6 @@
     right: 0;
     top: 0;
     bottom: 0;
-    border-radius: 8px;
     pointer-events: none;
     background: var(--black);
     opacity: 0;
@@ -101,6 +99,14 @@
   }
 
   .profile-content .card-wrapper:hover::after {
+    opacity: .5;
+  }
+
+  .profile-content .card-wrapper.pink-border .wishlist-button {
+    opacity: 1;
+  }
+
+  .profile-content .card-wrapper.pink-border::after {
     opacity: .5;
   }
 
