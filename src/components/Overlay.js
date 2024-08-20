@@ -281,7 +281,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
   
         // Call the addCardsToBinder function to update the state in App.js
         addCardsToBinder(cleanedCards.filter(newCard => !currentBinder.find(card => card.id === newCard.id)));
-        console.log('button not disabled');
+
         // Show alert message
         setAlertMessage('Cards added to binder');
         setTimeout(() => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
+import OverlayCard from './OverlayCard'; // Import the OverlayCard component
 
 const NormalCard = React.forwardRef(({
   isFlipped, 
@@ -16,16 +17,17 @@ const NormalCard = React.forwardRef(({
   applyBoxShadow, 
   isInteractable, 
   heroCard, 
-  id
+  id,
+  isInUserBinder
 }, ref) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
   const [isInteractMode, setIsInteractMode] = useState(startInteractive);
-  const [borderRadius, setBorderRadius] = useState('0px');
   const [contrast, setContrast] = useState('100%');
   const [imageLoaded, setImageLoaded] = useState(false);
   const [boxShadow, setBoxShadow] = useState('');
   const [transitionBoxShadow, setTransitionBoxShadow] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false); // State to control the overlay
 
   const outerRef = useRef(null);
   const innerRef = useRef(null);
@@ -41,7 +43,6 @@ const NormalCard = React.forwardRef(({
       const aspectRatioValue = img.width / img.height;
       setAspectRatio(aspectRatioValue);
       document.documentElement.style.setProperty('--card-aspect-ratio', `${aspectRatioValue}`);
-      calculateBorderRadius(img);
       adjustContrast(img);
       setImageLoaded(true);
     };
@@ -194,87 +195,35 @@ const NormalCard = React.forwardRef(({
   };
 
   const handleCardClick = (e) => {
-    if (!outerRef.current) return;
-
-    const outer = outerRef.current;
-    outer.classList.remove('tilting');
-    outer.style.setProperty('--rx', '0deg');
-    outer.style.setProperty('--ry', '0deg');
-    outer.style.setProperty('--mx', '50%');
-    outer.style.setProperty('--my', '50%');
-    
-    if (shineRef.current) {
-      shineRef.current.style.setProperty('--mx', '50%');
-      shineRef.current.style.setProperty('--my', '50%');
-    }
-    if (glareRef.current) {
-      glareRef.current.style.setProperty('--pointer-x', '50%');
-      glareRef.current.style.setProperty('--pointer-y', '50%');
-    }
-    if (glitterRef.current) {
-      glitterRef.current.style.setProperty('--pointer-x', '50%');
-      glitterRef.current.style.setProperty('--pointer-y', '50%');
+    if (isInUserBinder) {
+      setIsOverlayOpen(true); // Open the overlay on click
     }
 
-    onCardClick(e);
-  };
+    // Ensure no tilt is applied when clicked, reset styles
+    if (outerRef.current) {
+      const outer = outerRef.current;
+      outer.classList.remove('tilting');
+      outer.style.setProperty('--rx', '0deg');
+      outer.style.setProperty('--ry', '0deg');
+      outer.style.setProperty('--mx', '50%');
+      outer.style.setProperty('--my', '50%');
 
-  const calculateBorderRadius = (img) => {
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, img.width, img.height);
-
-      const threshold = 10;
-      const sampleSize = 50;
-      const transparentPixelCount = { topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0 };
-
-      const isTransparent = (pixelData) => pixelData[3] < threshold;
-
-      for (let y = 0; y < sampleSize; y++) {
-        for (let x = 0; x < sampleSize; x++) {
-          const pixelData = ctx.getImageData(x, y, 1, 1).data;
-          if (isTransparent(pixelData)) {
-            transparentPixelCount.topLeft++;
-          }
-        }
+      if (shineRef.current) {
+        shineRef.current.style.setProperty('--mx', '50%');
+        shineRef.current.style.setProperty('--my', '50%');
       }
-
-      for (let y = 0; y < sampleSize; y++) {
-        for (let x = img.width - sampleSize; x < img.width; x++) {
-          const pixelData = ctx.getImageData(x, y, 1, 1).data;
-          if (isTransparent(pixelData)) {
-            transparentPixelCount.topRight++;
-          }
-        }
+      if (glareRef.current) {
+        glareRef.current.style.setProperty('--pointer-x', '50%');
+        glareRef.current.style.setProperty('--pointer-y', '50%');
       }
-
-      for (let y = img.height - sampleSize; y < img.height; y++) {
-        for (let x = 0; x < sampleSize; x++) {
-          const pixelData = ctx.getImageData(x, y, 1, 1).data;
-          if (isTransparent(pixelData)) {
-            transparentPixelCount.bottomLeft++;
-          }
-        }
+      if (glitterRef.current) {
+        glitterRef.current.style.setProperty('--pointer-x', '50%');
+        glitterRef.current.style.setProperty('--pointer-y', '50%');
       }
+    }
 
-      for (let y = img.height - sampleSize; y < img.height; y++) {
-        for (let x = img.width - sampleSize; x < img.width; x++) {
-          const pixelData = ctx.getImageData(x, y, 1, 1).data;
-          if (isTransparent(pixelData)) {
-            transparentPixelCount.bottomRight++;
-          }
-        }
-      }
-
-      const totalTransparentPixels = transparentPixelCount.topLeft + transparentPixelCount.topRight + transparentPixelCount.bottomLeft + transparentPixelCount.bottomRight;
-      const borderRadiusValue = totalTransparentPixels > 0 ? '12px' : '0px';
-
-      setBorderRadius(borderRadiusValue);
-    } catch (error) {
-      console.error("Failed to calculate border radius", error);
+    if (onCardClick) {
+      onCardClick(e);
     }
   };
 
@@ -324,41 +273,61 @@ const NormalCard = React.forwardRef(({
   };
 
   return (
-    imageLoaded && (
-      <div
-        className={`normal-card-wrapper ${isTopCard && isFlipped ? getRarityClass() : ''}`}
-        style={{ perspective: '1000px', zIndex }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        data-rarity={rarity}
-        data-subtypes={Array.isArray(subtypes) ? subtypes.join(',').toLowerCase() : (subtypes || '').toLowerCase()}
-        data-set={setId}
-        data-supertypes={formatSupertypes(supertypes)}
-        data-id={id}
-      >
+    <>
+      {isOverlayOpen && (
+        <OverlayCard cardProps={{
+          isFlipped,
+          frontImage,
+          backImage,
+          rarity,
+          subtypes,
+          setId,
+          supertypes,
+          startInteractive,
+          zIndex,
+          isTopCard,
+          applyBoxShadow,
+          isInteractable,
+          heroCard,
+          id,
+        }} onClose={() => setIsOverlayOpen(false)} />
+      )}
+      {imageLoaded && (
         <div
-          className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
-          style={{ paddingTop: `${100 / aspectRatio}%`, borderRadius: borderRadius, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
-          ref={ref || outerRef} // Use the forwarded ref or fallback to outerRef
-          onClick={handleCardClick}
+          className={`normal-card-wrapper ${isTopCard && isFlipped ? getRarityClass() : ''}`}
+          style={{ perspective: '1000px', zIndex }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          data-rarity={rarity}
+          data-subtypes={Array.isArray(subtypes) ? subtypes.join(',').toLowerCase() : (subtypes || '').toLowerCase()}
+          data-set={setId}
+          data-supertypes={formatSupertypes(supertypes)}
+          data-id={id}
         >
-          <div className="normal-card-inner" ref={innerRef}>
-            <div className="normal-card-front" style={{ borderRadius }}>
-              <img src={backImage} alt="" />
-            </div>
-            <div className="normal-card-back" style={{ borderRadius }}>
-              <img src={frontImage} alt="Normal Card Back" />
-              <div className="shine" ref={shineRef}></div>
-              <div className="glare" ref={glareRef}></div>
-              <div className="grain"></div>
-              {['common', 'uncommon'].includes(rarity) && (
-                <div className="glitter" ref={glitterRef}></div>
-              )}
+          <div
+            className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
+            style={{ paddingTop: `${100 / aspectRatio}%`, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
+            ref={ref || outerRef} // Use the forwarded ref or fallback to outerRef
+            onClick={handleCardClick}
+          >
+            <div className="normal-card-inner" ref={innerRef}>
+              <div className="normal-card-front">
+                <img src={backImage} alt="" />
+              </div>
+              <div className="normal-card-back">
+                <img src={frontImage} alt="Normal Card Back" />
+                <div className="shine" ref={shineRef}></div>
+                <div className="glare" ref={glareRef}></div>
+                <div className="grain"></div>
+                {['common', 'uncommon'].includes(rarity) && (
+                  <div className="glitter" ref={glitterRef}></div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )
+      )}
+    </>
   );
 });
 

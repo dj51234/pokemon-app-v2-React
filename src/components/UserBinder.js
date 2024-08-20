@@ -143,6 +143,8 @@ const UserBinder = ({ binderCards = [] }) => {
                         isTopCard={true}
                         heroCard={true}
                         count={card.count} 
+                        onCardClick={() => {}}
+                        isInUserBinder={true}
                       />
                     ))}
                     {cardsToDisplay.length === 0 && <p>No cards available in this set</p>}

@@ -242,11 +242,13 @@
 .hero-card .normal-card-outer {
   box-shadow: 0 0 3px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 40px -30px white, 0 0 50px -20px white;
   filter: contrast(105%) !important;
+  border-radius: 22px !important
 }
 
 .hero-card .grain {
   opacity: .2 !important;
 }
+
 
 
 

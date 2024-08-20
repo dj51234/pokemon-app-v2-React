@@ -1,0 +1,50 @@
+.binder-overlay-card {
+    position: fixed;
+    top: 0;
+    left: 26.5rem;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Start invisible */
+    transition: opacity 0.3s ease-in-out; /* Transition for fade effect */
+  }
+  
+  .binder-overlay-card.show {
+    opacity: 1; /* Fade in */
+  }
+  
+  .binder-overlay-card.hide {
+    opacity: 0; /* Fade out */
+  }
+  
+  .binder-overlay-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  .binder-overlay-card-content {
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    width: 20vw;  /* Responsive width based on viewport width */
+    max-width: 600px;  /* Maximum width to ensure it doesn't get too large */
+    min-width: 300px;  /* Minimum width for smaller screens */
+    transform: translateX(-50%);
+  }
+  
+  .binder-overlay-card-content .normal-card-outer {
+    border-radius: 1.2vw !important;
+  }
+
+  .binder-grid .normal-card-outer {
+    border-radius: 1vw !important;
+  }
+  

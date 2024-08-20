@@ -1,0 +1,15 @@
+/* ScaledCardWrapper.css */
+
+.scaled-card-wrapper {
+    transition: transform 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    z-index: 1;
+  }
+  
+  .scaled-card-wrapper.scaled {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5); /* Scale up and center the card */
+    z-index: 1000; /* Bring the card to the top */
+  }
+  

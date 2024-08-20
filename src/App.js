@@ -100,7 +100,7 @@ const App = () => {
               path="/binder/view"
               element={
                 <ProtectedRoute>
-                  <UserBinder binderCards={binderCards} sets={sets} /> {/* Pass binder cards and sets as props */}
+                  <UserBinder binderCards={binderCards} sets={sets} isInUserBinder={true} /> {/* Pass binder cards and sets as props */}
                 </ProtectedRoute>
               }
             />
