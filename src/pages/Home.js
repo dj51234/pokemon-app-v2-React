@@ -1,4 +1,3 @@
-// src/pages/Home.js
 import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import PackSelection from '../components/PackSelection';
@@ -10,8 +9,11 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [randomCards, setRandomCards] = useState([]);
   const [revealedCards, setRevealedCards] = useState([]);
+  const [selectedSetId, setSelectedSetId] = useState(null); // New state for setId
 
-  const handlePackSelect = (setId) => setId;
+  const handlePackSelect = (setId) => {
+    setSelectedSetId(setId); // Save the selected setId
+  };
 
   const handleFetchCards = (cards) => setRandomCards(cards);
 
@@ -25,9 +27,25 @@ const Home = () => {
     <div className="app">
       <Hero />
       <div className="carousel-container" style={{ transform: `translateX(-${currentIndex * 100}vw)` }}>
-        <PackSelection onSelect={handlePackSelect} show={currentIndex === 0} onFetchCards={handleFetchCards} onNext={handleNext} />
-        <PackOpening onBack={handleBack} show={currentIndex === 1} randomCards={randomCards} onNext={handleNext} addRevealedCards={handleAddRevealedCards} />
-        <DemoBinder show={currentIndex === 2} revealedCards={revealedCards} onBack={handleBack} />
+        <PackSelection 
+          onSelect={handlePackSelect} 
+          show={currentIndex === 0} 
+          onFetchCards={handleFetchCards} 
+          onNext={handleNext} 
+        />
+        <PackOpening 
+          onBack={handleBack} 
+          show={currentIndex === 1} 
+          randomCards={randomCards} 
+          onNext={handleNext} 
+          addRevealedCards={handleAddRevealedCards} 
+          selectedSetId={selectedSetId} // Pass selectedSetId to PackOpening
+        />
+        <DemoBinder 
+          show={currentIndex === 2} 
+          revealedCards={revealedCards} 
+          onBack={handleBack} 
+        />
       </div>
     </div>
   );

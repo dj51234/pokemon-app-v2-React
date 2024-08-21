@@ -18,7 +18,8 @@ const NormalCard = React.forwardRef(({
   isInteractable, 
   heroCard, 
   id,
-  isInUserBinder
+  isInUserBinder,
+  selectedSetId
 }, ref) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -303,6 +304,7 @@ const NormalCard = React.forwardRef(({
           data-set={setId}
           data-supertypes={formatSupertypes(supertypes)}
           data-id={id}
+          data-selected-set-id={selectedSetId ? selectedSetId : undefined}
         >
           <div
             className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}

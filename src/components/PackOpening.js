@@ -83,6 +83,7 @@ const PackOpening = ({
   onBack,
   onNext,
   addRevealedCards,
+  selectedSetId
 }) => {
   const [leftStack, setLeftStack] = useState(
     Array(10).fill({ back: defaultImage, front: null, flipped: false })
@@ -317,7 +318,7 @@ const PackOpening = ({
               data-rarity={card.rarity}
             >
               <NormalCard
-                id={card.id} // Pass the id to the NormalCard component
+                id={card.id} 
                 isFlipped={card.flipped}
                 frontImage={card.front}
                 backImage={card.back}
@@ -328,7 +329,8 @@ const PackOpening = ({
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
-                isInteractable={leftStack.length - index === 10} // Pass interactable prop
+                isInteractable={leftStack.length - index === 10} 
+                selectedSetId={selectedSetId} 
               />
               <div className="explosion-container"></div>
             </div>

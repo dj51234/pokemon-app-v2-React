@@ -24,6 +24,8 @@
   transition: all 0.5s ease;
 }
 
+
+
 .card-stack {
   position: relative;
   width: 18vw;  /* Responsive width based on viewport width */
@@ -119,6 +121,8 @@
   font-size: 1.6rem;
   border-radius: 0.5rem;
 }
+
+
 
 @media screen and (max-width: 1200px) {
   .pack-opening h2 {
