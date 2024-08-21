@@ -5,10 +5,10 @@ import closeIcon from '../assets/close-icon.png';
 import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 import loadingGif from '../assets/loading-gif.gif';
-
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 
+// Function to determine if a card is rare
 export const isRare = (rarity) => {
   const rareRarities = [
     'special illustration rare', 'ace spec rare', 'amazing rare', 'hyper rare', 'double rare', 
@@ -21,6 +21,7 @@ export const isRare = (rarity) => {
   return rareRarities.includes(rarity);
 };
 
+// Color map for different rarities
 const rarityColors = {
   'ace spec rare': '#F700C1',
   'hyper rare': '#FFD913',
@@ -53,6 +54,7 @@ const rarityColors = {
   'ultra rare': '#FFFFFF',
 };
 
+// Function to get the box shadow based on rarity
 const getBoxShadowForRarity = (rarity) => {
   switch (rarity) {
     case 'ace spec rare':
@@ -80,6 +82,75 @@ const getBoxShadowForRarity = (rarity) => {
   }
 };
 
+// Function to create particle effects
+const createParticle = (explosionContainer, color) => {
+  const particle = document.createElement('div');
+  particle.classList.add('particle');
+
+  const rect = explosionContainer.getBoundingClientRect();
+  const cardWidth = rect.width;
+  const cardHeight = rect.height;
+
+  let startX, startY;
+  const borderSide = Math.floor(Math.random() * 4);
+  switch (borderSide) {
+    case 0: 
+      startX = Math.random() * cardWidth;
+      startY = 0;
+      break;
+    case 1: 
+      startX = cardWidth;
+      startY = Math.random() * cardHeight;
+      break;
+    case 2: 
+      startX = Math.random() * cardWidth;
+      startY = cardHeight;
+      break;
+    case 3: 
+      startX = 0;
+      startY = Math.random() * cardHeight;
+      break;
+    default:
+      startX = Math.random() * cardWidth;
+      startY = Math.random() * cardHeight;
+  }
+
+  const centerX = cardWidth / 2;
+  const centerY = cardHeight / 2;
+  const directionX = startX - centerX;
+  const directionY = startY - centerY;
+  const distance = Math.random() * 350 + 400; 
+  const tx = directionX * distance / cardWidth + 'px';
+  const ty = directionY * distance / cardHeight + 'px';
+
+  const size = Math.random() * 12;
+  particle.style.setProperty('--start-x', `${startX}px`);
+  particle.style.setProperty('--start-y', `${startY}px`);
+  particle.style.setProperty('--tx', tx);
+  particle.style.setProperty('--ty', ty);
+  particle.style.width = `${size}px`;
+  particle.style.height = `${size}px`;
+  particle.style.background = color !== 'rainbow' ? color : 'linear-gradient(45deg, red, orange, yellow, green, blue, purple)';
+
+  explosionContainer.appendChild(particle);
+
+  particle.style.animation = 'explosion 1s forwards';
+
+  particle.addEventListener('animationend', () => {
+    particle.remove();
+  });
+};
+
+// Function to trigger explosion effects
+const triggerExplosion = (explosionContainer, rarity) => {
+  const color = rarityColors[rarity] || 'white';
+  const numberOfParticles = 250;
+  for (let i = 0; i < numberOfParticles; i++) {
+    createParticle(explosionContainer, color);
+  }
+};
+
+// The Overlay component
 const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, currentUser }) => {
   const [aspectRatio, setAspectRatio] = useState(640 / 892);
   const [cardStack, setCardStack] = useState([]);
@@ -90,12 +161,28 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [lastCardFlipped, setLastCardFlipped] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(null); // State for alert message
+  const [wishlistAlert, setWishlistAlert] = useState(null); // State for wishlist alert
+  const [binderAlert, setBinderAlert] = useState(null); // State for binder alert
   const [isButtonDisabled, setIsButtonDisabled] = useState(false); // State to disable button
   const cardStackRef = useRef(null);
   const lastCardIdRef = useRef(null);
+  const [wishlist, setWishlist] = useState([]); // Local state for wishlist
 
   useEffect(() => {
+    const fetchWishlist = async () => {
+      if (currentUser) {
+        const userDocRef = doc(firestore, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const wishlistData = userData.wishlist || [];
+          setWishlist(wishlistData); // Set wishlist in local state
+        }
+      }
+    };
+
+    fetchWishlist(); // Fetch wishlist when component mounts
+
     const scrollTop = document.documentElement.scrollTop;
     document.body.style.setProperty('--st', `-${scrollTop}px`);
     document.body.classList.add('noscroll');
@@ -121,78 +208,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
       document.body.classList.remove('noscroll');
       document.documentElement.scrollTop = scrollTop;
     };
-  }, [cards]);
-
-  const handleClose = () => {
-    setOverlayVisible(false);
-    setTimeout(onClose, 500);
-  };
-
-  const createParticle = (explosionContainer, color) => {
-    const particle = document.createElement('div');
-    particle.classList.add('particle');
-
-    const rect = explosionContainer.getBoundingClientRect();
-    const cardWidth = rect.width;
-    const cardHeight = rect.height;
-
-    let startX, startY;
-    const borderSide = Math.floor(Math.random() * 4);
-    switch (borderSide) {
-      case 0: 
-        startX = Math.random() * cardWidth;
-        startY = 0;
-        break;
-      case 1: 
-        startX = cardWidth;
-        startY = Math.random() * cardHeight;
-        break;
-      case 2: 
-        startX = Math.random() * cardWidth;
-        startY = cardHeight;
-        break;
-      case 3: 
-        startX = 0;
-        startY = Math.random() * cardHeight;
-        break;
-      default:
-        startX = Math.random() * cardWidth;
-        startY = Math.random() * cardHeight;
-    }
-
-    const centerX = cardWidth / 2;
-    const centerY = cardHeight / 2;
-    const directionX = startX - centerX;
-    const directionY = startY - centerY;
-    const distance = Math.random() * 350 + 400; 
-    const tx = directionX * distance / cardWidth + 'px';
-    const ty = directionY * distance / cardHeight + 'px';
-
-    const size = Math.random() * 12;
-    particle.style.setProperty('--start-x', `${startX}px`);
-    particle.style.setProperty('--start-y', `${startY}px`);
-    particle.style.setProperty('--tx', tx);
-    particle.style.setProperty('--ty', ty);
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-    particle.style.background = color !== 'rainbow' ? color : 'linear-gradient(45deg, red, orange, yellow, green, blue, purple)';
-
-    explosionContainer.appendChild(particle);
-
-    particle.style.animation = 'explosion 1s forwards';
-
-    particle.addEventListener('animationend', () => {
-      particle.remove();
-    });
-  };
-
-  const triggerExplosion = (explosionContainer, rarity) => {
-    const color = rarityColors[rarity] || 'white';
-    const numberOfParticles = 250;
-    for (let i = 0; i < numberOfParticles; i++) {
-      createParticle(explosionContainer, color);
-    }
-  };
+  }, [cards, currentUser]);
 
   const handleCardClick = (index) => {
     if (animating) return;
@@ -241,17 +257,30 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
     }
   };
 
+  useEffect(() => {
+    if (cardStack.length > 0 && wishlist.includes(cardStack[0].id)) {
+      setWishlistAlert('This card is in your wishlist!');
+      const timer = setTimeout(() => {
+        setWishlistAlert(null); // Hide the alert message after 0.3 seconds
+      }, 3000);
+
+      return () => clearTimeout(timer); // Clear timeout if the component is unmounted or message changes
+    } else {
+      setWishlistAlert(null); // Ensure no message is shown if the card is not in the wishlist
+    }
+  }, [cardStack, wishlist]);
+
   const handleAddToBinder = async () => {
     if (currentUser) {
       setIsButtonDisabled(true); // Disable the button immediately upon click
 
       const userDocRef = doc(firestore, 'users', currentUser.uid);
-  
+
       try {
         // Fetch the user's current binder data
         const userDoc = await getDoc(userDocRef);
         const currentBinder = userDoc.exists() ? userDoc.data().binder : [];
-  
+
         // Clean and prepare the new cards data
         const cleanedCards = cardStack.map(card => ({
           id: card.id || '',
@@ -263,10 +292,13 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           supertypes: card.supertypes || [],
           count: 1 // Default count for new cards
         }));
-  
+
+        // Filter out cards from wishlist that are in the current card stack
+        const newWishlist = wishlist.filter(id => !cleanedCards.some(card => card.id === id));
+
         // Merge new cards into the binder, updating the count if the card already exists
         const mergedBinder = [...currentBinder];
-  
+
         cleanedCards.forEach(newCard => {
           const existingCard = mergedBinder.find(card => card.id === newCard.id);
           if (existingCard) {
@@ -276,30 +308,34 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           }
         });
 
-        // Update Firestore with the merged binder data
-        await updateDoc(userDocRef, { binder: mergedBinder });
-  
-        // Call the addCardsToBinder function to update the state in App.js
+        // Update Firestore with the merged binder data and new wishlist
+        await updateDoc(userDocRef, { 
+          binder: mergedBinder,
+          wishlist: newWishlist, // Update wishlist in Firestore
+        });
+
+        setWishlist(newWishlist); // Update local wishlist state
         addCardsToBinder(cleanedCards.filter(newCard => !currentBinder.find(card => card.id === newCard.id)));
 
-        // Show alert message
-        setAlertMessage('Cards added to binder');
-        setTimeout(() => {
-          setAlertMessage(null); // Hide alert message after 3 seconds
+        // Show alert message for adding to binder
+        setBinderAlert('Cards added to binder!');
+        const timer = setTimeout(() => {
+          setBinderAlert(null); // Hide alert message after 3 seconds
         }, 3000);
+
+        return () => clearTimeout(timer); // Clear timeout on component unmount
       } catch (error) {
         console.error('Error adding cards to binder:', error);
+      } finally {
+        setIsButtonDisabled(false); // Re-enable the button after operation
       }
     }
-};
+  };
 
-useEffect(() => {
-  if (!lastCardFlipped) {
-      setIsButtonDisabled(false); // Re-enable the button when a new pack is opened
-  }
-}, [lastCardFlipped]);
-
-  
+  const handleClose = () => {
+    setOverlayVisible(false);
+    setTimeout(onClose, 500);
+  };
 
   const handleOpenAnotherPack = async () => {
     setAspectRatio(640 / 892);
@@ -308,7 +344,7 @@ useEffect(() => {
     setAnimating(false);
     setMovingCard(null);
     setNextTopCardRarity(null);
-    
+
     setIsLoading(true);
     setLastCardFlipped(false);
 
@@ -357,7 +393,8 @@ useEffect(() => {
           </button>
         </div>
       </div>
-      {alertMessage && <div className="custom-alert">{alertMessage}</div>}
+      {wishlistAlert && <div className="custom-alert">{wishlistAlert}</div>}
+      {binderAlert && <div className="custom-alert">{binderAlert}</div>}
     </div>
   );
 };

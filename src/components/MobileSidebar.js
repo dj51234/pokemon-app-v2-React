@@ -89,7 +89,6 @@ const MobileSidebar = ({ isOpen, toggleSidebar }) => {
         </li>
         <li className="menu-header">My Binder</li>
         <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/view')}>View</li>
-        <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/organize')}>Organize</li>
         <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/wishlist')}>Wishlist</li>
         <li onClick={() => handleNavigation('/pokedex')}>Browse All Sets</li>
         <li onClick={() => handleNavigation('/messages')}>Messages</li>

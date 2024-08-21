@@ -1,20 +1,20 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../App';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 import CardItem from '../components/CardItem';
 import Header from '../components/Header';
 import ProfileHeader from '../components/ProfileHeader';
-import MobileHeader from '../components/MobileHeader'; // Import MobileHeader
-import CustomAlert from '../components/CustomAlert'; // Import CustomAlert
+import MobileHeader from '../components/MobileHeader';
+import CustomAlert from '../components/CustomAlert';
 import '../styles/WishlistPage.css';
 
 const WishlistPage = () => {
   const { currentUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert message
+  const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -33,19 +33,27 @@ const WishlistPage = () => {
     fetchWishlist();
   }, [currentUser]);
 
-  const removeCard = (cardId) => {
-    setWishlist((prevWishlist) => prevWishlist.filter((id) => id !== cardId));
-    setAlertMessage('Card removed from wishlist!'); // Trigger custom alert
+  const removeCard = async (cardId) => {
+    try {
+      setWishlist((prevWishlist) => prevWishlist.filter((id) => id !== cardId));
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      await updateDoc(userDocRef, {
+        wishlist: wishlist.filter((id) => id !== cardId),
+      });
+      setAlertMessage('Card removed from wishlist!');
+    } catch (error) {
+      console.error('Error removing card from wishlist:', error);
+    }
   };
 
   const closeAlert = () => {
-    setAlertMessage(null); // Close the alert
+    setAlertMessage(null);
   };
 
   return (
     <>
       {currentUser ? <ProfileHeader /> : <Header />}
-      <MobileHeader /> {/* Add MobileHeader component */}
+      <MobileHeader />
 
       <div className="wishlist-page">
         <div className="wishlist-container">
