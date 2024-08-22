@@ -93,3 +93,16 @@ export async function openPack(setId) {
     return [];
   }
 }
+
+
+async function testCardData() {
+  try {
+    const card = await pokemon.card.find('swsh4-25');
+    console.log(card);
+    return card;
+  } catch (error) {
+    console.error(`Error fetching data for card ID swsh4-25:`, error);
+  }
+}
+
+// testCardData();

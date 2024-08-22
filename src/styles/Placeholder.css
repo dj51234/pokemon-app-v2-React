@@ -1,0 +1,114 @@
+.binder-overlay-card {
+    position: fixed;
+    top: 0;
+    left: 26.5rem;
+    width: calc(100% - 26.5rem);
+    height: 100%;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0; /* Start invisible */
+    transition: opacity 0.3s ease-in-out; /* Transition for fade effect */
+    padding-inline: 4rem;
+  }
+  
+  .binder-overlay-card.show {
+    opacity: 1; /* Fade in */
+  }
+  
+  .binder-overlay-card.hide {
+    opacity: 0; /* Fade out */
+  }
+  
+  .binder-overlay-card-background {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  .binder-overlay-card-content {
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 2rem;
+  }
+
+  .binder-overlay-card-left {
+    width: 25vw;  /* Responsive width based on viewport width */
+    max-width: 600px;  /* Maximum width to ensure it doesn't get too large */
+    min-width: 300px;  /* Minimum width for smaller screens */
+  }
+
+  .binder-overlay-card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .binder-overlay-card-content .binder-overlay-card-right * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .binder-overlay-card-right .binder-overlay-card-right--prices {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .binder-overlay-card-right .binder-overlay-card-right--info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .binder-overlay-card-right .binder-overlay-card-right--info img {
+    width: 25px;
+  }
+
+  .binder-overlay-card-right .binder-overlay-card-right--attributes {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .binder-overlay-card-content .normal-card-outer {
+    border-radius: 1.2vw !important;
+  }
+
+  .binder-grid .normal-card-outer {
+    border-radius: 1vw !important;
+  }
+
+  .card-ability--types {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card-ability--types img {
+    width: 25px;
+  }
+
+  .card-ability--info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .card-ability--damage {
+    align-self: flex-end;
+  }
+
+  .card-ability--ability {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  

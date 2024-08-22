@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../styles/OverlayCard.css';
 import NormalCard from './NormalCard';
 
 const OverlayCard = ({ cardProps, onClose }) => {
   const [visible, setVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const navigate = useNavigate();  // Initialize useNavigate hook
 
   useEffect(() => {
     const openTimeout = setTimeout(() => {
@@ -27,11 +29,15 @@ const OverlayCard = ({ cardProps, onClose }) => {
     }
   };
 
+  const handleCardClick = () => {
+    navigate('/card-view', { state: { cardProps } });  // Navigate to the new page and pass the cardProps as state
+  };
+
   return (
     <div className={`binder-overlay-card ${visible ? 'show' : 'hide'}`}>
       <div className="binder-overlay-card-background" onClick={handleClose}></div>
       <div className="binder-overlay-card-content">
-        <NormalCard {...cardProps} isInUserBinder={false} />
+        <NormalCard {...cardProps} isInUserBinder={false} isInCardOverlay={true} onCardClick={handleCardClick} />
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import UserBinder from './components/UserBinder';
 import OpenPacksPage from './pages/OpenPacksPage';
 import WishlistPage from './components/WishlistPage';
+import ExpandedCardView from './components/ExpandedCardView'; // Import the ExpandedCardView component
 import { auth, firestore } from './js/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import './index.css';
@@ -109,6 +110,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   {/* Your organize component */}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/card-view"
+              element={
+                <ProtectedRoute>
+                  <ExpandedCardView />  {/* Render the ExpandedCardView component */}
                 </ProtectedRoute>
               }
             />

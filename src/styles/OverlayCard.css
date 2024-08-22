@@ -2,12 +2,12 @@
     position: fixed;
     top: 0;
     left: 26.5rem;
-    width: 100%;
+    width: calc(100% - 26.5rem);
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(0,0,0,0.9);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
     opacity: 0; /* Start invisible */
     transition: opacity 0.3s ease-in-out; /* Transition for fade effect */
@@ -34,10 +34,9 @@
   .binder-overlay-card-content {
     position: relative;
     transition: transform 0.3s ease-in-out;
-    width: 20vw;  /* Responsive width based on viewport width */
+    width: 25vw;  /* Responsive width based on viewport width */
     max-width: 600px;  /* Maximum width to ensure it doesn't get too large */
     min-width: 300px;  /* Minimum width for smaller screens */
-    transform: translateX(-50%);
   }
   
   .binder-overlay-card-content .normal-card-outer {

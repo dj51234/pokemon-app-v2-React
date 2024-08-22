@@ -1,0 +1,106 @@
+.expanded-card-view {
+  margin-left: 26.5rem;
+  width: calc(100% - 26.5rem);
+  min-height: 100vh;
+  background: var(--black);
+  display: flex;
+  padding: 3rem 4rem;
+}
+
+.expanded-card-content {
+  width: 100%;
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+  gap: 4rem;
+}
+
+.expanded-card-content .expanded-card-left {
+  width: 21vw;
+  max-width: 600px;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.expanded-card-content .expanded-card-left .normal-card-wrapper {
+  width: 100%;
+  aspect-ratio: var(--card-aspect-ratio); /* Maintain correct card aspect ratio */
+  max-height: 100%; /* Ensure card does not exceed container's height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expanded-card-content .expanded-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding-left: 2rem;
+}
+
+.expanded-card-right--prices,
+.expanded-card-right--info,
+.expanded-card-right--attributes {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.expanded-card-right--info img,
+.card-ability--types img {
+  width: 25px;
+}
+
+.card-ability--ability {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-ability--damage {
+  align-self: flex-end;
+}
+
+.card-ability--types {
+  display: flex;
+  gap: 1rem;
+}
+
+.card-ability--types img {
+  width: 25px;
+}
+
+.card-ability--info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.binder-grid .normal-card-outer {
+  border-radius: 1vw !important;
+}
+
+.card-additional-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
+    gap: 1rem; /* Adjust the gap between grid items */
+}
+
+.card-additional-info .weakness {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-background); /* Adjust as needed */
+}
+
+.card-prices {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+.card-attack {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/NormalCard.css';
-import OverlayCard from './OverlayCard'; // Import the OverlayCard component
+import OverlayCard from './OverlayCard'; 
 
 const NormalCard = React.forwardRef(({
   isFlipped, 
@@ -19,7 +19,8 @@ const NormalCard = React.forwardRef(({
   heroCard, 
   id,
   isInUserBinder,
-  selectedSetId
+  selectedSetId,
+  isInCardOverlay
 }, ref) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -28,7 +29,7 @@ const NormalCard = React.forwardRef(({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [boxShadow, setBoxShadow] = useState('');
   const [transitionBoxShadow, setTransitionBoxShadow] = useState(false);
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false); // State to control the overlay
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false); 
 
   const outerRef = useRef(null);
   const innerRef = useRef(null);
@@ -196,11 +197,14 @@ const NormalCard = React.forwardRef(({
   };
 
   const handleCardClick = (e) => {
-    if (isInUserBinder) {
-      setIsOverlayOpen(true); // Open the overlay on click
+    if (isInCardOverlay) {  // Check if the card is in the overlay
+      console.log('clicked');
     }
 
-    // Ensure no tilt is applied when clicked, reset styles
+    if (isInUserBinder) {
+      setIsOverlayOpen(true); 
+    }
+
     if (outerRef.current) {
       const outer = outerRef.current;
       outer.classList.remove('tilting');
@@ -227,6 +231,8 @@ const NormalCard = React.forwardRef(({
       onCardClick(e);
     }
   };
+  
+  
 
   const adjustContrast = (img) => {
     try {
@@ -309,7 +315,7 @@ const NormalCard = React.forwardRef(({
           <div
             className={`normal-card-outer ${isRotated ? 'rotated' : ''} ${transitionBoxShadow ? 'box-shadow-transition' : ''}`}
             style={{ paddingTop: `${100 / aspectRatio}%`, boxShadow, filter: `contrast(${contrast})`, transition: 'transform 0.3s ease-out' }}
-            ref={ref || outerRef} // Use the forwarded ref or fallback to outerRef
+            ref={ref || outerRef} 
             onClick={handleCardClick}
           >
             <div className="normal-card-inner" ref={innerRef}>

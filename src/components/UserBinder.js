@@ -93,8 +93,8 @@ const UserBinder = ({ binderCards = [] }) => {
 
   const getColorForPercentage = (percentage) => {
     if (percentage === 100) return '#00ff66';        
-    if (percentage >= 80) return '#c3ff00';           
-    if (percentage >= 60) return '#ffd000';           
+    if (percentage >= 70) return '#c3ff00';           
+    if (percentage >= 50) return '#ffd000';           
     if (percentage >= 20) return '#ff6f00';           
     if (percentage >= 10) return '#FF0000';            
     return 'red';                                  
