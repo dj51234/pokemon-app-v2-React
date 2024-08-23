@@ -95,14 +95,45 @@ export async function openPack(setId) {
 }
 
 
-async function testCardData() {
-  try {
-    const card = await pokemon.card.find('swsh4-25');
-    console.log(card);
-    return card;
-  } catch (error) {
-    console.error(`Error fetching data for card ID swsh4-25:`, error);
-  }
-}
+// packAlgorithm.js
+export async function fetchExpandedCardData(cardId) {
+  const card = await pokemon.card.find(cardId);
 
-// testCardData();
+  const cardInfo = {
+    name: card.name,
+    supertype: card.supertype,
+    subtypes: card.subtypes || [],
+    hp: card.hp,
+    abilities: card.abilities ? card.abilities.map(ability => ({
+      name: ability.name,
+      text: ability.text,
+    })) : [],
+    attacks: card.attacks ? card.attacks.map(attack => ({
+      name: attack.name,
+      cost: attack.cost,
+      convertedEnergyCost: attack.convertedEnergyCost,
+      damage: attack.damage,
+      text: attack.text,
+    })) : [],
+    weaknesses: card.weaknesses ? card.weaknesses.map(weakness => ({
+      type: weakness.type,
+      value: weakness.value,
+    })) : [],
+    retreatCost: card.retreatCost,
+    convertedRetreatCost: card.convertedRetreatCost,
+    set: {
+      name: card.set.name,
+    },
+    number: card.number,
+    tcgplayer: card.tcgplayer ? {
+      url: card.tcgplayer.url,
+      updatedAt: card.tcgplayer.updatedAt,
+      prices: card.tcgplayer.prices ? {
+        normal: card.tcgplayer.prices.normal,
+        reverseHolofoil: card.tcgplayer.prices.reverseHolofoil,
+      } : {},
+    } : {},
+  };
+
+  return cardInfo;
+}

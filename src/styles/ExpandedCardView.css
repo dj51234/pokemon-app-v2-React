@@ -4,19 +4,21 @@
   min-height: 100vh;
   background: var(--black);
   display: flex;
-  padding: 3rem 4rem;
+  padding: 7rem 6rem;
 }
 
 .expanded-card-content {
   width: 100%;
   display: flex;
   align-items: flex-start; /* Align items at the top */
-  gap: 4rem;
+  gap: 10rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .expanded-card-content .expanded-card-left {
-  width: 21vw;
-  max-width: 600px;
+  width: 18vw;
+  max-width: 500px;
   min-width: 300px;
   display: flex;
   justify-content: center;
@@ -35,7 +37,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 1rem;
   padding-left: 2rem;
 }
 
@@ -44,6 +46,29 @@
 .expanded-card-right--attributes {
   display: flex;
   gap: 1rem;
+  align-items: center;
+}
+
+.expanded-card-right--info, .expanded-card-right .card-prices {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+}
+
+.expanded-card-right--info, .expanded-card-right .card-prices h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--white);
+}
+
+.expanded-card-right--info, .expanded-card-right .card-attack h2:first-child {
+  font-weight: 400;
+  color: var(--white);
+  font-size: 2rem;
+}
+
+.expanded-card-right--info {
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -77,20 +102,38 @@
   align-items: center;
 }
 
-.binder-grid .normal-card-outer {
-  border-radius: 1vw !important;
-}
-
 .card-additional-info {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Create a 3x3 grid */
     gap: 1rem; /* Adjust the gap between grid items */
 }
 
+.card-additional-info img {
+    width: 25px;
+}
+
+.card-additional-info--container {
+  display: flex;
+  gap: 1rem;
+}
+
 .card-additional-info .weakness {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
     background-color: var(--card-background); /* Adjust as needed */
+    margin-bottom: 2rem;
+}
+
+.card-additional-info .weakness a {
+    color: var(--pink);
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.card-additional-info .weakness a:hover {
+    filter: brightness(1.2);
 }
 
 .card-prices {
@@ -103,4 +146,107 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-bottom: 2rem;
 }
+
+.expanded-card-right .card-ability {
+  margin-bottom: 3rem;
+}
+
+.expanded-card-right .card-ability p {
+  margin-top: 1rem;
+}
+
+.expanded-card-right .expanded-card-right--subtitle {
+  font-size: 3rem;
+    font-weight: 400;
+    color: var(--white);
+}
+
+.expanded-card-right .expanded-card-right--attributes {
+  align-items: flex-end;
+}
+
+.expanded-card-right .expanded-card-right--attributes p {
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--white);
+}
+
+.expanded-card-right .expanded-card-right--prices {
+  gap: 5rem;
+}
+
+.expanded-card-right .expanded-card-right--prices h3 {
+  font-weight: 400;
+}
+
+.expanded-card-right .expanded-card-right--prices p {
+  color: rgb(3, 209, 3);
+  font-weight: 600;
+  font-size: 2.7rem;
+}
+
+ .expanded-card-right .card-rule {
+  padding-top: 3rem;
+  margin-bottom: 2rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.expanded-card-right .card-rule h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 2rem;
+}
+
+.card-prices a {
+  color: var(--pink);
+  text-decoration: none;
+  transition: filter .1s ease-in-out
+}
+
+.card-prices a:hover {
+  filter: brightness(1.2);
+}
+
+.card-prices--header {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-prices--header a {
+  font-size: 2rem;
+}
+
+.card-prices--header span {
+  color: var(--secondary-link);
+}
+
+.card-prices--header * {
+  width: max-content
+}
+
+@media screen and (max-width: 1320px) {
+  .expanded-card-view {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 930px) {
+  .expanded-card-content {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .expanded-card-content .expanded-card-left {
+    margin: 0 auto;
+  }
+
+  .expanded-card-content .expanded-card-right {
+    padding-left: 0;
+  }
+}
+
+

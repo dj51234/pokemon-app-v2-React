@@ -9,16 +9,16 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    opacity: 0; /* Start invisible */
-    transition: opacity 0.3s ease-in-out; /* Transition for fade effect */
+    opacity: 0; 
+    transition: opacity 0.3s ease-in-out; 
   }
   
   .binder-overlay-card.show {
-    opacity: 1; /* Fade in */
+    opacity: 1; 
   }
   
   .binder-overlay-card.hide {
-    opacity: 0; /* Fade out */
+    opacity: 0; 
   }
   
   .binder-overlay-card-background {
@@ -34,16 +34,9 @@
   .binder-overlay-card-content {
     position: relative;
     transition: transform 0.3s ease-in-out;
-    width: 25vw;  /* Responsive width based on viewport width */
-    max-width: 600px;  /* Maximum width to ensure it doesn't get too large */
-    min-width: 300px;  /* Minimum width for smaller screens */
-  }
-  
-  .binder-overlay-card-content .normal-card-outer {
-    border-radius: 1.2vw !important;
+    width: 21vw;  
+    max-width: 500px;  
+    min-width: 300px; 
   }
 
-  .binder-grid .normal-card-outer {
-    border-radius: 1vw !important;
-  }
   
