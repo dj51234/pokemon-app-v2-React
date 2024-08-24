@@ -103,6 +103,7 @@ export async function fetchExpandedCardData(cardId) {
     name: card.name,
     supertype: card.supertype,
     subtypes: card.subtypes || [],
+    types: card.types || [],
     hp: card.hp,
     abilities: card.abilities ? card.abilities.map(ability => ({
       name: ability.name,
@@ -118,6 +119,10 @@ export async function fetchExpandedCardData(cardId) {
     weaknesses: card.weaknesses ? card.weaknesses.map(weakness => ({
       type: weakness.type,
       value: weakness.value,
+    })) : [],
+    resistances: card.resistances ? card.resistances.map(resistance => ({
+      type: resistance.type,
+      value: resistance.value,
     })) : [],
     retreatCost: card.retreatCost,
     convertedRetreatCost: card.convertedRetreatCost,
