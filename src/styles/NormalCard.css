@@ -108,12 +108,12 @@
 }
 
 .ace-spec-rare .normal-card-outer {
-  box-shadow: 0 0 3px -1px #F700C1, 0 0 5px 1px #F700C1, 0 0 22px 2px #F700C1, 0px 10px 20px -5px black, 0 0 40px -30px #F700C1, 0 0 50px -20px #F700C1;
+  box-shadow: 0 0 1px -1px #F700C1, 0 0 3px 1px #F700C1, 0 0 12px 2px #F700C1, 0px 10px 20px -5px black, 0 0 20px -30px #F700C1, 0 0 50px -20px #F700C1;
 }
 
 .hyper-rare .normal-card-outer,
 .rare-secret .normal-card-outer {
-  box-shadow: 0 0 3px -1px #FFD913, 0 0 5px 1px #FFD913, 0 0 22px 2px #FFD913, 0px 10px 20px -5px black, 0 0 40px -30px #FFD913, 0 0 50px -20px #FFD913;
+  box-shadow: 0 0 1px -1px #FFD913, 0 0 3px 1px #FFD913, 0 0 12px 2px #FFD913, 0px 10px 20px -5px black, 0 0 20px -30px #FFD913, 0 0 50px -20px #FFD913;
 }
 
 .double-rare .normal-card-outer,
