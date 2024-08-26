@@ -94,8 +94,6 @@ export async function openPack(setId) {
   }
 }
 
-
-// packAlgorithm.js
 export async function fetchExpandedCardData(cardId) {
   const card = await pokemon.card.find(cardId);
 
@@ -104,6 +102,7 @@ export async function fetchExpandedCardData(cardId) {
     supertype: card.supertype,
     subtypes: card.subtypes || [],
     types: card.types || [],
+    rules: card.rules || [],
     hp: card.hp,
     abilities: card.abilities ? card.abilities.map(ability => ({
       name: ability.name,
@@ -129,16 +128,21 @@ export async function fetchExpandedCardData(cardId) {
     set: {
       name: card.set.name,
     },
+    rarity: card.rarity,
     number: card.number,
     tcgplayer: card.tcgplayer ? {
       url: card.tcgplayer.url,
       updatedAt: card.tcgplayer.updatedAt,
-      prices: card.tcgplayer.prices ? {
-        normal: card.tcgplayer.prices.normal,
-        reverseHolofoil: card.tcgplayer.prices.reverseHolofoil,
-      } : {},
+      prices: card.tcgplayer.prices || {}
     } : {},
   };
 
   return cardInfo;
 }
+
+async function test() {
+  const data = await pokemon.card.find('sv3pt5-165')
+  console.log(data)
+}
+
+test()

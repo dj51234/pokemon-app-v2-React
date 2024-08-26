@@ -50,7 +50,6 @@
 .expanded-card-right--prices {
   display: flex;
   gap: 1rem;
-  align-items: center;
 }
 
 .expanded-card-right--info,
@@ -98,6 +97,7 @@
 .expanded-card-right .card-ability--name.name-italic {
   color: var(--pink) !important;
   font-style: italic;
+  font-weight: 500;
 }
 
 .expanded-card-right .card-ability--icon {
@@ -143,7 +143,24 @@
 .expanded-card-right .card-prices {
   display: flex;
   gap: 2rem;
-  flex-direction: column;
+}
+
+.expanded-card-right--prices-item {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.expanded-card-right--prices-item p {
+  font-size: 2rem;
+}
+
+.expanded-card-right--prices-item .price-number {
+  color: var(--pink);
+}
+
+.expanded-card-right--prices-item .market-price {
+  color: rgb(28, 212, 28);
+  font-weight:500
 }
 
 .expanded-card-right .card-attack {
@@ -154,7 +171,7 @@
 }
 
 .expanded-card-right .card-ability {
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .expanded-card-right .card-ability p {
@@ -162,13 +179,19 @@
 }
 
 .expanded-card-right .expanded-card-right--subtitle {
-  font-size: 3rem;
+  font-size: 2.3rem;
   font-weight: 400;
-  color: var(--white);
+  color: var(--secondary-link);
+  filter: brightness(1.4);
+}
+
+.card-prices--header .card-prices--updated {
+  color:var(--secondary-link);
+  filter: brightness(1.4);
 }
 
 .expanded-card-right .expanded-card-right--attributes {
-  align-items: flex-end;
+  align-items: center;
 }
 
 .expanded-card-right .expanded-card-right--attributes p {
@@ -178,23 +201,29 @@
 }
 
 .expanded-card-right .expanded-card-right--prices {
-  gap: 5rem;
+  flex-direction: column;
 }
 
 .expanded-card-right .expanded-card-right--prices h3 {
   font-weight: 400;
-}
-
-.expanded-card-right .expanded-card-right--prices p {
-  color: rgb(3, 209, 3);
-  font-weight: 600;
-  font-size: 2.7rem;
+  align-self: flex-start;
 }
 
 .expanded-card-right .card-rule {
-  padding-top: 3rem;
-  margin-bottom: 2rem;
-  border-top: 2px solid var(--border-color);
+  margin-bottom: 1rem;
+}
+
+.card-rule--rules {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+  color: var(--secondary-link);
+  filter: brightness(1.4);
+}
+
+.card-rule--num {
+  color: var(--white);
 }
 
 .expanded-card-right .card-prices a {
@@ -210,14 +239,12 @@
 .expanded-card-right .card-prices--header {
   display: flex;
   flex-direction: column;
+  margin-bottom: 2rem;
 }
 
 .expanded-card-right .card-prices--header a {
   font-size: 2rem;
-}
-
-.expanded-card-right .card-prices--header span {
-  color: var(--secondary-link);
+  margin-top: 1rem;
 }
 
 .expanded-card-right .card-prices--header * {

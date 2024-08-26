@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import ProfileHeader from '../components/ProfileHeader';
 import MobileHeader from '../components/MobileHeader';
@@ -38,6 +39,7 @@ const PokedexPage = () => {
   const [noResults, setNoResults] = useState(false);
   const [suggestedPokemon, setSuggestedPokemon] = useState([]);
   const [pokemonNames, setPokemonNames] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     fetchSetData()
@@ -70,6 +72,21 @@ const PokedexPage = () => {
 
     fetchNames();
   }, []);
+
+  useEffect(() => {
+    // Extract the setId from the URL
+    const params = new URLSearchParams(location.search);
+    const setId = params.get('setId');
+  
+    if (setId && sets.length > 0) { // Ensure 'sets' has been populated
+      const selected = sets.find(set => set.id === setId);
+  
+      if (selected) {
+        setSelectedSet(selected);
+        handleSetClick(selected);
+      }
+    }
+  }, [location.search, sets.length]);
 
   useEffect(() => {
     if (searchBy === 'set') {
@@ -253,7 +270,6 @@ const PokedexPage = () => {
       await updateDoc(userDocRef, {
         wishlist: arrayRemove(cardId),
       });
-      // Don't modify the state of cards in the Pokedex page
     }
   };
 

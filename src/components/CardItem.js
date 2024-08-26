@@ -161,6 +161,7 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
           alt="Card"
           className={`card-image ${isLoaded ? 'visible' : 'hidden'}`}
           onLoad={handleImageLoad}
+          crossOrigin="anonymous"
         />
         {currentUser && (
           <button

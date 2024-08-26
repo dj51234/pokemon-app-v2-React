@@ -139,7 +139,7 @@ export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 10) {
     const randomSet = sets[Math.floor(Math.random() * sets.length)];
 
     // Get the IDs of all cards in the selected set
-    const cardIDs = Array.from({ length: randomSet.printedTotal }, (_, i) => `${randomSet.id}-${i + 1}`);
+    const cardIDs = Array.from({ length: randomSet.total }, (_, i) => `${randomSet.id}-${i + 1}`);
 
     // Select random card IDs from the set
     const randomCardIDs = Array.from({ length: numberOfCards }, () =>

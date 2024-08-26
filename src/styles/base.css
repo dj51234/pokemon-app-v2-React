@@ -567,6 +567,11 @@ span.pink-text {
     border-radius: clamp(17px, 1.2vw, 22px) !important;
   }
 
+  .na {
+    color: var(--secondary-link);
+    filter: brightness(1.4);
+  }
+
   
 
 
