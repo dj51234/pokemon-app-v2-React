@@ -12,7 +12,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { fetchSetData } from '../js/api';
-
+import fetchUserData from '../js/firebaseFunctions';
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
 const MAX_BIO_LENGTH = 350;

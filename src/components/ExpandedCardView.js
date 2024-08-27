@@ -156,7 +156,7 @@ const ExpandedCardView = () => {
             </div>
             <div className="card-attack">
               <h2>ATTACKS/ABILITIES</h2>
-              {cardData?.abilities?.length > 0 && (
+              {cardData?.abilities?.length > 0 ? (
                 cardData.abilities.map((ability, index) => (
                   <div className="card-ability" key={`ability-${index}`}> {/* Update key here */}
                     <div className="card-ability--header">
@@ -166,8 +166,10 @@ const ExpandedCardView = () => {
                     <p className="card-ability--text">{ability.text}</p>
                   </div>
                 ))
+              ) : (
+                <p className='na'>No Attacks</p>
               )}
-              {cardData?.attacks?.length > 0 && (
+              {cardData?.attacks?.length > 0 ? (
                 cardData.attacks.map((attack, index) => (
                   <div className="card-ability" key={`attack-${index}`}> 
                     <div className="card-ability--info">
@@ -188,6 +190,8 @@ const ExpandedCardView = () => {
                     <p>{attack.text}</p>
                   </div>
                 ))
+              ) : (
+                <p className='na'>No Abilities</p>
               )}
             </div>
             <div className="card-rule">

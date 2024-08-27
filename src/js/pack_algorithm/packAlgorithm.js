@@ -141,7 +141,7 @@ export async function fetchExpandedCardData(cardId) {
 }
 
 async function test() {
-  const data = await pokemon.card.find('sv3pt5-165')
+  const data = await pokemon.card.find('sv6-205')
   console.log(data)
 }
 

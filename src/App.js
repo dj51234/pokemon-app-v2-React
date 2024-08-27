@@ -15,6 +15,7 @@ import './index.css';
 import { fetchUserSets } from './js/api';
 import ProtectedRoute from './ProtectedRoute';
 
+
 export const AuthContext = React.createContext();
 
 const App = () => {
@@ -53,13 +54,13 @@ const App = () => {
   }, []);
 
   const handleAddCardsToBinder = async (newCards) => {
-    // Update Firestore (already handled in Overlay)
+    // Update Firestore 
     // Update the local state with the new cards
     const updatedBinderCards = [...binderCards, ...newCards];
 
     setBinderCards(updatedBinderCards);
 
-    // Optionally, you can also update sets if necessary
+    // also update sets if necessary
     const updatedSets = await fetchUserSets(updatedBinderCards);
     setSets(updatedSets);
   };
@@ -101,15 +102,7 @@ const App = () => {
               path="/binder/view"
               element={
                 <ProtectedRoute>
-                  <UserBinder binderCards={binderCards} sets={sets} isInUserBinder={true} /> {/* Pass binder cards and sets as props */}
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/binder/organize"
-              element={
-                <ProtectedRoute>
-                  {/* Your organize component */}
+                  <UserBinder binderCards={binderCards} sets={sets} isInUserBinder={true} /> 
                 </ProtectedRoute>
               }
             />
@@ -117,7 +110,7 @@ const App = () => {
               path="/card-view"
               element={
                 <ProtectedRoute>
-                  <ExpandedCardView />  {/* Render the ExpandedCardView component */}
+                  <ExpandedCardView />  
                 </ProtectedRoute>
               }
             />
