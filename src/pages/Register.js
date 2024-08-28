@@ -56,21 +56,66 @@ const Register = () => {
   };
 
   const createUserDocument = async (user, username, randomColor) => {
-    // Fetch default "For You" sets
-    const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
-    const userDocRef = doc(firestore, 'users', user.uid);
+  // Fetch default "For You" sets
+  const defaultForYouSets = await fetchDefaultForYouSets(defaultForYouSetIds);
+  const userDocRef = doc(firestore, 'users', user.uid);
 
-    await setDoc(userDocRef, {
-      uid: user.uid,
-      email: user.email,
-      displayName: username,
-      lowercaseUsername: username.toLowerCase(), // Store lowercase username
-      bio: '',
-      profileColor: randomColor, // Store the generated random color
-      forYouSets: defaultForYouSets.reverse(), // Store the default "For You" sets
-      binder: [] // Initialize an empty binder array
-    });
+  // Initialize the properties
+  const binder = [];
+  const sets = [];
+  const wishlist = []; // Replace 'default-card-id' with the actual default card ID
+
+  // Initialize the rarities object with default values
+  const userRarities = {
+    sir: 0,
+    aceSpec: 0,
+    amazingRare: 0,
+    hyperRare: 0,
+    doubleRare: 0,
+    radiantRare: 0,
+    illustrationRare: 0,
+    rareAce: 0,
+    rareHolo: 0,
+    rareBreak: 0,
+    rareHoloEx: 0,
+    rareHoloGx: 0,
+    rareHoloLvx: 0,
+    rareHoloVstar: 0,
+    rareV: 0,
+    rareHoloVmax: 0,
+    rarePrime: 0,
+    rarePrismStar: 0,
+    rareRainbow: 0,
+    rareSecret: 0,
+    rareShining: 0,
+    rareHoloShiny: 0,
+    rareShinyGx: 0,
+    rareUltra: 0,
+    shinyRare: 0,
+    shinyUltraRare: 0,
+    trainerGalleryRareHolo: 0,
+    ultraRare: 0,
   };
+
+  await setDoc(userDocRef, {
+    uid: user.uid,
+    email: user.email,
+    displayName: username,
+    lowercaseUsername: username.toLowerCase(),
+    bio: "I'm an avid Pokémon trainer on a mission to catch 'em all! Always exploring new places, meeting fellow trainers, and evolving my team. Add something cool about yourself here...",
+    profileColor: randomColor,
+    forYouSets: defaultForYouSets.reverse(),
+    binder,
+    sets,
+    wishlist,
+    userRarities,
+    settings: {},
+    isActive: true,
+    lastLogin: new Date(),
+    totalCards: binder.length,
+    rank: 'bronze'
+  });
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();

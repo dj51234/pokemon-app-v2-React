@@ -10,7 +10,7 @@ import OpenPacksPage from './pages/OpenPacksPage';
 import WishlistPage from './components/WishlistPage';
 import ExpandedCardView from './components/ExpandedCardView'; // Import the ExpandedCardView component
 import { auth, firestore } from './js/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import './index.css';
 import { fetchUserSets } from './js/api';
 import ProtectedRoute from './ProtectedRoute';
@@ -38,9 +38,17 @@ const App = () => {
           if (userData.binder) {
             console.log("User's Binder Data:", userData.binder); // Log the binder data
             setBinderCards(userData.binder);
+            
             // Fetch sets based on the binder cards
             const fetchedSets = await fetchUserSets(userData.binder);
             setSets(fetchedSets);
+          }
+  
+          // Set the sets from the Firestore document if available
+          if (userData.sets) {
+            setSets(userData.sets);
+          } else {
+            setSets([]); // Default to an empty array if no sets are found
           }
         }
       } else {
@@ -54,15 +62,30 @@ const App = () => {
   }, []);
 
   const handleAddCardsToBinder = async (newCards) => {
-    // Update Firestore 
-    // Update the local state with the new cards
+    // Combine the existing binder cards with the new cards
     const updatedBinderCards = [...binderCards, ...newCards];
-
-    setBinderCards(updatedBinderCards);
-
-    // also update sets if necessary
-    const updatedSets = await fetchUserSets(updatedBinderCards);
-    setSets(updatedSets);
+  
+    // Update Firestore with the new binder and totalCards count
+    if (currentUser) {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+  
+      try {
+        await updateDoc(userDocRef, {
+          binder: updatedBinderCards,
+          totalCards: updatedBinderCards.length,  // Update totalCards to reflect the new length of the binder array
+        });
+  
+        // Update the local state with the new cards
+        setBinderCards(updatedBinderCards);
+  
+        // Fetch sets based on the updated binder cards
+        const updatedSets = await fetchUserSets(updatedBinderCards);
+        console.log(updatedSets)
+        setSets(updatedSets);
+      } catch (error) {
+        console.error('Error updating user binder:', error);
+      }
+    }
   };
 
   return (
