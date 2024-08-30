@@ -35,8 +35,16 @@
     position: relative;
     transition: transform 0.3s ease-in-out;
     width: 21vw;  
-    max-width: 500px;  
-    min-width: 300px; 
+    max-width: 550px;  
+    min-width: 400px; 
   }
+
+  @media screen and (max-width: 1320px) {
+    .binder-overlay-card{
+      left: 0;
+      width: 100%;
+    }
+  }
+  
 
   

@@ -1,9 +1,10 @@
+// Grid.js
 import React, { useState, useEffect } from 'react';
 import GridItem from './GridItem';
 import CardItem from './CardItem';
 import '../styles/Grid.css';
 
-const Grid = ({ sets, viewMode, cards = [], binderCards = [], onSetClick, isAuthenticated, removeCard }) => { 
+const Grid = ({ sets, viewMode, cards = [], binderCards = [], onSetClick, isAuthenticated, removeCard, selectedSet }) => { 
   const [loadedCount, setLoadedCount] = useState(0); // State to track loaded images
 
   // Handle the image load complete event
@@ -23,23 +24,26 @@ const Grid = ({ sets, viewMode, cards = [], binderCards = [], onSetClick, isAuth
       : `cards-grid ${isAuthenticated ? 'cards-grid--profile' : ''}`;
 
   return (
-    <div id="grid" className={gridClass}>
-      {viewMode === 'sets' ? (
-        sets.map((set) => (
-          <GridItem key={set.id} set={set} onSetClick={onSetClick} />
-        ))
-      ) : (
-        cards.map((card) => (
-          <CardItem
-            key={card.id}
-            card={card}
-            binderCards={binderCards} // Pass the binderCards prop
-            onLoadComplete={handleImageLoadComplete} // Pass the onLoad handler
-            removeCard={removeCard} // Pass the removeCard prop
-          />
-        ))
-      )}
-    </div>
+    <>
+      {selectedSet && viewMode === 'cards' && <h1 className='set-title-pokedex'>Viewing: <span className='pink-text'>{selectedSet.name}</span></h1>}
+      <div id="grid" className={gridClass}>
+        {viewMode === 'sets' ? (
+          sets.map((set) => (
+            <GridItem key={set.id} set={set} onSetClick={onSetClick} />
+          ))
+        ) : (
+          cards.map((card) => (
+            <CardItem
+              key={card.id}
+              card={card}
+              binderCards={binderCards}
+              onLoadComplete={handleImageLoadComplete}
+              removeCard={removeCard}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 };
 

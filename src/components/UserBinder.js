@@ -92,13 +92,13 @@ const UserBinder = ({ binderCards = [] }) => {
   };
 
   const getColorForPercentage = (percentage) => {
-    if (percentage === 100) return '#00ff66';        
-    if (percentage >= 70) return '#c3ff00';           
-    if (percentage >= 50) return '#ffd000';           
-    if (percentage >= 20) return '#ff6f00';           
-    if (percentage >= 10) return '#FF0000';            
-    return 'red';                                  
-  };   
+    if (percentage === 100) return '#00ff66';
+    if (percentage >= 70) return '#c3ff00';
+    if (percentage >= 50) return '#ffd000';
+    if (percentage >= 20) return '#ff6f00';
+    if (percentage >= 10) return '#FF0000';
+    return 'red';
+  };
 
   const percentage = (cardTally.userCount / cardTally.totalCount) * 100;
   const color = getColorForPercentage(percentage);
@@ -156,8 +156,7 @@ const UserBinder = ({ binderCards = [] }) => {
                         applyBoxShadow={false}
                         isTopCard={true}
                         heroCard={true}
-                        count={card.count} 
-                        onCardClick={() => {}}
+                        count={card.count}
                         isInUserBinder={true}
                       />
                     ))}

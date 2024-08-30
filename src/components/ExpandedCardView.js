@@ -64,7 +64,18 @@ const ExpandedCardView = () => {
         <div className="expanded-card-content">
           <div className="expanded-card-left">
             {cardProps ? (
-              <NormalCard {...cardProps} isInUserBinder={false} />
+              <>
+                <div className='binder-normal-card-container'>
+                  <NormalCard {...cardProps} isInUserBinder={false} />
+                </div>
+                <div className='binder-card-details'>
+                  {cardProps.count > 1 ? (
+                    <>You have <span className='pink-text bold-text'>{cardProps.count}</span> copies of this card.</> 
+                  ) : (
+                    <>You have <span className='pink-text bold-text'>1</span> copy of this card.</>
+                  )}
+                </div>
+              </>
             ) : (
               <p>No card details available</p>
             )}
@@ -73,12 +84,15 @@ const ExpandedCardView = () => {
             <div className="expanded-card-right--info">
               {cardData ? (
                 <>
-                  <h2 className="expanded-card-right--title">
-                    {cardData.name}{' '}
+                  <div>
+                    <h2 className="expanded-card-right--title">
+                      {cardData.name}{' '}
+                    </h2>
                     <span className="expanded-card-right--subtitle">
                       ({cardData.supertype} - {cardData.subtypes ? cardData.subtypes.join(', ') : 'Unknown'})
                     </span>
-                  </h2>
+                  </div>
+                  
                   <div className="expanded-card-right--attributes">
                     <p>HP: {cardData.hp}</p>
                     {cardData.types?.[0] ? (
@@ -260,12 +274,19 @@ const ExpandedCardView = () => {
               <div className="weakness">
                 <span>SET</span>
                 {cardData?.set?.name ? (
-                  <a 
-                    href="#" 
-                    onClick={handleSetClick}
+                  <button 
+                    type="button" 
+                    onClick={handleSetClick} 
+                    style={{ 
+                      background: 'none', 
+                      border: 'none', 
+                      padding: 0, 
+                      cursor: 'pointer',
+                      width: 'max-content'
+                    }}
                   >
                     {cardData.set.name}
-                  </a>
+                </button>
                 ) : (
                   <p className='na'>N/A</p>
                 )}

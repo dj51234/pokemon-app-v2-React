@@ -349,6 +349,7 @@ const PokedexPage = () => {
             isAuthenticated={!!currentUser} // Pass authentication status to Grid
             binderCards={binderCards} // Pass binderCards to Grid
             removeCard={removeCardFromWishlist} // Pass removeCard function
+            selectedSet={selectedSet}
           />
         )}
       </div>

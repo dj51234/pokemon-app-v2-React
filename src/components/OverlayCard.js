@@ -1,3 +1,5 @@
+// OverlayCard.js
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import '../styles/OverlayCard.css';
@@ -37,7 +39,8 @@ const OverlayCard = ({ cardProps, onClose }) => {
     <div className={`binder-overlay-card ${visible ? 'show' : 'hide'}`}>
       <div className="binder-overlay-card-background" onClick={handleClose}></div>
       <div className="binder-overlay-card-content">
-        <NormalCard {...cardProps} isInUserBinder={false} isInCardOverlay={true} onCardClick={handleCardClick} />
+        {/* Pass the count to NormalCard only if isInUserBinder is true */}
+        <NormalCard {...cardProps} isInUserBinder={false} isInCardOverlay={true} onCardClick={handleCardClick} count={cardProps.isInUserBinder ? cardProps.count : undefined} />
       </div>
     </div>
   );

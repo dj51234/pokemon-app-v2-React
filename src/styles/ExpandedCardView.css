@@ -17,8 +17,21 @@
   margin: 0 auto;
 }
 
+.expanded-card-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.expanded-card-left .binder-card-details {
+  width: 100%;
+  height: 50px;
+  margin-top: 3rem;
+  text-align: center;
+  font-size: clamp(1.8rem, 1.2vw, 2.3rem) !important;
+}
+
 /* Left section */
-.expanded-card-content .expanded-card-left {
+.expanded-card-content .binder-normal-card-container {
   width: 18vw;
   max-width: 500px;
   min-width: 300px;
@@ -129,7 +142,7 @@
   margin-bottom: 2rem;
 }
 
-.expanded-card-right .weakness a {
+.expanded-card-right .weakness button {
   color: var(--pink);
   text-decoration: none;
   font-size: 1.8rem;
@@ -192,6 +205,8 @@
 
 .expanded-card-right .expanded-card-right--attributes {
   align-items: center;
+  align-self: flex-start;
+  margin-top: .7rem;
 }
 
 .expanded-card-right .expanded-card-right--attributes p {
@@ -261,10 +276,14 @@
   }
 }
 
-@media screen and (max-width: 930px) {
+@media screen and (max-width: 1000px) {
   .expanded-card-content {
     flex-direction: column;
     gap: 3rem;
+  }
+
+  .expanded-card-left {
+    margin: 0 auto;
   }
 
   .expanded-card-content .expanded-card-right {

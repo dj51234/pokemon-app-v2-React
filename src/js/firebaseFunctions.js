@@ -28,4 +28,4 @@ const fetchUserData = async (userId) => {
   }
 };
 
-fetchUserData('4BnDaqg0K7CPdQq7UvJf9QI9dpTG');
+fetchUserData('GSO7DG6ea8C3CWlyJopXletrFE7f');

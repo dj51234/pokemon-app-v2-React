@@ -20,7 +20,8 @@ const NormalCard = React.forwardRef(({
   id,
   isInUserBinder,
   selectedSetId,
-  isInCardOverlay
+  isInCardOverlay,
+  count
 }, ref) => {
   const [isRotated, setIsRotated] = useState(isFlipped);
   const [aspectRatio, setAspectRatio] = useState(1);
@@ -297,6 +298,7 @@ const NormalCard = React.forwardRef(({
           isInteractable,
           heroCard,
           id,
+          count
         }} onClose={() => setIsOverlayOpen(false)} />
       )}
       {imageLoaded && (

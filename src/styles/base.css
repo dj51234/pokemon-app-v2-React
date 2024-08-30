@@ -572,6 +572,11 @@ span.pink-text {
     filter: brightness(1.4);
   }
 
+  .set-title-pokedex {
+    text-align: center;
+    padding-block: 1rem;
+  }
+
   
 
 

@@ -5,7 +5,7 @@ import closeIcon from '../assets/close-icon.png';
 import defaultImage from '../assets/default-image.png';
 import NormalCard from './NormalCard';
 import loadingGif from '../assets/loading-gif.gif';
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 
 // Function to determine if a card is rare
@@ -169,20 +169,22 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
   const [wishlist, setWishlist] = useState([]); // Local state for wishlist
 
   useEffect(() => {
-    const fetchWishlist = async () => {
-      if (currentUser) {
-        const userDocRef = doc(firestore, 'users', currentUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          const wishlistData = userData.wishlist || [];
-          setWishlist(wishlistData); // Set wishlist in local state
+    if (currentUser) {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+
+      // Set up real-time listener for wishlist
+      const unsubscribeWishlist = onSnapshot(userDocRef, (userDocSnap) => {
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          setWishlist(userData.wishlist || []);
         }
-      }
-    };
+      });
 
-    fetchWishlist(); // Fetch wishlist when component mounts
+      return () => unsubscribeWishlist();
+    }
+  }, [currentUser]);
 
+  useEffect(() => {
     const scrollTop = document.documentElement.scrollTop;
     document.body.style.setProperty('--st', `-${scrollTop}px`);
     document.body.classList.add('noscroll');
@@ -200,7 +202,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
       zIndex: cards.length - cards.indexOf(card),
       id: card.id
     })));
-    
+
     lastCardIdRef.current = cards[cards.length - 1].id;
     setIsLoading(false);
 
@@ -208,7 +210,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
       document.body.classList.remove('noscroll');
       document.documentElement.scrollTop = scrollTop;
     };
-  }, [cards, currentUser]);
+  }, [cards]);
 
   const handleCardClick = (index) => {
     if (animating) return;
@@ -261,7 +263,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
     if (cardStack.length > 0 && wishlist.includes(cardStack[0].id)) {
       setWishlistAlert('This card is in your wishlist!');
       const timer = setTimeout(() => {
-        setWishlistAlert(null); // Hide the alert message after 0.3 seconds
+        setWishlistAlert(null); // Hide the alert message after 3 seconds
       }, 3000);
 
       return () => clearTimeout(timer); // Clear timeout if the component is unmounted or message changes
@@ -278,8 +280,8 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
 
       try {
         // Fetch the user's current binder data
-        const userDoc = await getDoc(userDocRef);
-        const currentBinder = userDoc.exists() ? userDoc.data().binder : [];
+        const userDocSnap = await getDoc(userDocRef);
+        const currentBinder = userDocSnap.exists() ? userDocSnap.data().binder : [];
 
         // Clean and prepare the new cards data
         const cleanedCards = cardStack.map(card => ({
@@ -292,9 +294,6 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           supertypes: card.supertypes || [],
           count: 1 // Default count for new cards
         }));
-
-        // Filter out cards from wishlist that are in the current card stack
-        const newWishlist = wishlist.filter(id => !cleanedCards.some(card => card.id === id));
 
         // Merge new cards into the binder, updating the count if the card already exists
         const mergedBinder = [...currentBinder];
@@ -309,15 +308,12 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
         });
 
         // Update Firestore with the merged binder data and new wishlist
-        await updateDoc(userDocRef, { 
+        await updateDoc(userDocRef, {
           binder: mergedBinder,
-          wishlist: newWishlist, // Update wishlist in Firestore
+          wishlist: wishlist.filter(id => !cleanedCards.some(card => card.id === id)),
         });
 
-        setWishlist(newWishlist); // Update local wishlist state
-        addCardsToBinder(cleanedCards.filter(newCard => !currentBinder.find(card => card.id === newCard.id)));
-
-        // Show alert message for adding to binder
+        // The real-time listener will automatically update the state
         setBinderAlert('Cards added to binder!');
         const timer = setTimeout(() => {
           setBinderAlert(null); // Hide alert message after 3 seconds
