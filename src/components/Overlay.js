@@ -54,6 +54,38 @@ const rarityColors = {
   'ultra rare': '#FFFFFF',
 };
 
+// Rarity mapping object defined at the top of the file
+const rarityMapping = {
+  "special illustration rare": "specialIllustrationRare",
+  "ace spec rare": "aceSpecRare",
+  "amazing rare": "amazingRare",
+  "hyper rare": "hyperRare",
+  "double rare": "doubleRare",
+  "radiant rare": "radiantRare",
+  "illustration rare": "illustrationRare",
+  "rare ace": "rareAce",
+  "rare holo": "rareHolo",
+  "rare break": "rareBreak",
+  "rare holo ex": "rareHoloEx",
+  "rare holo gx": "rareHoloGx",
+  "rare holo lvx": "rareHoloLvx",
+  "rare holo vstar": "rareHoloVstar",
+  "rare v": "rareV",
+  "rare holo vmax": "rareHoloVmax",
+  "rare prime": "rarePrime",
+  "rare prism star": "rarePrismStar",
+  "rare rainbow": "rareRainbow",
+  "rare secret": "rareSecret",
+  "rare shining": "rareShining",
+  "rare holo shiny": "rareHoloShiny",
+  "rare shiny gx": "rareShinyGx",
+  "rare ultra": "rareUltra",
+  "shiny rare": "shinyRare",
+  "shiny ultra rare": "shinyUltraRare",
+  "trainer gallery rare holo": "trainerGalleryRareHolo",
+  "ultra rare": "ultraRare"
+};
+
 // Function to get the box shadow based on rarity
 const getBoxShadowForRarity = (rarity) => {
   switch (rarity) {
@@ -275,14 +307,15 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
   const handleAddToBinder = async () => {
     if (currentUser) {
       setIsButtonDisabled(true); // Disable the button immediately upon click
-
+  
       const userDocRef = doc(firestore, 'users', currentUser.uid);
-
+  
       try {
         // Fetch the user's current binder data
         const userDocSnap = await getDoc(userDocRef);
         const currentBinder = userDocSnap.exists() ? userDocSnap.data().binder : [];
-
+        const currentRarityCounts = userDocSnap.exists() ? userDocSnap.data().userRarities || {} : {};
+  
         // Clean and prepare the new cards data
         const cleanedCards = cardStack.map(card => ({
           id: card.id || '',
@@ -294,10 +327,11 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           supertypes: card.supertypes || [],
           count: 1 // Default count for new cards
         }));
-
+  
         // Merge new cards into the binder, updating the count if the card already exists
         const mergedBinder = [...currentBinder];
-
+        const newRarityCounts = { ...currentRarityCounts }; // Copy current rarities count
+  
         cleanedCards.forEach(newCard => {
           const existingCard = mergedBinder.find(card => card.id === newCard.id);
           if (existingCard) {
@@ -305,20 +339,34 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
           } else {
             mergedBinder.push(newCard); // Add new card with count 1
           }
+  
+          // Map the rarity from the API to the userRarities key
+          const mappedRarity = rarityMapping[newCard.rarity.toLowerCase()];
+  
+          // Update rarity count if the rarity exists in the mapping
+          if (mappedRarity) {
+            if (newRarityCounts[mappedRarity]) {
+              newRarityCounts[mappedRarity] += 1;
+            } else {
+              newRarityCounts[mappedRarity] = 1;
+            }
+          }
         });
-
-        // Update Firestore with the merged binder data and new wishlist
+  
+        // Update Firestore with the merged binder data, total cards count (binder length), and updated rarities count
         await updateDoc(userDocRef, {
           binder: mergedBinder,
+          totalCards: mergedBinder.length, // Update totalCards to the length of the binder array
+          userRarities: newRarityCounts,
           wishlist: wishlist.filter(id => !cleanedCards.some(card => card.id === id)),
         });
-
+  
         // The real-time listener will automatically update the state
         setBinderAlert('Cards added to binder!');
         const timer = setTimeout(() => {
           setBinderAlert(null); // Hide alert message after 3 seconds
         }, 3000);
-
+  
         return () => clearTimeout(timer); // Clear timeout on component unmount
       } catch (error) {
         console.error('Error adding cards to binder:', error);
@@ -326,7 +374,7 @@ const Overlay = ({ onClose, cards, setId, openSelectedPack, addCardsToBinder, cu
         setIsButtonDisabled(false); // Re-enable the button after operation
       }
     }
-  };
+  };    
 
   const handleClose = () => {
     setOverlayVisible(false);

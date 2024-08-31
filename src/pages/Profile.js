@@ -6,13 +6,14 @@ import { AuthContext } from '../App';
 import ProfileHeader from '../components/ProfileHeader';
 import MobileHeader from '../components/MobileHeader';
 import '../styles/Profile.css';
-import bronze from '../assets/diamond.png';
+import useCountUp from '../utils/useCountUp';
+import bronze from '../assets/bronze.png';
 import { auth, storage, firestore } from '../js/firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { updateProfile } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { fetchSetData } from '../js/api';
-import fetchUserData from '../js/firebaseFunctions';
+
 const MAX_USERNAME_LENGTH = 16;
 const MIN_USERNAME_LENGTH = 8;
 const MAX_BIO_LENGTH = 350;
@@ -40,15 +41,18 @@ const Profile = () => {
   const [availableSets, setAvailableSets] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredSets, setFilteredSets] = useState([]);
-  const [selectedSet, setSelectedSet] = useState(null);  // The new set selected by the user
-  const [setToReplace, setSetToReplace] = useState(null); // The set to be replaced
-  const [showReplacementOptions, setShowReplacementOptions] = useState(false); // Toggle between search and replacement options
+  const [selectedSet, setSelectedSet] = useState(null);
+  const [setToReplace, setSetToReplace] = useState(null);
+  const [showReplacementOptions, setShowReplacementOptions] = useState(false);
   const forYouRef = useRef(null);
   const usernameInputRef = useRef(null);
 
   const navigate = useNavigate();
 
   const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
+
+  const cardCount = useCountUp(stats.cards); // Use the hook for cards
+  const tradeCount = useCountUp(stats.trades); // Use the hook for trades
 
   const handleLogout = async () => {
     try {
@@ -196,7 +200,15 @@ const Profile = () => {
             setForYouSets(defaultForYouSets);
             await setDoc(userDocRef, { forYouSets: defaultForYouSets.map(set => ({ id: set.id })) }, { merge: true });
           }
+
+          // Update totalCards in stats state
+          setStats(prevStats => ({
+            ...prevStats,
+            cards: userData.totalCards || 0,
+            trades: userData.trades || 0, // Ensure you update trades if this is how you handle it
+          }));
         }
+        
         setForYouLoading(false);
         setLoading(false);
       } catch (error) {
@@ -206,7 +218,6 @@ const Profile = () => {
       }
     };
     
-
     if (currentUser) {
       fetchUserData();
     } else {
@@ -389,119 +400,119 @@ const Profile = () => {
       <ProfileHeader />
       <MobileHeader />
       <div className="profile-container">
-          <div className="profile-content">
-            <div className="profile-header">
-              <div className={`profile-image-wrapper ${profileImage ? 'no-border' : ''}`}>
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="profile-image profile-image--main" />
-                ) : (
-                  <div className="default-image gradient-background">
-                    {username.charAt(0)}
-                  </div>
-                )}
-                <input type="file" onChange={handleImageUpload} />
-              </div>
-              <div className="profile-details">
-                {isEditingUsername ? (
-                  <div className="username-edit">
-                    <input
-                      ref={usernameInputRef}
-                      type="text"
-                      value={newUsername}
-                      onChange={handleUsernameChange}
-                      onKeyDown={handleUsernameKeyDown}
-                      maxLength={MAX_USERNAME_LENGTH}
-                      style={{ width: 'auto' }}
-                    />
-                    <button onClick={handleSaveUsernameClick}>Save</button>
-                    <button onClick={handleCancelUsernameClick}>Cancel</button>
-                    {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
-                  </div>
-                ) : (
-                  <h2 onClick={handleEditClick}>
-                    {username} <img src={bronze} alt="Edit" className="rank" />
-                  </h2>
-                )}
-                <div className="profile-stats">
-                  <div className="stat-item">
-                    <h3>{stats.cards}</h3>
-                    <p>Cards</p>
-                  </div>
-                  <div className="stat-item">
-                    <h3>{stats.trades}</h3>
-                    <p>Trades</p>
-                  </div>
+        <div className="profile-content">
+          <div className="profile-header">
+            <div className={`profile-image-wrapper ${profileImage ? 'no-border' : ''}`}>
+              {profileImage ? (
+                <img src={profileImage} alt="Profile" className="profile-image profile-image--main" />
+              ) : (
+                <div className="default-image gradient-background">
+                  {username.charAt(0)}
                 </div>
-                {isEditingBio ? (
-                  <div className="bio-edit">
-                    <textarea
-                      value={newBio}
-                      onChange={handleBioChange}
-                      onKeyDown={handleBioKeyDown}
-                      rows="4"
-                      maxLength={MAX_BIO_LENGTH}
-                    />
-                    <div className="bio-char-count">
-                      {newBio.length}/{MAX_BIO_LENGTH}
+              )}
+              <input type="file" onChange={handleImageUpload} />
+            </div>
+            <div className="profile-details">
+              {isEditingUsername ? (
+                <div className="username-edit">
+                  <input
+                    ref={usernameInputRef}
+                    type="text"
+                    value={newUsername}
+                    onChange={handleUsernameChange}
+                    onKeyDown={handleUsernameKeyDown}
+                    maxLength={MAX_USERNAME_LENGTH}
+                    style={{ width: 'auto' }}
+                  />
+                  <button onClick={handleSaveUsernameClick}>Save</button>
+                  <button onClick={handleCancelUsernameClick}>Cancel</button>
+                  {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
+                </div>
+              ) : (
+                <h2 onClick={handleEditClick}>
+                  {username} <img src={bronze} alt="Edit" className="rank" />
+                </h2>
+              )}
+              <div className="profile-stats">
+                <div className="stat-item">
+                  <h3>{cardCount}</h3>
+                  <p>Cards</p>
+                </div>
+                <div className="stat-item">
+                  <h3>{tradeCount}</h3>
+                  <p>Trades</p>
+                </div>
+              </div>
+              {isEditingBio ? (
+                <div className="bio-edit">
+                  <textarea
+                    value={newBio}
+                    onChange={handleBioChange}
+                    onKeyDown={handleBioKeyDown}
+                    rows="4"
+                    maxLength={MAX_BIO_LENGTH}
+                  />
+                  <div className="bio-char-count">
+                    {newBio.length}/{MAX_BIO_LENGTH}
+                  </div>
+                  <button onClick={handleSaveBioClick}>Save</button>
+                  <button onClick={handleCancelBioClick}>Cancel</button>
+                </div>
+              ) : (
+                <div className="bio-container" onClick={() => setIsEditingBio(true)}>
+                  <p className="bio">
+                    {bio}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* "For You" Section */}
+          <div className="profile-for-you">
+            <h2><span className="gradient-text">For</span> You</h2>
+            <div className="for-you-wrapper">
+              {isSliderVisible && (
+                <>
+                  {isLeftArrowVisible && (
+                    <button className="scroll-left-arrow" onClick={handleScrollLeft}>
+                      &#8249;
+                    </button>
+                  )}
+                  {isRightArrowVisible && (
+                    <button className="scroll-right-arrow" onClick={handleScrollRight}>
+                      &#8250;
+                    </button>
+                  )}
+                </>
+              )}
+              <div className="for-you-grid" ref={forYouRef}>
+                {forYouLoading ? (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <div className="skeleton-item" key={index}>
+                      <div className="skeleton-logo"></div>
                     </div>
-                    <button onClick={handleSaveBioClick}>Save</button>
-                    <button onClick={handleCancelBioClick}>Cancel</button>
-                  </div>
+                  ))
                 ) : (
-                  <div className="bio-container" onClick={() => setIsEditingBio(true)}>
-                    <p className="bio">
-                      {bio}
-                    </p>
-                  </div>
+                  forYouSets.map((set) => (
+                    <div
+                      className={`set-item ${setToReplace && setToReplace.id === set.id ? 'selected' : ''}`}
+                      key={set.id}
+                      onClick={() => {
+                        if (isEditingSets) {
+                          setSetToReplace(set);
+                        } else {
+                          handleForYouSetClick(set.id);
+                        }
+                      }}
+                    >
+                      <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
+                    </div>
+                  ))
                 )}
               </div>
             </div>
-
-            {/* "For You" Section */}
-            <div className="profile-for-you">
-              <h2><span className="gradient-text">For</span> You</h2>
-              <div className="for-you-wrapper">
-                {isSliderVisible && (
-                  <>
-                    {isLeftArrowVisible && (
-                      <button className="scroll-left-arrow" onClick={handleScrollLeft}>
-                        &#8249;
-                      </button>
-                    )}
-                    {isRightArrowVisible && (
-                      <button className="scroll-right-arrow" onClick={handleScrollRight}>
-                        &#8250;
-                      </button>
-                    )}
-                  </>
-                )}
-                <div className="for-you-grid" ref={forYouRef}>
-                  {forYouLoading ? (
-                    Array.from({ length: 4 }).map((_, index) => (
-                      <div className="skeleton-item" key={index}>
-                        <div className="skeleton-logo"></div>
-                      </div>
-                    ))
-                  ) : (
-                    forYouSets.map((set) => (
-                      <div
-                        className={`set-item ${setToReplace && setToReplace.id === set.id ? 'selected' : ''}`}
-                        key={set.id}
-                        onClick={() => {
-                          if (isEditingSets) {
-                            setSetToReplace(set);
-                          } else {
-                            handleForYouSetClick(set.id);
-                          }
-                        }}
-                      >
-                        <img src={set.images.logo} alt={`${set.name} logo`} className="set-logo" />
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-              {isEditingSets && (
+            {isEditingSets && (
               <div className="edit-sets-carousel">
                 {!showReplacementOptions ? (
                   <>
@@ -551,24 +562,24 @@ const Profile = () => {
                 )}
               </div>
             )}
-              <button className="profile-edit-sets" onClick={handleEditSetsClick}>
-                {isEditingSets ? 'Save' : 'Edit Your Sets'}
+            <button className="profile-edit-sets" onClick={handleEditSetsClick}>
+              {isEditingSets ? 'Save' : 'Edit Your Sets'}
+            </button>
+            {isEditingSets && (
+              <button className="profile-edit-sets profile-cancel-edit" style={{ marginLeft: '1rem' }} onClick={handleCancelEdit}>
+                Cancel
               </button>
-              {isEditingSets && (
-                <button className="profile-edit-sets profile-cancel-edit" style={{ marginLeft: '1rem' }} onClick={handleCancelEdit}>
-                  Cancel
-                </button>
-              )}
-            </div>
-            <div className="profile-messages">
-              <h3>Messages</h3>
-              {/* Messaging system UI here */}
-            </div>
-            <div className="profile-binder">
-              <h3>My Binder</h3>
-              {/* Binder preview UI here */}
-            </div>
+            )}
           </div>
+          <div className="profile-messages">
+            <h3>Messages</h3>
+            {/* Messaging system UI here */}
+          </div>
+          <div className="profile-binder">
+            <h3>My Binder</h3>
+            {/* Binder preview UI here */}
+          </div>
+        </div>
       </div>
     </>
   );

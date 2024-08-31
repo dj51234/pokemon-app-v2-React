@@ -190,7 +190,7 @@ span.gradient-text {
 }
 
 .btn-primary--pulse {
-    animation: btnPrimaryPulse 2s infinite !important;
+    animation: btnPrimaryPulse 2s infinite ;
 }
 
 .btn-primary--pulse:hover {
@@ -281,10 +281,10 @@ span.pink-text {
   .pack-opening-content .card-stack .normal-card-wrapper[data-selected-set-id='pl2'] .normal-card-outer,
   .pack-opening-content .card-stack .normal-card-wrapper[data-selected-set-id='pl3'] .normal-card-outer,
   .pack-opening-content .card-stack .normal-card-wrapper[data-selected-set-id='pl4'] .normal-card-outer {
-    border-radius: 0 !important;
+    border-radius: 0 ;
   }
 
-  .binder-overlay-card-content .normal-card-wrapper[data-set='base1'] .normal-card-outer,
+.binder-overlay-card-content .normal-card-wrapper[data-set='base1'] .normal-card-outer,
 .binder-overlay-card-content .normal-card-wrapper[data-set='base2'] .normal-card-outer,
 .binder-overlay-card-content .normal-card-wrapper[data-set='basep'] .normal-card-outer,
 .binder-overlay-card-content .normal-card-wrapper[data-set='base3'] .normal-card-outer,
@@ -347,11 +347,11 @@ span.pink-text {
 .binder-overlay-card-content .normal-card-wrapper[data-set='pl2'] .normal-card-outer,
 .binder-overlay-card-content .normal-card-wrapper[data-set='pl3'] .normal-card-outer,
 .binder-overlay-card-content .normal-card-wrapper[data-set='pl4'] .normal-card-outer {
-  border-radius: 0px !important;
+  border-radius: 0px ;
 }
 
-.binder-overlay-card-content .normal-card-outer {
-  border-radius: clamp(17px, 1.2vw, 22px) !important;
+.binder-grid .binder-overlay-card-content .normal-card-outer {
+  border-radius: clamp(17px, 1.6vw, 22px) ;
 }
 
 .binder-grid .normal-card-wrapper[data-set='base1'] .normal-card-outer,
@@ -417,12 +417,12 @@ span.pink-text {
 .binder-grid .normal-card-wrapper[data-set='pl2'] .normal-card-outer,
 .binder-grid .normal-card-wrapper[data-set='pl3'] .normal-card-outer,
 .binder-grid .normal-card-wrapper[data-set='pl4'] .normal-card-outer {
-  border-radius: 0 !important;
+  border-radius: 0 ;
   cursor: pointer;
 }
 
 .binder-grid .normal-card-outer {
-  border-radius: clamp(17px, 1vw, 22px) !important;
+  border-radius: clamp(17px, 1vw, 22px) ;
   cursor: pointer;
 }
 
@@ -489,12 +489,12 @@ span.pink-text {
 .expanded-card-content .normal-card-wrapper[data-set='pl2'] .normal-card-outer,
 .expanded-card-content .normal-card-wrapper[data-set='pl3'] .normal-card-outer,
 .expanded-card-content .normal-card-wrapper[data-set='pl4'] .normal-card-outer {
-  border-radius: 0 !important;
+  border-radius: 0 ;
   cursor: pointer;
 }
 
 .expanded-card-content .normal-card-outer {
-    border-radius: clamp(17px, 1vw, 22px) !important;
+    border-radius: clamp(17px, 1vw, 22px) ;
   }
 
   .overlay .overlay-content .normal-card-wrapper[data-set='base1'] .normal-card-outer,
@@ -560,11 +560,11 @@ span.pink-text {
   .overlay .overlay-content .normal-card-wrapper[data-set='pl2'] .normal-card-outer,
   .overlay .overlay-content .normal-card-wrapper[data-set='pl3'] .normal-card-outer,
   .overlay .overlay-content .normal-card-wrapper[data-set='pl4'] .normal-card-outer {
-    border-radius: 0px !important;
+    border-radius: 0px ;
   }
   
   .overlay .overlay-content .normal-card-outer {
-    border-radius: clamp(17px, 1.2vw, 22px) !important;
+    border-radius: clamp(17px, 1.2vw, 22px) ;
   }
 
   .na {

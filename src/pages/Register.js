@@ -67,8 +67,8 @@ const Register = () => {
 
   // Initialize the rarities object with default values
   const userRarities = {
-    sir: 0,
-    aceSpec: 0,
+    specialIllustrationRare: 0,
+    aceSpecRare: 0,
     amazingRare: 0,
     hyperRare: 0,
     doubleRare: 0,
