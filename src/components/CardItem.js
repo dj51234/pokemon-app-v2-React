@@ -3,22 +3,32 @@ import { AuthContext } from '../App';
 import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 import { fetchCardData } from '../js/api';
-import CustomAlert from './CustomAlert'; // Import the CustomAlert component
-import '../styles/WishlistPage.css'; // Assuming the styles file is already linked
+import CustomAlert from './CustomAlert';
+import '../styles/WishlistPage.css';
 
 const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
-  const { currentUser, binderCards } = useContext(AuthContext); // Access binderCards from AuthContext
+  const { currentUser, binderCards } = useContext(AuthContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [cardData, setCardData] = useState(card || {});
   const [inWishlist, setInWishlist] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(null); // State for custom alert message
+  const [alertMessage, setAlertMessage] = useState(null);
   const [borderRadius, setBorderRadius] = useState('0px');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       if (cardId && !card) {
-        const cardInfo = await fetchCardData([cardId]);
-        setCardData(cardInfo[0]);
+        try {
+          const fetchedCardInfo = await fetchCardData([cardId]);
+          if (fetchedCardInfo && fetchedCardInfo.length > 0) {
+            setCardData(fetchedCardInfo[0]);
+          } else {
+            setError('Failed to fetch card data');
+          }
+        } catch (error) {
+          console.error('Error fetching card data:', error);
+          setError('Failed to fetch card data');
+        }
       }
     };
     fetchData();
@@ -27,11 +37,17 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
   useEffect(() => {
     const checkWishlist = async () => {
       if (currentUser && cardData.id) {
-        const userDocRef = doc(firestore, 'users', currentUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setInWishlist(userData.wishlist?.includes(cardData.id));
+        try {
+          const userDocRef = doc(firestore, 'users', currentUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setInWishlist(userData.wishlist?.some(item => 
+              typeof item === 'string' ? item === cardData.id : item.id === cardData.id
+            ));
+          }
+        } catch (error) {
+          console.error('Error checking wishlist:', error);
         }
       }
     };
@@ -41,37 +57,54 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
   const handleImageLoad = () => {
     setIsLoaded(true);
     calculateBorderRadius();
-    if (onLoadComplete) onLoadComplete(); // Notify parent that this image has loaded
+    if (onLoadComplete) onLoadComplete();
   };
 
   const addToWishlist = async () => {
-    if (currentUser && cardData.id) {
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      await updateDoc(userDocRef, {
-        wishlist: arrayUnion(cardData.id),
-      });
-      setInWishlist(true);
-      setAlertMessage('Card added to wishlist!'); // Trigger custom alert
+    if (currentUser && cardData.id && cardData.images?.large) {
+      try {
+        const userDocRef = doc(firestore, 'users', currentUser.uid);
+        const wishlistItem = {
+          id: cardData.id,
+          imageUrl: cardData.images.large
+        };
+        await updateDoc(userDocRef, {
+          wishlist: arrayUnion(wishlistItem),
+        });
+        setInWishlist(true);
+        setAlertMessage('Card added to wishlist!');
+      } catch (error) {
+        console.error('Error adding to wishlist:', error);
+        setAlertMessage('Failed to add card to wishlist');
+      }
     }
   };
 
   const removeFromWishlist = async () => {
     if (currentUser && cardData.id) {
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      await updateDoc(userDocRef, {
-        wishlist: arrayRemove(cardData.id),
-      });
-      setInWishlist(false);
-      removeCard(cardData.id); // Call the removeCard function passed as a prop
-      setAlertMessage('Card removed from wishlist!'); // Trigger custom alert
+      try {
+        const userDocRef = doc(firestore, 'users', currentUser.uid);
+        const wishlistItem = {
+          id: cardData.id,
+          imageUrl: cardData.images?.large
+        };
+        await updateDoc(userDocRef, {
+          wishlist: arrayRemove(wishlistItem),
+        });
+        setInWishlist(false);
+        removeCard(cardData.id);
+        setAlertMessage('Card removed from wishlist!');
+      } catch (error) {
+        console.error('Error removing from wishlist:', error);
+        setAlertMessage('Failed to remove card from wishlist');
+      }
     }
   };
 
   const closeAlert = () => {
-    setAlertMessage(null); // Close the alert
+    setAlertMessage(null);
   };
 
-  // Check if this card exists in the user's binder
   const isInBinder = binderCards.some(binderCard => binderCard.id === cardData.id);
 
   // Calculate border radius using the image's transparent corners
@@ -140,40 +173,40 @@ const CardItem = ({ card, cardId, onLoadComplete, removeCard }) => {
     }
   };
 
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
-    <div
-      className="grid-item--card"
-      style={{
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
-        background: 'var(--black)',
-      }}
-    >
+    <div className="grid-item--card" style={{ backgroundSize: 'contain', backgroundPosition: 'center', background: 'var(--black)' }}>
       <div
         className={`card-wrapper ${isLoaded ? 'loaded' : ''} ${isInBinder ? 'pink-border' : ''}`}
         data-rarity={cardData.rarity ? cardData.rarity.toLowerCase() : 'unknown'}
         data-id={cardData.id}
+        data-image={cardData.images?.large}
+        data-name={cardData.name}
         style={{ borderRadius }}
       >
         {!isLoaded && <div className="skeleton-loader"></div>}
-        <img
-          src={cardData.images?.large}
-          alt="Card"
-          className={`card-image ${isLoaded ? 'visible' : 'hidden'}`}
-          onLoad={handleImageLoad}
-          crossOrigin="anonymous"
-        />
+        {cardData.images?.large && (
+          <img
+            src={cardData.images.large}
+            alt={cardData.name}
+            className={`card-image ${isLoaded ? 'visible' : 'hidden'}`}
+            onLoad={handleImageLoad}
+            crossOrigin="anonymous"
+          />
+        )}
         {currentUser && (
           <button
             className="wishlist-button"
             onClick={isInBinder ? null : inWishlist ? removeFromWishlist : addToWishlist}
-            disabled={isInBinder} // Disable button if the card is in the binder
-            style={{ cursor: isInBinder ? 'default' : 'pointer' }} // Conditionally set cursor style
+            disabled={isInBinder}
+            style={{ cursor: isInBinder ? 'default' : 'pointer' }}
           >
             {isInBinder ? 'Card In Binder' : inWishlist ? 'Remove from Wishlist -' : 'Add to Wishlist +'}
           </button>
         )}
-        {/* Add dynamic border radius to ::after element */}
         <style>{`
           .card-wrapper::after {
             border-radius: ${borderRadius};

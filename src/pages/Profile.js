@@ -24,7 +24,7 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState(currentUser?.photoURL || '');
   const [username, setUsername] = useState(currentUser?.displayName || '');
   const [bio, setBio] = useState(defaultBio);
-  const [stats, setStats] = useState({ cards: 0, trades: 0 });
+  const [stats, setStats] = useState({ cards: undefined, trades: undefined });
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [newUsername, setNewUsername] = useState(username);
   const [isEditingBio, setIsEditingBio] = useState(false);
@@ -51,8 +51,8 @@ const Profile = () => {
 
   const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
 
-  const cardCount = useCountUp(stats.cards); // Use the hook for cards
-  const tradeCount = useCountUp(stats.trades); // Use the hook for trades
+  const cardCount = useCountUp(stats.cards, 2000, 1000);
+  const tradeCount = useCountUp(stats.trades, 2000, 500);
 
   const handleLogout = async () => {
     try {

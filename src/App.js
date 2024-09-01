@@ -11,6 +11,7 @@ import UserBinder from './components/UserBinder';
 import OpenPacksPage from './pages/OpenPacksPage';
 import WishlistPage from './components/WishlistPage';
 import ExpandedCardView from './components/ExpandedCardView';
+import Messages from './components/Messages';
 import { auth, firestore } from './js/firebase';
 import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 import './index.css';
@@ -128,6 +129,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <ExpandedCardView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <Messages />
                 </ProtectedRoute>
               }
             />

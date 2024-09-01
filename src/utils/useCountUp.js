@@ -1,22 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-const useCountUp = (end, duration = 1000) => {
+const useCountUp = (finalValue, duration = 1000, placeholder = 100) => {
   const [count, setCount] = useState(0);
+  const [target, setTarget] = useState(placeholder);
+  const animationRef = useRef(null);
 
   useEffect(() => {
     let start = 0;
-    const increment = Math.ceil(end / (duration / 16.67)); // Roughly 60 frames per second
-    const step = () => {
+    let startTime = null;
+
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const increment = Math.ceil(target / (duration / 16.67)); // Roughly 60 frames per second
+
       start += increment;
-      if (start > end) start = end;
+      if (start > target) start = target;
       setCount(start);
-      if (start < end) {
-        requestAnimationFrame(step);
+
+      if (progress < duration && start < target) {
+        animationRef.current = requestAnimationFrame(animate);
       }
     };
 
-    step();
-  }, [end, duration]);
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [target, duration]);
+
+  useEffect(() => {
+    if (finalValue !== undefined) {
+      setTarget(finalValue);
+    }
+  }, [finalValue]);
 
   return count;
 };

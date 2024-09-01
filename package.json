@@ -71,5 +71,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "lucide-react": "^0.437.0",
+    "source-map-loader": "^5.0.0"
   }
 }

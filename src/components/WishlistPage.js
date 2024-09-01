@@ -29,16 +29,15 @@ const WishlistPage = () => {
       }
       setLoading(false);
     };
-
     fetchWishlist();
   }, [currentUser]);
 
   const removeCard = async (cardId) => {
     try {
-      setWishlist((prevWishlist) => prevWishlist.filter((id) => id !== cardId));
+      setWishlist((prevWishlist) => prevWishlist.filter((item) => item.id !== cardId));
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, {
-        wishlist: wishlist.filter((id) => id !== cardId),
+        wishlist: wishlist.filter((item) => item.id !== cardId),
       });
       setAlertMessage('Card removed from wishlist!');
     } catch (error) {
@@ -54,7 +53,6 @@ const WishlistPage = () => {
     <>
       {currentUser ? <ProfileHeader /> : <Header />}
       <MobileHeader />
-
       <div className="wishlist-page">
         <div className="wishlist-container">
           <div className="wishlist-content">
@@ -70,8 +68,21 @@ const WishlistPage = () => {
               <p>No cards in your wishlist yet. <Link to="/pokedex">Add cards now <span>+</span></Link></p>
             ) : (
               <div className="wishlist-grid">
-                {wishlist.map((cardId) => (
-                  <CardItem key={cardId} cardId={cardId} removeCard={removeCard} />
+                {wishlist.map((item) => (
+                  <CardItem 
+                    key={item.id}
+                    cardId={item.id}
+                    card={{
+                      id: item.id,
+                      images: { large: item.imageUrl },
+                      name: item.name,
+                      rarity: item.rarity,
+                      subtypes: item.subtypes,
+                      setId: item.setId,
+                      supertypes: item.supertypes
+                    }}
+                    removeCard={removeCard}
+                  />
                 ))}
               </div>
             )}
