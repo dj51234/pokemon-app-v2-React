@@ -1,179 +1,191 @@
 .profile-view {
-    background-color: var(--black);
-    border-radius: 0.8rem;
-    overflow: hidden;
-    box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
-    color: var(--white);
-    font-size: 1.6rem; /* Base font size */
-  }
-  
-  .profile-view .profile-header {
-    padding: 3.2rem;
-    text-align: center;
-    background-color: var(--secondary-color-solid);
-  }
-  
-  .profile-view .profile-header h1 {
-    font-size: 2.4rem;
-    margin: 1.6rem 0;
-    z-index: 10;
-  }
-  
-  .profile-view .profile-avatar {
-    width: 12rem;
-    height: 12rem;
-    border-radius: 6rem;
-    margin-bottom: 1.6rem;
-    z-index: 10;
-  }
-  
-  .profile-view .rank {
-    background-color: var(--pink);
-    padding: 0.4rem 0.8rem;
-    border-radius: 0.4rem;
-    font-size: 1.2rem;
-    text-transform: uppercase;
-  }
-  
-  .profile-view .profile-content {
-    padding: 3.2rem;
-  }
-  
-  .profile-view .profile-section {
-    margin-bottom: 3.2rem;
-  }
-  
-  .profile-view .profile-section h2 {
-    margin-bottom: 1.6rem;
-    font-size: 2rem;
-    color: var(--pink);
-  }
-  
-  .profile-view .profile-section p {
-    font-size: 1.6rem;
-    line-height: 1.5;
-  }
-  
-  .profile-view .stats-grid, .rarity-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-    gap: 1.6rem;
-  }
-  
-  .profile-view .stat-item, .rarity-item {
-    display: flex;
-    align-items: center;
-    background-color: var(--secondary-color-solid);
-    padding: 0.8rem;
-    border-radius: 0.4rem;
-    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
-  }
+  background-color: var(--black);
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 0.4rem 0.6rem rgba(0, 0, 0, 0.1);
+  color: var(--white);
+  font-size: 1.6rem; /* Base font size */
+}
 
-  .profile-view .stat-item {
-    text-align:initial;
-  }
-  
-  .profile-view .stat-item span, .wishlist-item span {
-    font-size: 1.4rem;
-  }
+.profile-view .profile-header {
+  padding: 3.2rem;
+  text-align: center;
+  background-color: var(--secondary-color-solid);
+}
 
-  .profile-view .stat-item span {
-    margin-left: 1rem;
-  }
-  
-  .profile-view .status-indicator {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-  }
+.profile-view .profile-header .profile-header--basic-info {
+  font-size: 1.4rem;
+  margin: 1.6rem 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
 
-  .profile-view .status-indicator.active {
-    background-color: green;
-  }
+.profile-view .profile-avatar {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 6rem;
+  z-index: 10;
+}
 
-  .profile-view .status-indicator.inactive {
-    background-color: red;
-  }
-  
-  .profile-view .rarity-name {
-    font-size: 1.6rem;
-    color: var(--subtext);
-  }
-  
-  .profile-view .rarity-count {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--pink);
-    margin-left: 1rem;
-  }
-  
-  .profile-view .binder-preview {
-    display: flex;
-    overflow-x: auto;
-    gap: 1.6rem;
-    padding-bottom: 1.6rem;
-  }
-  
-  .profile-view .binder-card {
-    width: 10rem;
-    height: 14rem;
-    object-fit: cover;
-    border-radius: 0.4rem;
-    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-  }
-  
-  .profile-view .more-cards {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 10rem;
-    height: 14rem;
-    background-color: var(--secondary-color);
-    color: var(--subtext);
-    font-weight: bold;
-    border-radius: 0.4rem;
-    font-size: 1.4rem;
-  }
+.profile-view .rank {
+  z-index: 10;
+  width: 25px;
+  height: 25px;
+}
 
-  .profile-view .number-highlight {
-    color: var(--pink);
-    font-weight: 900;
-    font-size: 1.8rem;
-    margin-left: .5rem;
-  }
+.profile-view .profile-header--button {
+  z-index: 10;
+  border: none;
+  font-size: 1.6rem;
+}
 
-  .profile-view .wishlist-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1.6rem;
-  }
-  
-  .profile-view .wishlist-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--secondary-color-solid);
-    padding: 0.8rem;
-    border-radius: 0.4rem;
-    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
-  }
-  
-  .profile-view .wishlist-card-image {
-    width: 100%;
-    height: auto;
-    border-radius: 0.4rem;
-    margin-bottom: 0.8rem;
-  }
-  
-  .profile-view .wishlist-item span {
-    font-size: 1.2rem;
-    color: var(--subtext);
-    text-align: center;
-    word-break: break-all;
-  }
-  
-  .profile-view .wishlist-item svg {
-    color: var(--pink);
-    margin-bottom: 0.4rem;
-  }
-  
+.profile-view .profile-content {
+  padding: 3.2rem;
+}
+
+.profile-view .profile-section {
+  margin-bottom: 3.2rem;
+}
+
+.profile-view .profile-section h2 {
+  margin-bottom: 1.6rem;
+  font-size: 2rem;
+  color: var(--pink);
+}
+
+.profile-view .profile-section p {
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.profile-view .stats-grid, .rarity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1.6rem;
+}
+
+.profile-view .stat-item, .rarity-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary-color-solid);
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
+}
+
+.profile-view .stat-item {
+  text-align: initial;
+}
+
+.profile-view .stat-item span, .wishlist-item span {
+  font-size: 1.4rem;
+}
+
+.profile-view .stat-item span {
+  margin-left: 1rem;
+}
+
+.profile-view .status-indicator {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.profile-view .status-indicator.active {
+  background-color: green;
+}
+
+.profile-view .status-indicator.inactive {
+  background-color: red;
+}
+
+.profile-view .rarity-name {
+  font-size: 1.6rem;
+  color: var(--subtext);
+}
+
+.profile-view .rarity-count {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--pink);
+  margin-left: 1rem;
+}
+
+.profile-view .number-highlight {
+  color: var(--pink);
+  font-weight: 900;
+  font-size: 1.8rem;
+  margin-left: .5rem;
+}
+
+/* Binder Preview styles */
+.profile-view .binder-preview {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+
+.profile-view .binder-card {
+  width: 20rem;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
+/* Wishlist styles (matching binder preview) */
+.profile-view .wishlist-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+
+.profile-view .wishlist-item {
+  position: relative;
+}
+
+.profile-view .wishlist-card-image {
+  width: 20rem;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
+.profile-view .more-cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20rem;
+  height: 28rem; /* Approximating a 3:4 aspect ratio */
+  background-color: var(--secondary-color);
+  color: var(--subtext);
+  font-weight: bold;
+  font-size: 1.4rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
+.profile-view .wishlist-item svg {
+  position: absolute;
+  bottom: 0.8rem;
+  right: 0.8rem;
+  color: var(--pink);
+}
+
+.profile-view .wishlist-placeholder {
+  width: 20rem;
+  height: 28rem; /* Approximating a 3:4 aspect ratio */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary-color-solid);
+  color: var(--subtext);
+  font-size: 1.4rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+}

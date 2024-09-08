@@ -1,19 +1,42 @@
 import React from "react";
 import { User, Mail, Calendar, Clock, Book, Star, Heart } from "lucide-react";
 import "../styles/ProfileView.css";
+import bronzeRank from '../assets/bronze.png';
+import silverRank from '../assets/silver.png';
+import goldRank from '../assets/gold.png';
+import diamondRank from '../assets/diamond.png';
+import master1Rank from '../assets/master-1.png';
+import master2Rank from '../assets/master-2.png';
 
 const formatRarityName = (rarityKey) => {
+  
   const words = rarityKey.split(/(?=[A-Z])/).map((word) => word.toLowerCase());
   return words
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
 };
 
 const ProfileView = ({ user }) => {
+  const wishlistDisplayCount = 5;
+  
   const totalRareCards = Object.values(user.userRarities).reduce(
     (a, b) => a + b,
     0
   );
+  
+  const getRankImage = (rank) => {
+    const rankMap = {
+      'bronze': bronzeRank,
+      'silver': silverRank,
+      'gold': goldRank,
+      'diamond': diamondRank,
+      'master-1': master1Rank,
+      'master-2': master2Rank
+    };
+    
+    return rankMap[rank.toLowerCase()] || bronzeRank; // Default to bronze if rank not found
+  };
+  
 
   return (
     <div className="profile-view">
@@ -26,8 +49,16 @@ const ProfileView = ({ user }) => {
           alt={user.displayName}
           className="profile-avatar"
         />
-        <h1>{user.displayName}</h1>
-        <span className="rank">{user.rank}</span>
+        <div className="profile-header--basic-info">
+          <h1>{user.displayName}</h1>
+          <img 
+            src={getRankImage(user.rank)} 
+            alt={`${user.rank} rank`} 
+            className="rank"
+          />
+        </div>
+        {/* <span className="rank">{user.rank}</span> */}
+        <button className="profile-header--button gradient-btn">Message</button>
       </div>
 
       <div className="profile-content">
@@ -94,7 +125,7 @@ const ProfileView = ({ user }) => {
         <div className="profile-section">
           <h2>Wishlist</h2>
           <div className="wishlist-grid">
-            {user.wishlist.map((item, index) => (
+            {user.wishlist.slice(0, wishlistDisplayCount).map((item, index) => (
               <div key={index} className="wishlist-item">
                 {typeof item === "object" && item.imageUrl ? (
                   <img
@@ -108,6 +139,11 @@ const ProfileView = ({ user }) => {
                 <Heart size={16} />
               </div>
             ))}
+            {user.wishlist.length > wishlistDisplayCount && (
+              <div className="more-cards">
+                +{user.wishlist.length - wishlistDisplayCount} more
+              </div>
+            )}
           </div>
         </div>
 

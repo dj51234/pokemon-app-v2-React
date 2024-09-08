@@ -23,34 +23,40 @@ const Messages = () => {
     ];
   
     const fetchUserAvatar = async (userId, displayName) => {
-        try {
-          const storageRef = ref(storage, `profileImages/${userId}`);
-          const url = await getDownloadURL(storageRef);
-          return url;
-        } catch (error) {
-          if (error.code === 'storage/object-not-found') {
-            // Return a default avatar based on user's display name
-            return generateDefaultAvatar(displayName);
-          } else {
-            console.error('Error fetching user avatar:', error);
-            return null;
-          }
+      try {
+        console.log(`Attempting to fetch avatar for user: ${userId}`);
+        const storageRef = ref(storage, `profileImages/${userId}`);
+        console.log('Storage reference:', storageRef.fullPath);
+        const url = await getDownloadURL(storageRef);
+        console.log(`Successfully fetched avatar URL for ${userId}:`, url);
+        return url;
+      } catch (error) {
+        if (error.code === 'storage/object-not-found') {
+          console.log(`No profile image found for user ${userId}, using default avatar`);
+          return generateDefaultAvatar(displayName);
+        } else {
+          console.error(`Error fetching avatar for ${userId}:`, error);
+          return generateDefaultAvatar(displayName);
         }
-      };
+      }
+    };
     
-      const generateDefaultAvatar = (displayName) => {
-        const initial = displayName ? displayName.charAt(0).toUpperCase() : '?';
-        return `https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`;
-      };
+    const generateDefaultAvatar = (displayName) => {
+      const initial = displayName ? displayName.charAt(0).toUpperCase() : '?';
+      const avatarUrl = `https://ui-avatars.com/api/?name=${initial}&background=random&color=fff`;
+      console.log(`Generated default avatar for ${displayName}:`, avatarUrl);
+      return avatarUrl;
+    };
     
       const fetchUsers = async () => {
         setIsLoading(true);
         try {
           const usersRef = collection(firestore, 'users');
-          const q = query(usersRef, limit(10)); // Limit to 10 users for this example
+          const q = query(usersRef, limit(10));
           const querySnapshot = await getDocs(q);
           const userList = await Promise.all(querySnapshot.docs.map(async (doc) => {
             const userData = doc.data();
+            console.log(`User data for ${doc.id}:`, userData);
             const avatarUrl = await fetchUserAvatar(doc.id, userData.displayName);
             return {
               id: doc.id,
@@ -58,6 +64,7 @@ const Messages = () => {
               avatarUrl
             };
           }));
+          console.log('Fetched user list:', userList);
           setUsers(userList);
         } catch (error) {
           console.error('Error fetching users:', error);
@@ -140,9 +147,13 @@ const Messages = () => {
                             onClick={() => handleUserClick(user.id)}
                             >
                             <img 
-                                src={user.avatarUrl} 
-                                alt={user.displayName || 'User'} 
-                                className="chat-avatar"
+                              src={user.avatarUrl} 
+                              alt={user.displayName || 'User'} 
+                              className="chat-avatar"
+                              onError={(e) => {
+                                console.log(`Error loading avatar for ${user.displayName}, falling back to default`);
+                                e.target.src = generateDefaultAvatar(user.displayName);
+                              }}
                             />
                             <div className="chat-info">
                                 <h3>{user.displayName || 'Anonymous User'}</h3>
