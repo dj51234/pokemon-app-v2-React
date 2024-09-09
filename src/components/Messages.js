@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MoreVertical, Send, Users, MessageSquare, X } from 'lucide-react';
+import { Search, MoreVertical, Send, Users, MessageSquare, MoveLeft } from 'lucide-react';
 import { collection, getDocs, query, limit, doc, getDoc } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { firestore, storage } from '../js/firebase'; 
@@ -48,30 +48,30 @@ const Messages = () => {
       return avatarUrl;
     };
     
-      const fetchUsers = async () => {
-        setIsLoading(true);
-        try {
-          const usersRef = collection(firestore, 'users');
-          const q = query(usersRef, limit(10));
-          const querySnapshot = await getDocs(q);
-          const userList = await Promise.all(querySnapshot.docs.map(async (doc) => {
-            const userData = doc.data();
-            console.log(`User data for ${doc.id}:`, userData);
-            const avatarUrl = await fetchUserAvatar(doc.id, userData.displayName);
-            return {
-              id: doc.id,
-              ...userData,
-              avatarUrl
-            };
-          }));
-          console.log('Fetched user list:', userList);
-          setUsers(userList);
-        } catch (error) {
-          console.error('Error fetching users:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      try {
+        const usersRef = collection(firestore, 'users');
+        const q = query(usersRef, limit(10));
+        const querySnapshot = await getDocs(q);
+        const userList = await Promise.all(querySnapshot.docs.map(async (doc) => {
+          const userData = doc.data();
+          console.log(`User data for ${doc.id}:`, userData);
+          const avatarUrl = await fetchUserAvatar(doc.id, userData.displayName);
+          return {
+            id: doc.id,
+            ...userData,
+            avatarUrl
+          };
+        }));
+        console.log('Fetched user list:', userList);
+        setUsers(userList);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
   
     useEffect(() => {
       if (isUserSearchActive) {
@@ -85,137 +85,139 @@ const Messages = () => {
     };
 
     const handleUserClick = async (userId) => {
-        setIsLoading(true);
-        try {
-          const userDoc = await getDoc(doc(firestore, 'users', userId));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const avatarUrl = await fetchUserAvatar(userId, userData.displayName);
-            setSelectedUser({ id: userId, ...userData, avatarUrl });
-            setIsSidebarVisible(false);
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
+      setIsLoading(true);
+      try {
+        const userDoc = await getDoc(doc(firestore, 'users', userId));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const avatarUrl = await fetchUserAvatar(userId, userData.displayName);
+          setSelectedUser({ id: userId, ...userData, avatarUrl });
+          // Delay hiding the sidebar slightly to allow for smooth transition
+          setTimeout(() => setIsSidebarVisible(false), 50);
         }
-        setIsLoading(false);
-      };
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+      setIsLoading(false);
+    };
 
-      const handleCloseProfile = () => {
-        setSelectedUser(null);
-        setIsSidebarVisible(true);
-      };
+    const handleCloseProfile = () => {
+      setIsSidebarVisible(true);
+      // Delay unsetting the selected user to allow for smooth transition
+      setTimeout(() => setSelectedUser(null), 300);
+    };
   
-        return (
-            <>
-                <ProfileHeader />
-                <div className="messages-container">
-                    {/* Sidebar */}
-                    <div className={`messages-sidebar ${isSidebarVisible ? '' : 'hidden'}`}>
-                    <div className="messages-sidebar-header">
-                        <div className="messages-toggle">
-                        <button 
-                            className={`toggle-button ${!isUserSearchActive ? 'active' : ''}`}
-                            onClick={() => setIsUserSearchActive(false)}
-                        >
-                            <MessageSquare size={20} />
-                            <span>Chats</span>
-                        </button>
-                        <button 
-                            className={`toggle-button ${isUserSearchActive ? 'active' : ''}`}
-                            onClick={() => setIsUserSearchActive(true)}
-                        >
-                            <Users size={20} />
-                            <span>Users</span>
-                        </button>
-                        </div>
-                        <div className="messages-search">
-                        <input 
-                            type="text" 
-                            placeholder={isUserSearchActive ? "Search users" : "Search messages"}
-                        />
-                        <Search className="search-icon" size={18} />
-                        </div>
+    return (
+      <>
+        <ProfileHeader />
+        <div className="messages-container">
+          {/* Sidebar */}
+          <div className={`messages-sidebar ${isSidebarVisible ? '' : 'hidden'}`}>
+            <div className="messages-sidebar-header">
+              <div className="messages-toggle">
+                <button 
+                  className={`toggle-button ${!isUserSearchActive ? 'active' : ''}`}
+                  onClick={() => setIsUserSearchActive(false)}
+                >
+                  <MessageSquare size={20} />
+                  <span>Chats</span>
+                </button>
+                <button 
+                  className={`toggle-button ${isUserSearchActive ? 'active' : ''}`}
+                  onClick={() => setIsUserSearchActive(true)}
+                >
+                  <Users size={20} />
+                  <span>Users</span>
+                </button>
+              </div>
+              <div className="messages-search">
+                <input 
+                  type="text" 
+                  placeholder={isUserSearchActive ? "Search users" : "Search messages"}
+                />
+                <Search className="search-icon" size={18} />
+              </div>
+            </div>
+            <div className="messages-list">
+              {isLoading ? (
+                <div className="loading">Loading...</div>
+              ) : isUserSearchActive ? (
+                users.map((user) => (
+                  <div 
+                    key={user.id} 
+                    className="chat-item" 
+                    onClick={() => handleUserClick(user.id)}
+                  >
+                    <img 
+                      src={user.avatarUrl} 
+                      alt={user.displayName || 'User'} 
+                      className="chat-avatar"
+                      onError={(e) => {
+                        console.log(`Error loading avatar for ${user.displayName}, falling back to default`);
+                        e.target.src = generateDefaultAvatar(user.displayName);
+                      }}
+                    />
+                    <div className="chat-info">
+                      <h3>{user.displayName || 'Anonymous User'}</h3>
+                      <p>Click to view profile</p>
                     </div>
-                    <div className="messages-list">
-                        {isLoading ? (
-                        <div className="loading">Loading...</div>
-                        ) : isUserSearchActive ? (
-                        users.map((user) => (
-                            <div 
-                            key={user.id} 
-                            className="chat-item" 
-                            onClick={() => handleUserClick(user.id)}
-                            >
-                            <img 
-                              src={user.avatarUrl} 
-                              alt={user.displayName || 'User'} 
-                              className="chat-avatar"
-                              onError={(e) => {
-                                console.log(`Error loading avatar for ${user.displayName}, falling back to default`);
-                                e.target.src = generateDefaultAvatar(user.displayName);
-                              }}
-                            />
-                            <div className="chat-info">
-                                <h3>{user.displayName || 'Anonymous User'}</h3>
-                                <p>Click to view profile</p>
-                            </div>
-                            </div>
-                        ))
-                        ) : (
-                        chats.map((chat) => (
-                            <div
-                            key={chat.id}
-                            className={`chat-item ${selectedChat === chat.id ? 'selected' : ''}`}
-                            onClick={() => setSelectedChat(chat.id)}
-                            >
-                            <img src={chat.avatar} alt={chat.name} className="chat-avatar" />
-                            <div className="chat-info">
-                                <h3>{chat.name}</h3>
-                                <p>{chat.lastMessage}</p>
-                            </div>
-                            </div>
-                        ))
-                        )}
+                  </div>
+                ))
+              ) : (
+                chats.map((chat) => (
+                  <div
+                    key={chat.id}
+                    className={`chat-item ${selectedChat === chat.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedChat(chat.id)}
+                  >
+                    <img src={chat.avatar} alt={chat.name} className="chat-avatar" />
+                    <div className="chat-info">
+                      <h3>{chat.name}</h3>
+                      <p>{chat.lastMessage}</p>
                     </div>
-                    </div>
-                
-                    {/* Chat Area */}
-                    <div className={`chat-area ${isSidebarVisible ? '' : 'expanded'}`}>
-                    {selectedUser ? (
-                        <div className="profile-view-container">
-                        <button className="close-profile" onClick={handleCloseProfile}>
-                            <X size={24} />
-                        </button>
-                        <ProfileView user={selectedUser} />
-                        </div>
-                    ) : selectedChat ? (
-                        <>
-                        <div className="chat-header">
-                            <div className="chat-header-info">
-                            <img src="/api/placeholder/40/40" alt="Selected user" className="chat-avatar" />
-                            <h2>{chats.find(chat => chat.id === selectedChat)?.name}</h2>
-                            </div>
-                            <MoreVertical className="more-options" />
-                        </div>
-                        <div className="chat-messages">
-                            {/* Messages will be rendered here */}
-                        </div>
-                        <div className="chat-input">
-                            <input type="text" placeholder="Type a message" />
-                            <button className="send-button">
-                            <Send size={20} />
-                            </button>
-                        </div>
-                        </>
-                    ) : (
-                        <div className="no-chat-selected">
-                        <p>Select a chat to start messaging or click on a user to view their profile</p>
-                        </div>
-                    )}
-                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        
+          {/* Chat Area */}
+          <div className={`chat-area ${!isSidebarVisible ? 'expanded' : ''}`}>
+            {selectedUser ? (
+              <div className={`profile-view-container ${!isSidebarVisible ? 'expanded' : ''}`}>
+                <button className="close-profile" onClick={handleCloseProfile}>
+                  <span><MoveLeft />Back to Messages</span>
+                </button>
+                <ProfileView user={selectedUser} />
+              </div>
+            ) : selectedChat ? (
+              <>
+                <div className="chat-header">
+                  <div className="chat-header-info">
+                    <img src="/api/placeholder/40/40" alt="Selected user" className="chat-avatar" />
+                    <h2>{chats.find(chat => chat.id === selectedChat)?.name}</h2>
+                  </div>
+                  <MoreVertical className="more-options" />
                 </div>
-            </>
-        );
-  };
-  
-  export default Messages;
+                <div className="chat-messages">
+                  {/* Messages will be rendered here */}
+                </div>
+                <div className="chat-input">
+                  <input type="text" placeholder="Type a message" />
+                  <button className="send-button">
+                    <Send size={20} />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="no-chat-selected">
+                <p>Select a chat to start messaging or click on a user to view their profile</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+};
+
+export default Messages;

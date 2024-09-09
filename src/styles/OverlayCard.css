@@ -29,6 +29,8 @@
     height: 100%;
     background: transparent;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
   }
   
   .binder-overlay-card-content {
@@ -37,6 +39,15 @@
     width: 21vw;  
     max-width: 550px;  
     min-width: 400px; 
+    margin-top: -4rem;
+  }
+
+  .binder-overlay-card-content .normal-card-wrapper {
+    margin-top: 3rem;
+  }
+
+  .binder-overlay-card h1 {
+    text-align: center;
   }
 
   @media screen and (max-width: 1320px) {

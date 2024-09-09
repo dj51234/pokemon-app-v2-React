@@ -39,7 +39,7 @@ const OverlayCard = ({ cardProps, onClose }) => {
     <div className={`binder-overlay-card ${visible ? 'show' : 'hide'}`}>
       <div className="binder-overlay-card-background" onClick={handleClose}></div>
       <div className="binder-overlay-card-content">
-        {/* Pass the count to NormalCard only if isInUserBinder is true */}
+        <h1><span className='gradient-text'>Click Card for Details</span></h1>
         <NormalCard {...cardProps} isInUserBinder={false} isInCardOverlay={true} onCardClick={handleCardClick} count={cardProps.isInUserBinder ? cardProps.count : undefined} />
       </div>
     </div>

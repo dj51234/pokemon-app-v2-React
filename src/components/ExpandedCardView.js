@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import NormalCard from './NormalCard';
+import { MoveLeft } from 'lucide-react';
 import '../styles/ExpandedCardView.css';
 import grass from '../assets/types/grass.png';
 import fire from '../assets/types/fire.png';
@@ -57,11 +58,18 @@ const ExpandedCardView = () => {
     }
   };
 
+  const handleBackToBinder = () => {
+    navigate('/binder/view');
+  };
+
   return (
     <>
       <div className="expanded-card-view">
         <ProfileHeader />
         <div className="expanded-card-content">
+          <span className='back-to-binder' onClick={handleBackToBinder}>
+            <MoveLeft /> <a href="#">Back to Binder</a>
+          </span>
           <div className="expanded-card-left">
             {cardProps ? (
               <>
