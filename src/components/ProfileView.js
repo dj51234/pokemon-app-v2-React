@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Mail, Calendar, Clock, Book, Star, Heart } from "lucide-react";
+import { User, Mail, Calendar, Clock, Book, Star, Heart, MoveLeft } from "lucide-react";
 import "../styles/ProfileView.css";
 import bronzeRank from '../assets/bronze.png';
 import silverRank from '../assets/silver.png';
@@ -16,7 +16,7 @@ const formatRarityName = (rarityKey) => {
   .join(" ");
 };
 
-const ProfileView = ({ user }) => {
+const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
   const wishlistDisplayCount = 5;
   
   const totalRareCards = Object.values(user.userRarities).reduce(
@@ -44,6 +44,9 @@ const ProfileView = ({ user }) => {
         className="profile-header"
         style={{ backgroundColor: user.profileColor }}
       >
+        <button className="close-profile" onClick={handleCloseProfile}>
+          <span><MoveLeft />Back to Messages</span>
+        </button>
         <img
           src={user.avatarUrl}
           alt={user.displayName}

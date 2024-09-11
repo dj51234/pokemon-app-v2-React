@@ -238,33 +238,40 @@
 
 .profile-view-container .profile-header {
   border-radius: 0;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .profile-view-container .profile-content {
-  margin-left: 0;
+  max-width: 120rem;
+  margin: 0 auto;
 }
 
 .profile-view-container .close-profile {
-  position: absolute;
-  top: 2.8rem;
-  left: 2rem;
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--pink);
-  z-index: 10;
+  color: var(--white);
   font-size: 1.8rem;
   font-weight: 500;
-  transition: color .2s ease-in-out;
+  transition: color .15s ease-in-out;
+  z-index: 10;
+  position: absolute;
+  top: 2rem;
+  left: 2.2rem;
 }
 
 .profile-view-container .close-profile span {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 1rem;
 }
 
+/* .profile-view-container .close-profile svg {
+  color: var(--pink);
+} */
+
 .profile-view-container .close-profile:hover {
-  color: #f8f9fa;
+  color: var(--pink);
 }

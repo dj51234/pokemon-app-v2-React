@@ -183,12 +183,13 @@ const Messages = () => {
         
           {/* Chat Area */}
           <div className={`chat-area ${!isSidebarVisible ? 'expanded' : ''}`}>
-            {selectedUser ? (
+          {selectedUser ? (
               <div className={`profile-view-container ${!isSidebarVisible ? 'expanded' : ''}`}>
-                <button className="close-profile" onClick={handleCloseProfile}>
-                  <span><MoveLeft />Back to Messages</span>
-                </button>
-                <ProfileView user={selectedUser} />
+                <ProfileView 
+                  user={selectedUser} 
+                  handleCloseProfile={handleCloseProfile}
+                  isSidebarVisible={isSidebarVisible}
+                />
               </div>
             ) : selectedChat ? (
               <>
