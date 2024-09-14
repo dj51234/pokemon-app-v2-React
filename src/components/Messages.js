@@ -5,6 +5,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { firestore, storage } from '../js/firebase'; 
 import ProfileHeader from './ProfileHeader';
 import ProfileView from './ProfileView';
+import MobileHeader from './MobileHeader';
 import '../styles/Messages.css';
 
 const Messages = () => {
@@ -14,6 +15,7 @@ const Messages = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 1320);
   
     // Dummy data for demonstration
     const chats = [
@@ -84,6 +86,30 @@ const Messages = () => {
       setSelectedChat(null);
     };
 
+    useEffect(() => {
+      const checkMobileView = () => {
+          const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+          setIsMobileView(width <= 1320);
+      };
+
+      // Check on mount
+      checkMobileView();
+
+      // Add event listeners
+      window.addEventListener('resize', checkMobileView);
+      window.addEventListener('orientationchange', checkMobileView);
+
+      // Cleanup
+      return () => {
+          window.removeEventListener('resize', checkMobileView);
+          window.removeEventListener('orientationchange', checkMobileView);
+      };
+  }, []);
+
+  const toggleMessagesSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+  };
+
     const handleUserClick = async (userId) => {
       setIsLoading(true);
       try {
@@ -109,10 +135,14 @@ const Messages = () => {
   
     return (
       <>
-        <ProfileHeader />
+        {isMobileView ? (
+                <MobileHeader toggleMessagesSidebar={toggleMessagesSidebar} />
+            ) : (
+                <ProfileHeader />
+            )}
         <div className="messages-container">
           {/* Sidebar */}
-          <div className={`messages-sidebar ${isSidebarVisible ? '' : 'hidden'}`}>
+          <div className={`messages-sidebar ${isMobileView && !isSidebarVisible ? 'hidden' : ''}`}>
             <div className="messages-sidebar-header">
               <div className="messages-toggle">
                 <button 
@@ -182,7 +212,7 @@ const Messages = () => {
           </div>
         
           {/* Chat Area */}
-          <div className={`chat-area ${!isSidebarVisible ? 'expanded' : ''}`}>
+          <div className={`chat-area ${isMobileView && isSidebarVisible ? 'hidden' : ''}`}>
           {selectedUser ? (
               <div className={`profile-view-container ${!isSidebarVisible ? 'expanded' : ''}`}>
                 <ProfileView 

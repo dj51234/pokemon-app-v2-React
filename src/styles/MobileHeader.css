@@ -65,6 +65,20 @@
     transform: rotate(-45deg); /* Rotate and move the bottom bar to form the "X" */
     height: .5rem;
   }
+
+  .mobile-header-icons {
+    display: flex;
+    gap: 2rem;
+    flex-direction: row-reverse;
+  }
+
+  .messages-icon {
+    background: none;
+    color: var(--white);
+    outline: none;
+    border: none;
+
+  }
   
   /* Media Queries */
   @media (min-width: 1321px) {

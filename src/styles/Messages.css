@@ -7,19 +7,19 @@
 }
 
 .messages-sidebar {
-  width: 33%;
+  width: 300px;
   background-color: var(--black);
-  border-right: 1px solid var(--border-color);
+  border-left: 1px solid var(--border-color);
   transition: transform 0.3s ease-in-out;
   position: absolute;
-  left: 0;
+  right: 0;
   top: 0;
   bottom: 0;
   z-index: 2;
 }
 
 .messages-sidebar.hidden {
-  transform: translateX(-100%);
+  transform: translateX(300px);
 }
 
 .messages-sidebar-header {
@@ -101,12 +101,12 @@
 
 .chat-area {
   flex: 1;
-  margin-left: 33%;
-  transition: margin-left 0.3s ease-in-out;
+  margin-right: 300px;
+  transition: margin-right 0.3s ease-in-out;
 }
 
 .chat-area.expanded {
-  margin-left: 0;
+  margin-right: 0;
 }
 
 .chat-header {
@@ -229,7 +229,7 @@
   transition: left 0.3s ease-in-out;
   z-index: 1;
   background-color: var(--black);
-  overflow-y: auto; /* Add this line to enable vertical scrolling */
+  overflow-y: auto;
 }
 
 .profile-view-container.expanded {
@@ -268,10 +268,25 @@
   gap: 1rem;
 }
 
-/* .profile-view-container .close-profile svg {
-  color: var(--pink);
-} */
-
 .profile-view-container .close-profile:hover {
   color: var(--pink);
+}
+
+@media screen and (max-width: 1320px) {
+  .messages-sidebar {
+    width: 100%;
+  }
+  .messages-sidebar.hidden {
+    transform: translateX(100%);
+  }
+  .messages-container {
+    width: 100%;
+    margin-left: 0;
+  }
+  .profile-view-container {
+    width: 100%;
+  }
+  .chat-area {
+    margin-right: 0;
+  }
 }
