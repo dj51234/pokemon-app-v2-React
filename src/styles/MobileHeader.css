@@ -90,6 +90,8 @@
   @media (max-width: 1320px) {
     .mobile-header {
       display: flex;
+      padding: 2rem 2.5rem;
     }
+    
   }
   

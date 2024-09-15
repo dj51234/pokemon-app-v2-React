@@ -1,5 +1,14 @@
+// ProfileView.js
+
 import React from "react";
-import { User, Mail, Calendar, Clock, Book, Star, Heart, MoveLeft } from "lucide-react";
+import {
+  User,
+  Mail,
+  Clock,
+  Star,
+  Heart,
+  MoveLeft,
+} from "lucide-react";
 import "../styles/ProfileView.css";
 import bronzeRank from '../assets/bronze.png';
 import silverRank from '../assets/silver.png';
@@ -9,34 +18,34 @@ import master1Rank from '../assets/master-1.png';
 import master2Rank from '../assets/master-2.png';
 
 const formatRarityName = (rarityKey) => {
-  
-  const words = rarityKey.split(/(?=[A-Z])/).map((word) => word.toLowerCase());
+  const words = rarityKey
+    .split(/(?=[A-Z])/)
+    .map((word) => word.toLowerCase());
   return words
-  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  .join(" ");
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
-const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
+const ProfileView = ({ user, handleCloseProfile }) => {
   const wishlistDisplayCount = 5;
-  
+
   const totalRareCards = Object.values(user.userRarities).reduce(
     (a, b) => a + b,
     0
   );
-  
+
   const getRankImage = (rank) => {
     const rankMap = {
-      'bronze': bronzeRank,
-      'silver': silverRank,
-      'gold': goldRank,
-      'diamond': diamondRank,
-      'master-1': master1Rank,
-      'master-2': master2Rank
+      bronze: bronzeRank,
+      silver: silverRank,
+      gold: goldRank,
+      diamond: diamondRank,
+      "master-1": master1Rank,
+      "master-2": master2Rank,
     };
-    
+
     return rankMap[rank.toLowerCase()] || bronzeRank; // Default to bronze if rank not found
   };
-  
 
   return (
     <div className="profile-view">
@@ -44,9 +53,7 @@ const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
         className="profile-header"
         style={{ backgroundColor: user.profileColor }}
       >
-        <button className="close-profile" onClick={handleCloseProfile}>
-          <span><MoveLeft />Back to Messages</span>
-        </button>
+        {/* Back Button */}
         <img
           src={user.avatarUrl}
           alt={user.displayName}
@@ -54,14 +61,15 @@ const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
         />
         <div className="profile-header--basic-info">
           <h1>{user.displayName}</h1>
-          <img 
-            src={getRankImage(user.rank)} 
-            alt={`${user.rank} rank`} 
+          <img
+            src={getRankImage(user.rank)}
+            alt={`${user.rank} rank`}
             className="rank"
           />
         </div>
-        {/* <span className="rank">{user.rank}</span> */}
-        <button className="profile-header--button gradient-btn">Message</button>
+        <button className="profile-header--button gradient-btn">
+          Message
+        </button>
       </div>
 
       <div className="profile-content">
@@ -100,10 +108,10 @@ const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
             <div className="stat-item">
               <div
                 className={`status-indicator ${
-                  user.isActive ? "active" : "inactive"
+                  user.isOnline ? "active" : "inactive"
                 }`}
               ></div>
-              <span>{user.isActive ? "Online" : "Offline"}</span>
+              <span>{user.isOnline ? "Online" : "Offline"}</span>
             </div>
           </div>
         </div>
@@ -143,7 +151,7 @@ const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
               </div>
             ))}
             {user.wishlist.length > wishlistDisplayCount && (
-              <div className="more-cards">
+              <div className="wishlist-item more-cards">
                 +{user.wishlist.length - wishlistDisplayCount} more
               </div>
             )}
@@ -154,15 +162,18 @@ const ProfileView = ({ user, handleCloseProfile, isSidebarVisible }) => {
           <h2>Binder Preview</h2>
           <div className="binder-preview">
             {user.binder.slice(0, 5).map((card, index) => (
-              <img
-                key={index}
-                src={card.imageUrl}
-                alt={card.name}
-                className="binder-card"
-              />
+              <div key={index} className="binder-card-wrapper">
+                <img
+                  src={card.imageUrl}
+                  alt={card.name}
+                  className="binder-card"
+                />
+              </div>
             ))}
             {user.binder.length > 5 && (
-              <div className="more-cards">+{user.binder.length - 5} more</div>
+              <div className="binder-card-wrapper more-cards">
+                +{user.binder.length - 5} more
+              </div>
             )}
           </div>
         </div>

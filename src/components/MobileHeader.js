@@ -30,11 +30,6 @@ const MobileHeader = ({ toggleMessagesSidebar }) => {
         <h2><span className='gradient-text'>MASTERSET</span></h2>
       </Link>
       <div className="mobile-header-icons">
-        {isMessagesPage && (
-          <button className="messages-icon" onClick={handleMessagesIconClick}>
-            <MessageSquare size={32} />
-          </button>
-        )}
         <div
           className={`profile-hamburger-menu ${isSidebarOpen ? 'open' : ''}`}
           onClick={toggleSidebar}

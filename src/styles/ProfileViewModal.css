@@ -1,0 +1,98 @@
+.profile-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.profile-view-content {
+    background-color: var(--black);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.close-profile {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.profile-header {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--secondary-color-solid);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.profile-content {
+    padding: 1rem 2rem 2rem;
+}
+
+.profile-section {
+    margin-bottom: 1.5rem;
+}
+
+.profile-section h2 {
+    margin-bottom: 0.5rem;
+    color: var(--pink);
+}
+
+.stats-grid, .rarity-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.stat-item, .rarity-item {
+    background-color: var(--hover);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    flex: 1 1 45%;
+}
+
+.stat-item span {
+    display: block;
+    color: var(--subtext);
+}
+
+.stat-item strong {
+    color: var(--white);
+}
+
+.rarity-name {
+    color: var(--subtext);
+}
+
+.rarity-count {
+    color: var(--white);
+    font-weight: bold;
+}
+
+/* Ensure the modal is scrollable if content exceeds viewport height */
+.profile-view-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.profile-view-content::-webkit-scrollbar-thumb {
+    background-color: var(--hover);
+    border-radius: 4px;
+}

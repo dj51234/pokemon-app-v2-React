@@ -113,7 +113,7 @@ const Register = () => {
     isActive: true,
     lastLogin: new Date(),
     totalCards: binder.length,
-    rank: 'bronze'
+    rank: 'bronze',
   });
 };
 
