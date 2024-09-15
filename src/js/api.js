@@ -95,16 +95,13 @@ function shuffleArray(array) {
 // New function for fetching sets for the PackSelection component
 export async function fetchSetsForPackSelection() {
   try {
-    const twilightMasqueradeId = 'sv6pt5'; // Twilight Masquerade set ID
-    const popularSetIds = ["sv6", "sv3pt5", "swsh12pt5"]; // Example popular set IDs
-
-    // Fetch Twilight Masquerade set
-    const twilightMasquerade = await pokemon.set.find(twilightMasqueradeId);
+  
+    const popularSetIds = ["sv7",'sv6pt5', "sv6", "sv3pt5"]; // Example popular set IDs
 
     // Fetch popular sets
     const popularSets = await Promise.all(popularSetIds.map(id => pokemon.set.find(id)));
 
-    const sets = [twilightMasquerade, ...popularSets].map(set => ({
+    const sets = [...popularSets].map(set => ({
       name: set.name,
       id: set.id,
       logo: set.images.logo,

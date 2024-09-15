@@ -5,15 +5,15 @@ import '../styles/PackSelection.css';
 
 const PackSelection = ({ onSelect, show, onFetchCards, onNext }) => {
   const [sets, setSets] = useState([]);
-  const [highlightedSetId, setHighlightedSetId] = useState('sv6'); // Default to Twilight Masquerade
+  const [highlightedSetId, setHighlightedSetId] = useState('sv7'); // Default to Twilight Masquerade
 
   useEffect(() => {
     const getSets = async () => {
       try {
         const setData = await fetchSetsForPackSelection();
-        const twilightMasquerade = setData.find(set => set.id === 'sv6pt5');
-        const popularSets = setData.filter(set => ["sv6", "sv3pt5", "swsh12pt5"].includes(set.id));
-        setSets([twilightMasquerade, ...popularSets]);
+        
+        const popularSets = setData.filter(set => ["sv7",'sv6pt5', "sv6", "sv3pt5"].includes(set.id));
+        setSets([...popularSets]);
       } catch (error) {
         console.error('Error fetching set data:', error);
       }

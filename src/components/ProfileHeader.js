@@ -105,6 +105,9 @@ const ProfileHeader = () => {
         <li onClick={() => handleNavigation('/')}>Home</li>
         <li onClick={() => handleNavigation('/profile')}>Profile (Detailed)</li>
         <li className="menu-header">Open Packs</li>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv7')}>
+         Stellar Crown <span className="gradient-text">NEW</span> 
+        </li>
         <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6pt5')}>
          Shrouded Fable <span className="gradient-text">NEW</span> 
         </li>
@@ -127,8 +130,8 @@ const ProfileHeader = () => {
         <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/view')}>View</li>
         <li className="menu-item menu-item--secondary" onClick={() => handleNavigation('/binder/wishlist')}>Wishlist</li>
         <li onClick={() => handleNavigation('/pokedex')}>Browse All Sets</li>
-        <li onClick={() => handleNavigation('/messages')}>Messages</li>
-        <li onClick={() => handleNavigation('/trade')}>Trade With Others</li>
+        {/* <li onClick={() => handleNavigation('/messages')}>Messages</li>
+        <li onClick={() => handleNavigation('/trade')}>Trade With Others</li> */}
       </ul>
     </div>
   );

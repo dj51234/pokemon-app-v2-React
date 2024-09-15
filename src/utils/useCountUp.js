@@ -1,42 +1,59 @@
 import { useState, useEffect, useRef } from 'react';
 
 const useCountUp = (finalValue, duration = 1000, placeholder = 100) => {
-  const [count, setCount] = useState(0);
-  const [target, setTarget] = useState(placeholder);
+  const getInitialCount = (value) => {
+    if (value === undefined) return placeholder;
+    if (value > 1000) return Math.max(1000, value * 0.8);
+    return Math.min(placeholder, value);
+  };
+
+  const [count, setCount] = useState(() => getInitialCount(finalValue));
   const animationRef = useRef(null);
+  const startTimeRef = useRef(null);
+  const previousFinalValue = useRef(getInitialCount(finalValue));
 
   useEffect(() => {
-    let start = 0;
-    let startTime = null;
-
+    let isMounted = true;
     const animate = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = timestamp - startTime;
-      const increment = Math.ceil(target / (duration / 16.67)); // Roughly 60 frames per second
+      if (!startTimeRef.current) startTimeRef.current = timestamp;
+      const progress = timestamp - startTimeRef.current;
+      
+      let targetValue = finalValue !== undefined ? finalValue : previousFinalValue.current * 1.2;
+      let startValue = previousFinalValue.current;
 
-      start += increment;
-      if (start > target) start = target;
-      setCount(start);
+      const difference = targetValue - startValue;
+      const percentage = Math.min(progress / duration, 1);
+      
+      // Easing function for smoother animation
+      const easeOutQuad = (t) => t * (2 - t);
+      const easedProgress = easeOutQuad(percentage);
 
-      if (progress < duration && start < target) {
+      const currentValue = Math.round(startValue + difference * easedProgress);
+      
+      if (isMounted) {
+        setCount(currentValue);
+      }
+
+      if (percentage < 1) {
         animationRef.current = requestAnimationFrame(animate);
+      } else if (finalValue !== undefined) {
+        previousFinalValue.current = finalValue;
+        startTimeRef.current = null;
+        if (currentValue !== finalValue) {
+          animationRef.current = requestAnimationFrame(animate);
+        }
       }
     };
 
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
+      isMounted = false;
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [target, duration]);
-
-  useEffect(() => {
-    if (finalValue !== undefined) {
-      setTarget(finalValue);
-    }
-  }, [finalValue]);
+  }, [finalValue, duration]);
 
   return count;
 };

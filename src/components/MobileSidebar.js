@@ -69,6 +69,9 @@ const MobileSidebar = ({ isOpen, toggleSidebar }) => {
         <li onClick={() => handleNavigation('/')}>Home</li>
         <li onClick={() => handleNavigation('/profile')}>Profile (Detailed)</li>
         <li className="menu-header">Open Packs</li>
+        <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv7')}>
+          Stellar Crown <span className="gradient-text">NEW</span> 
+        </li>
         <li className="menu-item menu-item--secondary" onClick={() => handleSetLinkClick('sv6pt5')}>
           Shrouded Fable <span className="gradient-text">NEW</span> 
         </li>

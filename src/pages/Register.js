@@ -21,7 +21,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
+  const defaultForYouSetIds = ['sv7','sv6pt5', 'sv6', 'sv5'];
 
   useEffect(() => {
     document.body.classList.add('auth-background');
