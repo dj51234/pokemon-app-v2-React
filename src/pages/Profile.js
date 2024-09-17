@@ -49,7 +49,7 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const defaultForYouSetIds = ['sv6pt5', 'sv6', 'sv5', 'sv4pt5'];
+  const defaultForYouSetIds = ['sv7','sv6pt5', 'sv6', 'sv5'];
 
   const cardCount = useCountUp(stats.cards, 2000, 100);
   const tradeCount = useCountUp(stats.trades, 2000, 50);

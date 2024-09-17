@@ -3,14 +3,24 @@
   flex-direction: row;
   min-height: 100vh;
   color: var(--white);
+  margin-left: 27rem;
 }
 
-.profile-content {
+.profile-container .profile-content {
   flex: 1;
   padding: 0 2rem 2rem 2rem;
-  margin-left: 27rem;
   overflow-x: hidden;  /* Ensure horizontal scrolling is hidden */
   overflow-y: visible;  /* Allow vertical overflow */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pokedex-content {
+  flex: 1;
+  padding: 0 2rem 2rem 2rem;
+  overflow-x: hidden;  /* Ensure horizontal scrolling is hidden */
+  overflow-y: visible;
+  margin-left: 27rem;
 }
 
 .profile-header {
@@ -391,15 +401,22 @@ input[type="file"] {
     align-items: center;
   }
 
+  
+}
+
+@media (max-width: 1320px) {
+  .profile-container {
+    margin-left: 0;
+  }
   .profile-content {
     margin-left: 0;
     overflow-y: visible;  /* Ensure vertical overflow is allowed */
   }
 }
 
-@media (max-width: 1320px) {
-  .profile-content {
-    margin-left: 0;
+@media (min-width: 1920px) {
+  .profile-container .profile-content {
+    max-width: 1600px;
   }
 }
 

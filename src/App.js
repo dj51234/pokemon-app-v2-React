@@ -41,7 +41,6 @@ const App = () => {
               setProfileColor(userData.profileColor);
             }
             if (userData.binder) {
-              console.log("User's Binder Data:", userData.binder); // Log the binder data
               setBinderCards(userData.binder);
 
               // Fetch sets based on the binder cards

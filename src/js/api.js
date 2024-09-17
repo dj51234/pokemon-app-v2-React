@@ -37,22 +37,16 @@ export async function fetchRandomPokemonCards(setCode) {
     }
 
     const allCardIds = Object.values(setData).flat();
-    console.log(`Total cards in set ${setCode}:`, allCardIds.length);
 
     // Use a Set to ensure unique random numbers
     const uniqueCardIds = new Set();
     while (uniqueCardIds.size < numberOfCards) {
       const randomId = allCardIds[Math.floor(Math.random() * allCardIds.length)];
       uniqueCardIds.add(randomId);
-      console.log(`Generated random card ID: ${randomId}, Unique IDs so far:`, [...uniqueCardIds]);
     }
-
-    console.log('Final set of unique card IDs:', [...uniqueCardIds]);
 
     // Fetch card data for each random card ID
     const randomCardData = await Promise.all([...uniqueCardIds].map(id => pokemon.card.find(id)));
-
-    console.log('Fetched card data:', randomCardData);
 
     return randomCardData;
   } catch (error) {
@@ -76,7 +70,7 @@ export async function fetchAllPokemonNames() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
     const data = await response.json();
     const names = data.results.map(pokemon => pokemon.name);
-    console.log('All Pokémon names:', names);
+
     return names;
   } catch (error) {
     console.error('Error fetching Pokémon names from PokeAPI:', error);
@@ -118,7 +112,7 @@ export async function fetchSetsForPackSelection() {
 export async function logRarities() {
   try {
     const rarities = await pokemon.rarity.all();
-    console.log('Rarities:', rarities);
+
   } catch (error) {
     console.error('Error fetching rarities:', error);
   }

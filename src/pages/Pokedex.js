@@ -214,7 +214,6 @@ const PokedexPage = () => {
     }
 
     const cardIDs = Object.values(setCardData).flat();
-    console.log(`Fetching card data for set ${set.id}:`, cardIDs);
 
     const cardData = await fetchCardData(cardIDs);
     setCards(cardData);
@@ -278,7 +277,7 @@ const PokedexPage = () => {
       {currentUser ? <ProfileHeader /> : <Header />}
       <MobileHeader /> {/* Add MobileHeader component */}
 
-      <div className={`content ${currentUser ? 'profile-content' : ''}`} style={{ background: '#080B12' }}>
+      <div className={`content ${currentUser ? 'profile-content pokedex-content' : ''}`} style={{ background: '#080B12' }}>
         <SearchBar
           sortSets={sortSets}
           series={series}

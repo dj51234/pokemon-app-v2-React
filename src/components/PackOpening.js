@@ -338,7 +338,7 @@ const PackOpening = ({
         </div>
         <div className="pack-opening-buttons">
           <button
-            className={`back-button btn-primary ${
+            className={`back-button-home back-button btn-primary ${
               highlightBackButton ? 'highlighted' : ''
             }`}
             onClick={handleBackClick}

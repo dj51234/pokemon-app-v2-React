@@ -115,7 +115,7 @@
   pointer-events: none;
 }
 
-.back-button, .next-button {
+.back-button-home.back-button, .next-button {
   margin-top: 2rem;
   padding: 1rem 2rem;
   font-size: 1.6rem;
