@@ -1,76 +1,130 @@
 // src/js/api.js
 
-import pokemon from 'pokemontcgsdk';
-import allSetData from './pack_algorithm/allSetData.json';
+import sets from '../data/sets.json';
+import allCardsSlim from '../data/allCardsSlim.json';
 
-pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
+// Cache for loaded card sets
+const cardCache = {};
 
-export async function fetchSetData() {
-  try {
-    const response = await pokemon.set.all();
-    return response;
-  } catch (error) {
-    console.error('Error:', error);
-  }
+// Get all sets
+export function getAllSets() {
+  return sets;
 }
 
+// Alias for backwards compatibility
+export async function fetchSetData() {
+  return sets;
+}
+
+// Get single set by ID
+export function getSetById(setId) {
+  return sets.find(s => s.id === setId);
+}
+
+export async function getCardsBySetId(setId) {
+  return allCardsSlim[setId] || [];
+}
+
+// Get single card by ID
+export async function getCardById(cardId) {
+  const setId = cardId.split('-')[0];
+  const cards = allCardsSlim[setId] || [];
+  return cards.find(c => c.id === cardId);
+}
+
+export async function getFullCardById(cardId) {
+  const setId = cardId.split('-')[0];
+  
+  // Load full set data if not cached
+  if (!cardCache[setId]) {
+    try {
+      const data = await import(`../data/cards/${setId}.json`);
+      cardCache[setId] = data.default;
+    } catch (error) {
+      console.error(`Error loading full card data:`, error);
+      return null;
+    }
+  }
+  
+  return cardCache[setId].find(c => c.id === cardId);
+}
+
+// Get all rarities in a set
+export async function getSetRarities(setId) {
+  const cards = await getCardsBySetId(setId);
+  return [...new Set(cards.map(c => c.rarity).filter(Boolean))];
+}
+
+// Get cards by rarity within a set
+export async function getCardsByRarity(setId, rarity) {
+  const cards = await getCardsBySetId(setId);
+  return cards.filter(c => c.rarity?.toLowerCase() === rarity.toLowerCase());
+}
+
+// Search cards by name within a set
+export async function searchCardsByNameInSet(setId, name) {
+  const cards = await getCardsBySetId(setId);
+  return cards.filter(c => c.name.toLowerCase().includes(name.toLowerCase()));
+}
+
+// Replaces old fetchCardData(cardIDs)
 export async function fetchCardData(cardIDs) {
   try {
-    const cardData = await Promise.all(cardIDs.map(id => pokemon.card.find(id)));
-    return cardData;
+    const cardData = await Promise.all(cardIDs.map(id => getCardById(id)));
+    return cardData.filter(Boolean);
   } catch (error) {
     console.error('Error:', error);
+    return [];
   }
 }
 
-// Removed fetchSetLength as it's no longer needed
-
+// Replaces old fetchRandomPokemonCards(setCode)
 export async function fetchRandomPokemonCards(setCode) {
   try {
-    const numberOfCards = 10; // Number of random cards to fetch
-
-    // Use allSetData.json to fetch card IDs
-    const setData = allSetData[setCode];
-    if (!setData) {
-      console.error(`Set ID ${setCode} not found in JSON data.`);
+    const numberOfCards = 10;
+    const cards = await getCardsBySetId(setCode);
+    
+    if (!cards || cards.length === 0) {
+      console.error(`Set ID ${setCode} not found.`);
       return [];
     }
 
-    const allCardIds = Object.values(setData).flat();
-
-    // Use a Set to ensure unique random numbers
-    const uniqueCardIds = new Set();
-    while (uniqueCardIds.size < numberOfCards) {
-      const randomId = allCardIds[Math.floor(Math.random() * allCardIds.length)];
-      uniqueCardIds.add(randomId);
-    }
-
-    // Fetch card data for each random card ID
-    const randomCardData = await Promise.all([...uniqueCardIds].map(id => pokemon.card.find(id)));
-
-    return randomCardData;
+    const shuffled = [...cards].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, numberOfCards);
   } catch (error) {
     console.error('Error fetching random Pokémon cards:', error);
-    throw error;
+    return [];
   }
 }
 
+// Replaces old fetchPokemonCardsByName(name) - searches all sets
 export async function fetchPokemonCardsByName(name) {
   try {
-    const response = await pokemon.card.where({ q: `name:"${name}"` });
-    return response.data;
+    const allCards = [];
+    for (const set of sets) {
+      try {
+        const cards = await getCardsBySetId(set.id);
+        const matches = cards.filter(c => 
+          c.name.toLowerCase().includes(name.toLowerCase())
+        );
+        allCards.push(...matches);
+      } catch (e) {
+        // Skip sets that fail to load
+      }
+    }
+    return allCards;
   } catch (error) {
     console.error('Error fetching Pokémon cards by name:', error);
-    throw error;
+    return [];
   }
 }
 
+// Keep as-is - still uses PokeAPI
 export async function fetchAllPokemonNames() {
   try {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
     const data = await response.json();
     const names = data.results.map(pokemon => pokemon.name);
-
     return names;
   } catch (error) {
     console.error('Error fetching Pokémon names from PokeAPI:', error);
@@ -78,97 +132,75 @@ export async function fetchAllPokemonNames() {
   }
 }
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-// New function for fetching sets for the PackSelection component
-export async function fetchSetsForPackSelection() {
+// Replaces old fetchSetsForPackSelection()
+export function fetchSetsForPackSelection() {
   try {
-  
-    const popularSetIds = ["sv7",'sv6pt5', "sv6", "sv3pt5"]; // Example popular set IDs
+    const popularSetIds = ["sv7", "sv6pt5", "sv6", "sv3pt5"];
+    
+    const popularSets = popularSetIds
+      .map(id => getSetById(id))
+      .filter(Boolean)
+      .map(set => ({
+        name: set.name,
+        id: set.id,
+        logo: set.images.logo,
+        releaseDate: set.releaseDate
+      }));
 
-    // Fetch popular sets
-    const popularSets = await Promise.all(popularSetIds.map(id => pokemon.set.find(id)));
-
-    const sets = [...popularSets].map(set => ({
-      name: set.name,
-      id: set.id,
-      logo: set.images.logo,
-      releaseDate: set.releaseDate
-    }));
-
-    return sets;
+    return popularSets;
   } catch (error) {
     console.error('Error fetching sets for pack selection:', error);
     return [];
   }
 }
 
+// Replaces old logRarities()
 export async function logRarities() {
   try {
-    const rarities = await pokemon.rarity.all();
-
+    const allRarities = new Set();
+    for (const set of sets.slice(0, 10)) { // Only check first 10 sets for speed
+      const rarities = await getSetRarities(set.id);
+      rarities.forEach(r => allRarities.add(r));
+    }
+    console.log('All rarities:', [...allRarities]);
   } catch (error) {
     console.error('Error fetching rarities:', error);
   }
 }
 
-// Call the function on page load
-logRarities();
-
+// Replaces old fetchRandomPokemonCardsForPokedex()
 export async function fetchRandomPokemonCardsForPokedex(numberOfCards = 10) {
   try {
-    // Fetch all sets
-    const sets = await fetchSetData();
-
-    // Select a random set
     const randomSet = sets[Math.floor(Math.random() * sets.length)];
-
-    // Get the IDs of all cards in the selected set
-    const cardIDs = Array.from({ length: randomSet.total }, (_, i) => `${randomSet.id}-${i + 1}`);
-
-    // Select random card IDs from the set
-    const randomCardIDs = Array.from({ length: numberOfCards }, () =>
-      cardIDs[Math.floor(Math.random() * cardIDs.length)]
-    );
-
-    // Fetch data for the selected random card IDs
-    const randomCardData = await fetchCardData(randomCardIDs);
-
-    return randomCardData;
+    const cards = await getCardsBySetId(randomSet.id);
+    if (!cards || cards.length === 0) return [];
+    const shuffled = [...cards].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, numberOfCards);
   } catch (error) {
     console.error('Error fetching random Pokémon cards for Pokedex:', error);
-    throw error;
+    return [];
   }
 }
 
-// Function to fetch sets based on user binder data
-export async function fetchUserSets(binderCards) {
+// Replaces old fetchUserSets(binderCards)
+export function fetchUserSets(binderCards) {
   try {
-    // Extract unique set IDs from binder cards
     const setIds = [...new Set(binderCards.map(card => card.id.split('-')[0]))];
+    
+    const userSets = setIds
+      .map(id => getSetById(id))
+      .filter(Boolean)
+      .map(set => ({
+        name: set.name,
+        id: set.id,
+        logo: set.images.logo,
+        releaseDate: set.releaseDate,
+        totalCount: set.total
+      }));
 
-    // Fetch set data for these set IDs
-    const setsData = await Promise.all(setIds.map(id => pokemon.set.find(id)));
-
-    // Map the fetched set data to desired format, including totalCount
-    const sets = setsData.map(set => ({
-      name: set.name,
-      id: set.id,
-      logo: set.images.logo,
-      releaseDate: set.releaseDate,
-      totalCount: set.total // Include totalCount property
-    }));
-
-    return sets;
+    return userSets;
   } catch (error) {
     console.error('Error fetching user-specific sets:', error);
     return [];
   }
 }
-

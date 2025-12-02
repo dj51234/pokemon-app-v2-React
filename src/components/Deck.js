@@ -21,24 +21,19 @@ const Deck = ({ setId }) => {
             back: cardBackImage,
             rarity: card.rarity,
           }));
+          
+          // Preload images in order (top card first)
+          for (const card of cardsWithBackImage) {
+            await new Promise((resolve) => {
+              const img = new Image();
+              img.onload = resolve;
+              img.onerror = resolve;
+              img.src = card.front;
+            });
+          }
+          
           setDeck(cardsWithBackImage);
-
-          const firstCardImage = cardsWithBackImage[0].front;
-          const img = new Image();
-          img.src = firstCardImage;
-          img.onload = () => {
-            const aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
-            const containerWidth = `min(${img.naturalWidth}px, 75vw)`;
-            document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
-            document.documentElement.style.setProperty('--container-width', containerWidth);
-          };
-
-          // Set animating to false after all cards have finished falling
-          setTimeout(() => {
-            setAnimating(false);
-          }, 1000); // Ensure this delay matches the fall animation duration
-        } else {
-          console.error('No cards were returned from the openPack function.');
+          // ... rest of your code
         }
       }
     };

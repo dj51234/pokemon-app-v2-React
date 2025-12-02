@@ -17,7 +17,6 @@ import { doc, onSnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 import './index.css';
 import { fetchUserSets } from './js/api';
 import ProtectedRoute from './ProtectedRoute';
-// import './js/pack_algorithm/fetchAllSetData';
 
 export const AuthContext = React.createContext();
 

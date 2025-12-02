@@ -1,9 +1,6 @@
 // src/js/pack_algorithm/packAlgorithm.js
 
-import pokemon from 'pokemontcgsdk';
-import allSetData from './allSetData.json';
-
-pokemon.configure({ apiKey: process.env.REACT_APP_API_KEY });
+import { getCardsBySetId, getFullCardById } from '../api';
 
 // Function to get random cards from an array
 function getRandomCards(array, count) {
@@ -11,46 +8,46 @@ function getRandomCards(array, count) {
   return shuffled.slice(0, count);
 }
 
-// Function to fetch individual card data by ID
-async function fetchCardData(cardId) {
-  try {
-    const card = await pokemon.card.find(cardId);
-    return card;
-  } catch (error) {
-    console.error(`Error fetching data for card ID ${cardId}:`, error);
-  }
-}
-
 // Function to simulate opening a pack
 export async function openPack(setId) {
   try {
-    const setData = allSetData[setId];
-    if (!setData) {
-      console.error(`Set ID ${setId} not found in the JSON data.`);
+    const cards = await getCardsBySetId(setId);
+    if (!cards || cards.length === 0) {
+      console.error(`Set ID ${setId} not found.`);
       return [];
     }
-    
+
+    // Group cards by rarity
+    const rarityGroups = {};
+    cards.forEach(card => {
+      const rarity = card.rarity?.toLowerCase() || 'unknown';
+      if (!rarityGroups[rarity]) {
+        rarityGroups[rarity] = [];
+      }
+      rarityGroups[rarity].push(card);
+    });
+
     let finalSelectedCards = [];
 
-    if (setData.common && setData.uncommon) {
-      const selectedCommonCards = getRandomCards(setData.common, 6).map(id => ({
-        id,
+    if (rarityGroups.common && rarityGroups.uncommon) {
+      const selectedCommonCards = getRandomCards(rarityGroups.common, 6).map(card => ({
+        ...card,
         rarity: 'common'
       }));
-      const selectedUncommonCards = getRandomCards(setData.uncommon, 3).map(id => ({
-        id,
+      const selectedUncommonCards = getRandomCards(rarityGroups.uncommon, 3).map(card => ({
+        ...card,
         rarity: 'uncommon'
       }));
 
-      const remainingRarities = Object.keys(setData).filter(
-        (rarity) => rarity !== 'common' && rarity !== 'uncommon'
+      const remainingRarities = Object.keys(rarityGroups).filter(
+        rarity => rarity !== 'common' && rarity !== 'uncommon'
       );
 
       const selectedRarity = remainingRarities[Math.floor(Math.random() * remainingRarities.length)];
-      const selectedRareCard = getRandomCards(setData[selectedRarity], 1).map(id => ({
-        id,
+      const selectedRareCard = {
+        ...getRandomCards(rarityGroups[selectedRarity], 1)[0],
         rarity: selectedRarity
-      }))[0];
+      };
 
       finalSelectedCards = [
         ...selectedCommonCards,
@@ -58,36 +55,29 @@ export async function openPack(setId) {
         selectedRareCard
       ];
     } else {
-      const allCards = Object.values(setData).flat();
-      finalSelectedCards = getRandomCards(allCards, 10).map(id => {
-        const rarity = Object.keys(setData).find(rarity => setData[rarity].includes(id));
-        return { id, rarity: rarity || 'unknown' };
-      });
+      // Fallback if set doesn't have standard rarity structure
+      finalSelectedCards = getRandomCards(cards, 10).map(card => ({
+        ...card,
+        rarity: card.rarity?.toLowerCase() || 'unknown'
+      }));
     }
 
-    const cardsWithDetails = await Promise.all(
-      finalSelectedCards.map(async (card) => {
-        const cardData = await fetchCardData(card.id);
-        if (cardData) {
-          return { 
-            ...card, 
-            imageUrl: cardData.images.large, 
-            subtypes: cardData.subtypes,
-            setId: cardData.set.id,
-            supertypes: cardData.supertype,
-            type: cardData.types ? cardData.types[0] : 'unknown',
-          };
-        }
-        return card;
-      })
-    );
+    // Map to the format your app expects
+    const cardsWithDetails = finalSelectedCards.map(card => ({
+      id: card.id,
+      rarity: card.rarity,
+      imageUrl: card.images?.large,
+      subtypes: card.subtypes,
+      setId: setId,
+      supertypes: card.supertype,
+      type: card.types ? card.types[0] : 'unknown',
+    }));
 
-    // Log rarity and image URLs to the console
     cardsWithDetails.forEach(card => {
       console.log(`Card ID: ${card.id}, Rarity: ${card.rarity}, Image URL: ${card.imageUrl}`);
     });
 
-    return cardsWithDetails.filter(card => card.imageUrl); // Ensure to return only cards with image URLs
+    return cardsWithDetails.filter(card => card.imageUrl);
   } catch (error) {
     console.error(`Error opening pack for set ID ${setId}:`, error);
     return [];
@@ -95,7 +85,12 @@ export async function openPack(setId) {
 }
 
 export async function fetchExpandedCardData(cardId) {
-  const card = await pokemon.card.find(cardId);
+  const card = await getFullCardById(cardId);
+
+  if (!card) {
+    console.error(`Card ${cardId} not found`);
+    return null;
+  }
 
   const cardInfo = {
     name: card.name,
@@ -126,23 +121,12 @@ export async function fetchExpandedCardData(cardId) {
     retreatCost: card.retreatCost,
     convertedRetreatCost: card.convertedRetreatCost,
     set: {
-      name: card.set.name,
+      name: card.set?.name || '',
     },
     rarity: card.rarity,
     number: card.number,
-    tcgplayer: card.tcgplayer ? {
-      url: card.tcgplayer.url,
-      updatedAt: card.tcgplayer.updatedAt,
-      prices: card.tcgplayer.prices || {}
-    } : {},
+    tcgplayer: {}, // Empty for now since static data doesn't have pricing
   };
 
   return cardInfo;
 }
-
-async function test() {
-  const data = await pokemon.card.find('sv6-205')
-  console.log(data)
-}
-
-test()

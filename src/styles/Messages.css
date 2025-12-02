@@ -141,7 +141,7 @@
   width: max-content;
 }
 
-.back-button:hover {
+.messages-container .back-button:hover {
   color: var(--pink);
 }
 

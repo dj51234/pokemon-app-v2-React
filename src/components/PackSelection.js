@@ -11,8 +11,10 @@ const PackSelection = ({ onSelect, show, onFetchCards, onNext }) => {
     const getSets = async () => {
       try {
         const setData = await fetchSetsForPackSelection();
+        console.log('Set data received:', setData);
         
         const popularSets = setData.filter(set => ["sv7",'sv6pt5', "sv6", "sv3pt5"].includes(set.id));
+        console.log('Popular sets:', popularSets);
         setSets([...popularSets]);
       } catch (error) {
         console.error('Error fetching set data:', error);

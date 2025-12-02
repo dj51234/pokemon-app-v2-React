@@ -13,11 +13,11 @@ import {
   fetchPokemonCardsByName,
   fetchAllPokemonNames,
   fetchRandomPokemonCardsForPokedex,
+  getCardsBySetId,  // Add this
 } from '../js/api';
 import leven from 'leven';
 import '../styles/Grid.css';
 import { AuthContext } from '../App';
-import allSetData from '../js/pack_algorithm/allSetData.json';
 import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
 import { firestore } from '../js/firebase';
 
@@ -206,21 +206,32 @@ const PokedexPage = () => {
   const handleSetClick = async (set) => {
     setIsLoading(true);
 
-    const setCardData = allSetData[set.id];
-    if (!setCardData) {
-      console.error(`Set ID ${set.id} not found in JSON data.`);
+    try {
+      const cardData = await getCardsBySetId(set.id);
+      
+      if (!cardData || cardData.length === 0) {
+        console.error(`Set ID ${set.id} not found.`);
+        setIsLoading(false);
+        return;
+      }
+
+      setSelectedSet(set);
+      setViewMode('cards');
       setIsLoading(false);
-      return;
+      
+      // Load cards one by one
+      for (let i = 0; i < cardData.length; i++) {
+        setCards(prev => [...prev, cardData[i]]);
+        
+        // Small delay so browser can render
+        await new Promise(r => setTimeout(r, 10));
+      }
+      
+    } catch (error) {
+      console.error('Error loading set cards:', error);
+      setIsLoading(false);
     }
-
-    const cardIDs = Object.values(setCardData).flat();
-
-    const cardData = await fetchCardData(cardIDs);
-    setCards(cardData);
-    setSelectedSet(set);
-    setViewMode('cards');
-    setIsLoading(false);
-  };
+  }; 
 
   const handleBackToSets = () => {
     setViewMode('sets');
