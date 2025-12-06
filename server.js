@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -5,7 +7,7 @@ const axios = require('axios');
 const app = express();
 app.use(cors());
 
-const API_KEY = '1d9fae19-4bf6-4422-bdf4-6128f7cda936';
+const API_KEY = process.env.API_KEY;
 const BASE_URL = 'https://api.pokemontcg.io/v2';
 
 app.use('/api', async (req, res) => {

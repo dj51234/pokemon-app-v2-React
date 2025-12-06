@@ -74,7 +74,10 @@ This app allows users to open packs and collect Pokémon cards in their profile.
    - Add your Pokémon TCG API key to the .env file (you can sign up for one [**HERE**](https://dev.pokemontcg.io/)):
    ```sh
    REACT_APP_API_KEY=your_api_key_here
-4. Run the app:
+4. Start local server for API calls
+   ```sh
+   node server.js
+5. Run the app:
    ```sh
    npm start
 ## Contribution Guidelines
