@@ -1,10 +1,6 @@
 
 # MasterSet
 
-<p align="center" width="100%">
-<video src="https://github.com/user-attachments/assets/25f1f786-f745-496d-92c2-8ff98f3b0c8f" width="80%" controls></video>
-</p>
-
 ## Overview
 
 This app allows users to open packs and collect Pokémon cards in their profile. It currently features a hero page and a main browse page where users can search for Pokémon sets or specific Pokémon. The app aims to provide a comprehensive and engaging experience for Pokémon card collectors.
