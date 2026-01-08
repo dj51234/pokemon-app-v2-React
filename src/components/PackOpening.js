@@ -1,10 +1,10 @@
 // File: /components/PackOpening.jsx
 
-import React, { useState, useEffect, useRef } from 'react';
-import '../styles/PackOpening.css';
-import '../styles/explosion.css';
-import defaultImage from '../assets/default-image.png';
-import NormalCard from './NormalCard';
+import React, { useState, useEffect, useRef } from 'react'
+import '../styles/PackOpening.css'
+import '../styles/explosion.css'
+import defaultImage from '../assets/default-image.png'
+import NormalCard from './NormalCard'
 
 // Function to check if a rarity is considered rare
 const isRare = (rarity) => {
@@ -38,9 +38,9 @@ const isRare = (rarity) => {
     'shiny ultra rare',
     'trainer gallery rare holo',
     'ultra rare',
-  ];
-  return rareRarities.includes(rarity);
-};
+  ]
+  return rareRarities.includes(rarity)
+}
 
 // Define rarity colors
 const rarityColors = {
@@ -75,7 +75,7 @@ const rarityColors = {
   'trainer gallery rare holo': '#FFFFFF',
   'ultra rare': '#FFFFFF',
   // Add more colors for other rarities as needed
-};
+}
 
 const PackOpening = ({
   show,
@@ -83,126 +83,140 @@ const PackOpening = ({
   onBack,
   onNext,
   addRevealedCards,
-  selectedSetId
+  selectedSetId,
 }) => {
   const [leftStack, setLeftStack] = useState(
-    Array(10).fill({ back: defaultImage, front: null, flipped: false })
-  );
-  const [cardsToShow, setCardsToShow] = useState([]);
-  const [animating, setAnimating] = useState(false);
-  const [allFlipped, setAllFlipped] = useState(false);
-  const [movingCard, setMovingCard] = useState(null);
-  const [sendingToBinder, setSendingToBinder] = useState(false);
-  const [hideStack, setHideStack] = useState(false);
-  const [highlightBackButton, setHighlightBackButton] = useState(false);
-  const [hideNextButton, setHideNextButton] = useState(false);
-  const [nextTopCardRarity, setNextTopCardRarity] = useState(null);
-  const topCardRef = useRef(null);
-  const cardStackRef = useRef(null);
+    Array(10)
+      .fill(null)
+      .map((_, i) => ({
+        back: defaultImage,
+        front: null,
+        flipped: false,
+        instanceId: `card-${i}`,
+      }))
+  )
+  const [cardsToShow, setCardsToShow] = useState([])
+  const [animating, setAnimating] = useState(false)
+  const [allFlipped, setAllFlipped] = useState(false)
+  const [movingCard, setMovingCard] = useState(null)
+  const [sendingToBinder, setSendingToBinder] = useState(false)
+  const [hideStack, setHideStack] = useState(false)
+  const [highlightBackButton, setHighlightBackButton] = useState(false)
+  const [hideNextButton, setHideNextButton] = useState(false)
+  const [nextTopCardRarity, setNextTopCardRarity] = useState(null)
+  const topCardRef = useRef(null)
+  const cardStackRef = useRef(null)
 
   useEffect(() => {
     if (randomCards.length > 0) {
       // Separate rare and non-rare cards
       const nonRareCards = randomCards.filter(
         (card) => !isRare(card.rarity?.toLowerCase())
-      );
+      )
       const rareCards = randomCards.filter((card) =>
         isRare(card.rarity?.toLowerCase())
-      );
+      )
 
       // Combine non-rare cards first, then rare cards
-      const reorderedCards = [ ...rareCards, ...nonRareCards,];
+      const reorderedCards = [...rareCards, ...nonRareCards]
 
-      setCardsToShow(reorderedCards);
-      setHideStack(false);
+      setCardsToShow(reorderedCards)
+      setHideStack(false)
       setLeftStack(
-        Array(10).fill({ back: defaultImage, front: null, flipped: false })
-      );
-      setAllFlipped(false);
-      setHideNextButton(false);
+        Array(10)
+          .fill(null)
+          .map((_, i) => ({
+            back: defaultImage,
+            front: null,
+            flipped: false,
+            instanceId: `card-${i}-${Date.now()}`, // Unique ID for each pack opening session
+          }))
+      )
+      setAllFlipped(false)
+      setHideNextButton(false)
     }
-  }, [randomCards]);
+  }, [randomCards])
 
   const createParticle = (explosionContainer, color) => {
-    const particle = document.createElement('div');
-    particle.classList.add('particle');
+    const particle = document.createElement('div')
+    particle.classList.add('particle')
 
-    const rect = explosionContainer.getBoundingClientRect();
-    const cardWidth = rect.width;
-    const cardHeight = rect.height;
+    const rect = explosionContainer.getBoundingClientRect()
+    const cardWidth = rect.width
+    const cardHeight = rect.height
 
     // Determine a random starting position around the border of the card
-    let startX, startY;
-    const borderSide = Math.floor(Math.random() * 4);
+    let startX, startY
+    const borderSide = Math.floor(Math.random() * 4)
     switch (borderSide) {
       case 0: // Top border
-        startX = Math.random() * cardWidth;
-        startY = 0;
-        break;
+        startX = Math.random() * cardWidth
+        startY = 0
+        break
       case 1: // Right border
-        startX = cardWidth;
-        startY = Math.random() * cardHeight;
-        break;
+        startX = cardWidth
+        startY = Math.random() * cardHeight
+        break
       case 2: // Bottom border
-        startX = Math.random() * cardWidth;
-        startY = cardHeight;
-        break;
+        startX = Math.random() * cardWidth
+        startY = cardHeight
+        break
       case 3: // Left border
-        startX = 0;
-        startY = Math.random() * cardHeight;
-        break;
+        startX = 0
+        startY = Math.random() * cardHeight
+        break
       default:
-        startX = Math.random() * cardWidth;
-        startY = Math.random() * cardHeight;
+        startX = Math.random() * cardWidth
+        startY = Math.random() * cardHeight
     }
 
     // Calculate the target position based on direction from center
-    const centerX = cardWidth / 2;
-    const centerY = cardHeight / 2;
-    const directionX = startX - centerX;
-    const directionY = startY - centerY;
-    const distance = Math.random() * 500 + 300; // Increase the explosion distance
-    const tx = (directionX * distance) / cardWidth + 'px';
-    const ty = (directionY * distance) / cardHeight + 'px';
+    const centerX = cardWidth / 2
+    const centerY = cardHeight / 2
+    const directionX = startX - centerX
+    const directionY = startY - centerY
+    const distance = Math.random() * 500 + 300 // Increase the explosion distance
+    const tx = (directionX * distance) / cardWidth + 'px'
+    const ty = (directionY * distance) / cardHeight + 'px'
 
-    const size = Math.random() * 12; // Random size between 10px and 30px
-    particle.style.setProperty('--start-x', `${startX}px`);
-    particle.style.setProperty('--start-y', `${startY}px`);
-    particle.style.setProperty('--tx', tx);
-    particle.style.setProperty('--ty', ty);
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-    particle.style.background = color; // Use color for the particle background
+    const size = Math.random() * 12 // Random size between 10px and 30px
+    particle.style.setProperty('--start-x', `${startX}px`)
+    particle.style.setProperty('--start-y', `${startY}px`)
+    particle.style.setProperty('--tx', tx)
+    particle.style.setProperty('--ty', ty)
+    particle.style.width = `${size}px`
+    particle.style.height = `${size}px`
+    particle.style.background = color // Use color for the particle background
 
-    explosionContainer.appendChild(particle);
+    explosionContainer.appendChild(particle)
 
-    particle.style.animation = 'explosion 1s forwards'; // Shorter animation duration
+    particle.style.animation = 'explosion 1s forwards' // Shorter animation duration
 
     particle.addEventListener('animationend', () => {
-      particle.remove();
-    });
-  };
+      particle.remove()
+    })
+  }
 
   const triggerExplosion = (explosionContainer, rarity) => {
-    const color = rarityColors[rarity] || 'white'; // Default to white if no color specified
-    const numberOfParticles = 450; // Adjust the number of particles
+    const color = rarityColors[rarity] || 'white' // Default to white if no color specified
+    const numberOfParticles = 450 // Adjust the number of particles
     for (let i = 0; i < numberOfParticles; i++) {
-      createParticle(explosionContainer, color);
+      createParticle(explosionContainer, color)
     }
-  };
+  }
 
   const handleCardClick = (index) => {
-    if (animating) return;
+    if (animating) return
 
-    const newLeftStack = [...leftStack];
-    const card = newLeftStack[index];
+    const newLeftStack = [...leftStack]
+    const card = newLeftStack[index]
 
     if (!allFlipped && cardsToShow.length > 0) {
-      setAnimating(true);
+      setAnimating(true)
 
       const updatedStack = newLeftStack.map((card, i) => {
         if (!card.flipped && cardsToShow.length > 0) {
-          const randomCard = cardsToShow.pop();
+          const randomCard = cardsToShow.pop()
           const newCard = {
             ...card,
             front: randomCard.images.large,
@@ -217,85 +231,91 @@ const PackOpening = ({
                 supertype.toLowerCase()
               ) || [],
             id: randomCard.id, // Add the card id here
-          };
-          return newCard;
+          }
+          return newCard
         }
-        return card;
-      });
+        return card
+      })
 
-      setLeftStack(updatedStack);
-      setCardsToShow(cardsToShow);
-      setAllFlipped(true);
+      setLeftStack(updatedStack)
+      setCardsToShow(cardsToShow)
+      setAllFlipped(true)
 
       setTimeout(() => {
-        setAnimating(false);
-      }, 600);
+        setAnimating(false)
+      }, 600)
     } else if (card.flipped) {
-      setAnimating(true);
-      setMovingCard(index);
+      setAnimating(true)
+      setMovingCard(index)
 
       // Check the next top card's rarity before moving the current top card to the back
-      const nextTopCardElement = Array.from(
-        cardStackRef.current.children
-      ).find((child) => parseInt(child.style.zIndex, 10) === 9); // Select the second-to-top card
+      const nextTopCardElement = Array.from(cardStackRef.current.children).find(
+        (child) => parseInt(child.style.zIndex, 10) === 9
+      ) // Select the second-to-top card
       if (nextTopCardElement) {
-        const nextTopCardRarity =
-          nextTopCardElement.getAttribute('data-rarity');
+        const nextTopCardRarity = nextTopCardElement.getAttribute('data-rarity')
         if (isRare(nextTopCardRarity)) {
           // Set the next top card rarity to apply box shadow after the current top card is clicked
-          setNextTopCardRarity(nextTopCardRarity);
+          setNextTopCardRarity(nextTopCardRarity)
           // Trigger the explosion animation on the next top card
           triggerExplosion(
             nextTopCardElement.querySelector('.explosion-container'),
             nextTopCardRarity
-          );
+          )
         }
       }
 
       setTimeout(() => {
-        const newCard = newLeftStack.splice(index, 1)[0];
-        newLeftStack.push(newCard);
+        const newCard = newLeftStack.splice(index, 1)[0]
+        newLeftStack.push(newCard)
         newLeftStack.forEach((card, idx) => {
-          card.zIndex = newLeftStack.length - idx;
-        });
+          card.zIndex = newLeftStack.length - idx
+        })
 
-        setLeftStack(newLeftStack);
-        setMovingCard(null);
-        setNextTopCardRarity(null);
-        setAnimating(false);
-      }, 700);
+        setLeftStack(newLeftStack)
+        setMovingCard(null)
+        setNextTopCardRarity(null)
+        setAnimating(false)
+      }, 700)
     }
-  };
+  }
 
   const handleBackClick = () => {
     setTimeout(() => {
       setLeftStack(
-        Array(10).fill({ back: defaultImage, front: null, flipped: false })
-      );
-      setCardsToShow([]);
-      setAllFlipped(false);
-      setMovingCard(null);
-      setHideStack(false);
-      setHighlightBackButton(false);
-    }, 500);
-    onBack();
-  };
+        Array(10)
+          .fill(null)
+          .map((_, i) => ({
+            back: defaultImage,
+            front: null,
+            flipped: false,
+            instanceId: `card-${i}-reset`,
+          }))
+      )
+      setCardsToShow([])
+      setAllFlipped(false)
+      setMovingCard(null)
+      setHideStack(false)
+      setHighlightBackButton(false)
+    }, 500)
+    onBack()
+  }
 
   const handleNextClick = () => {
-    setSendingToBinder(true);
+    setSendingToBinder(true)
     const newRevealedCards = leftStack
       .filter((card) => card.flipped)
-      .map((card) => ({ image: card.front }));
-    addRevealedCards(newRevealedCards);
+      .map((card) => ({ image: card.front }))
+    addRevealedCards(newRevealedCards)
 
     setTimeout(() => {
-      setSendingToBinder(false);
-      setHideStack(true);
-      setHighlightBackButton(true);
-      setHideNextButton(true);
-      onNext();
-    }, 600);
-  };
+      setSendingToBinder(false)
+      setHideStack(true)
+      setHighlightBackButton(true)
+      setHideNextButton(true)
+      onNext()
+    }, 600)
+  }
 
   return (
     <div className={`pack-opening ${show ? 'show' : ''}`}>
@@ -305,20 +325,20 @@ const PackOpening = ({
         </h2>
         <div
           ref={cardStackRef}
-          className={`card-stack ${
-            sendingToBinder ? 'move-to-binder' : ''
-          } ${hideStack ? 'hide' : ''}`}
+          className={`card-stack ${sendingToBinder ? 'move-to-binder' : ''} ${
+            hideStack ? 'hide' : ''
+          }`}
         >
           {leftStack.map((card, index) => (
             <div
-              key={index}
+              key={card.instanceId}
               ref={index === 0 ? topCardRef : null}
               className={`card ${movingCard === index ? 'moving-to-back' : ''}`}
               style={{ zIndex: leftStack.length - index }}
               data-rarity={card.rarity}
             >
               <NormalCard
-                id={card.id} 
+                id={card.id}
                 isFlipped={card.flipped}
                 frontImage={card.front}
                 backImage={card.back}
@@ -329,8 +349,8 @@ const PackOpening = ({
                 supertypes={card.supertypes}
                 isTopCard={index === 0}
                 applyBoxShadow={index === 1 && !!nextTopCardRarity}
-                isInteractable={leftStack.length - index === 10} 
-                selectedSetId={selectedSetId} 
+                isInteractable={leftStack.length - index === 10}
+                selectedSetId={selectedSetId}
               />
               <div className="explosion-container"></div>
             </div>
@@ -346,14 +366,17 @@ const PackOpening = ({
             Open New Pack
           </button>
           {allFlipped && !hideNextButton && (
-            <button className="next-button btn-primary" onClick={handleNextClick}>
+            <button
+              className="next-button btn-primary"
+              onClick={handleNextClick}
+            >
               Add to Binder
             </button>
           )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PackOpening;
+export default PackOpening
