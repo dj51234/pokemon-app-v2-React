@@ -122,16 +122,24 @@ const PackOpening = ({
 
       setCardsToShow(reorderedCards)
       setHideStack(false)
-      setLeftStack(
-        Array(10)
-          .fill(null)
-          .map((_, i) => ({
-            back: defaultImage,
-            front: null,
-            flipped: false,
-            instanceId: `card-${i}-${Date.now()}`, // Unique ID for each pack opening session
-          }))
-      )
+
+      // Pre-populate the stack with card data to trigger image preloading
+      // We reverse the reorderedCards because handleCardClick used to pop() from the end,
+      // meaning the first card in the stack (index 0) gets the last card in reorderedCards.
+      const initialStack = [...reorderedCards].reverse().map((card, i) => ({
+        back: defaultImage,
+        front: card.images.large,
+        flipped: false,
+        instanceId: `card-${i}-${Date.now()}`,
+        rarity: card.rarity?.toLowerCase() || '',
+        subtypes: card.subtypes?.map((subtype) => subtype.toLowerCase()) || [],
+        setId: card.setId?.toLowerCase() || '',
+        supertypes:
+          card.supertypes?.map((supertype) => supertype.toLowerCase()) || [],
+        id: card.id,
+      }))
+
+      setLeftStack(initialStack)
       setAllFlipped(false)
       setHideNextButton(false)
     }
@@ -211,34 +219,15 @@ const PackOpening = ({
     const newLeftStack = [...leftStack]
     const card = newLeftStack[index]
 
-    if (!allFlipped && cardsToShow.length > 0) {
+    if (!allFlipped && leftStack.length > 0) {
       setAnimating(true)
 
-      const updatedStack = newLeftStack.map((card, i) => {
-        if (!card.flipped && cardsToShow.length > 0) {
-          const randomCard = cardsToShow.pop()
-          const newCard = {
-            ...card,
-            front: randomCard.images.large,
-            flipped: true,
-            rarity: randomCard.rarity?.toLowerCase() || '',
-            subtypes:
-              randomCard.subtypes?.map((subtype) => subtype.toLowerCase()) ||
-              [],
-            setId: randomCard.setId?.toLowerCase() || '',
-            supertypes:
-              randomCard.supertypes?.map((supertype) =>
-                supertype.toLowerCase()
-              ) || [],
-            id: randomCard.id, // Add the card id here
-          }
-          return newCard
-        }
-        return card
-      })
+      const updatedStack = newLeftStack.map((card) => ({
+        ...card,
+        flipped: true,
+      }))
 
       setLeftStack(updatedStack)
-      setCardsToShow(cardsToShow)
       setAllFlipped(true)
 
       setTimeout(() => {
