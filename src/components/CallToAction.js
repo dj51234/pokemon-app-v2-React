@@ -1,29 +1,23 @@
-import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App';
-import '../styles/CallToAction.css';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import '../styles/CallToAction.css'
 
 const CallToAction = () => {
-  const { currentUser } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleCallToAction = (e) => {
-    e.preventDefault();
-    if (currentUser) {
-      navigate('/profile');
-    } else {
-      navigate('/register');
-    }
-  };
+    e.preventDefault()
+    navigate('/pokedex')
+  }
 
   return (
     <div className="call-to-action">
       <h1>Let's Get Started</h1>
-      <a href="/" onClick={handleCallToAction}>
-        {currentUser ? 'Go to Profile' : 'Sign Up or Login'}
+      <a href="/pokedex" onClick={handleCallToAction}>
+        Browse Cards
       </a>
     </div>
-  );
-};
+  )
+}
 
-export default CallToAction;
+export default CallToAction

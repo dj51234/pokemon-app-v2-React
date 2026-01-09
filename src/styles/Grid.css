@@ -2,7 +2,6 @@
 
 #grid {
   width: 100%;
-  margin-bottom: 3rem;
   position: relative; /* Position relative for the skeleton overlay */
 }
 
@@ -11,7 +10,7 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
   max-width: 75%;
-  margin: 2rem auto;
+  margin: 3rem auto 0;
 }
 
 .sets-grid--profile {
@@ -20,11 +19,11 @@
 
 .cards-grid {
   max-width: 80%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
   justify-content: center;
   gap: 1rem;
-  margin: 3rem auto;
+  margin: 3rem auto 0;
 }
 
 .cards-grid--profile {
@@ -167,5 +166,3 @@
 .card-wrapper:hover .wishlist-button {
   opacity: 1;
 }
-
-

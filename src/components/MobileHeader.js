@@ -1,33 +1,22 @@
-import React, { useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { MessageSquare } from 'lucide-react';
-import MobileSidebar from './MobileSidebar';
-import '../styles/MobileHeader.css';
-import { AuthContext } from '../App';
+import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import MobileSidebar from './MobileSidebar'
+import '../styles/MobileHeader.css'
 
 const MobileHeader = ({ toggleMessagesSidebar }) => {
-  const { currentUser } = useContext(AuthContext);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const location = useLocation()
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const handleMessagesIconClick = () => {
-    if (typeof toggleMessagesSidebar === 'function') {
-      toggleMessagesSidebar();
-    }
-  };
-
-  if (!currentUser) return null;
-
-  const isMessagesPage = location.pathname === '/messages';
+    setIsSidebarOpen(!isSidebarOpen)
+  }
 
   return (
     <div className="mobile-header">
       <Link to="/" className="mobileheader-mobile--logo">
-        <h2><span className='gradient-text'>MASTERSET</span></h2>
+        <h2>
+          <span className="gradient-text">MASTERSET</span>
+        </h2>
       </Link>
       <div className="mobile-header-icons">
         <div
@@ -41,7 +30,7 @@ const MobileHeader = ({ toggleMessagesSidebar }) => {
       </div>
       <MobileSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
     </div>
-  );
-};
+  )
+}
 
-export default MobileHeader;
+export default MobileHeader

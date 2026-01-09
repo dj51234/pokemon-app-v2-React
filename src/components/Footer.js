@@ -1,11 +1,11 @@
 // src/components/Footer.js
-import React from 'react';
-import '../styles/Footer.css'; // Import the CSS file
+import React from 'react'
+import '../styles/Footer.css' // Import the CSS file
 
 const Footer = () => (
   <footer>
-    <p>&copy; Derrick Johnson 2024</p>
+    <p>&copy; Derrick Johnson {new Date().getFullYear()}</p>
   </footer>
-);
+)
 
-export default Footer;
+export default Footer

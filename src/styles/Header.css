@@ -31,10 +31,6 @@ nav ul {
   gap: 2rem;
 }
 
-nav ul li:first-child {
-  margin-top: 10px;
-}
-
 nav ul a {
   text-decoration: none;
   padding: 1rem 2rem;
@@ -47,7 +43,8 @@ nav ul a {
   border-radius: 50%;
 }
 
-.nav-profile-image-wrapper, .nav-default-image-wrapper {
+.nav-profile-image-wrapper,
+.nav-default-image-wrapper {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -75,7 +72,12 @@ nav ul a {
   width: 100%;
   border-radius: 50%;
   text-transform: uppercase;
-  background: linear-gradient(122deg, #FA5560 0.01%, #B14BF4 49.90%, #4D91FF 100%);
+  background: linear-gradient(
+    122deg,
+    #fa5560 0.01%,
+    #b14bf4 49.9%,
+    #4d91ff 100%
+  );
   color: white; /* Ensure the text color is readable on the gradient */
 }
 
@@ -128,7 +130,8 @@ nav ul a {
     height: 8rem;
   }
 
-  .nav-profile-image-wrapper, .nav-default-image-wrapper {
+  .nav-profile-image-wrapper,
+  .nav-default-image-wrapper {
     width: 55px;
     height: 55px;
   }
@@ -139,7 +142,8 @@ nav ul a {
     height: 6rem;
   }
 
-  .nav-profile-image-wrapper, .nav-default-image-wrapper {
+  .nav-profile-image-wrapper,
+  .nav-default-image-wrapper {
     width: 45px;
     height: 45px;
   }

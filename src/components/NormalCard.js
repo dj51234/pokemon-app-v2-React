@@ -96,6 +96,7 @@ const NormalCard = React.forwardRef(
             )
             break
           case 'hyper rare':
+          case 'mega hyper rare':
             setBoxShadow(
               '0 0 1px -1px #FFD913, 0 0 3px 1px #FFD913, 0 0 12px 2px #FFD913, 0px 10px 20px -5px black, 0 0 20px -30px #FFD913, 0 0 50px -20px #FFD913'
             )
@@ -126,6 +127,11 @@ const NormalCard = React.forwardRef(
             )
             break
           case 'rare holo v':
+            setBoxShadow(
+              '0 0 1px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 20px -30px white, 0 0 50px -20px white'
+            )
+            break
+          case 'black white rare':
             setBoxShadow(
               '0 0 1px -1px white, 0 0 3px 1px white, 0 0 12px 2px white, 0px 10px 20px -5px black, 0 0 20px -30px white, 0 0 50px -20px white'
             )
@@ -405,8 +411,18 @@ const NormalCard = React.forwardRef(
               <div className="normal-card-front">
                 <img src={backImage} alt="" />
               </div>
-              <div className="normal-card-back">
-                <img src={frontImage} alt="Normal Card Back" />
+              <div
+                className="normal-card-back"
+                style={{
+                  opacity: imageLoaded ? 1 : 0,
+                  transition: 'opacity 0.2s ease-in-out',
+                }}
+              >
+                <img
+                  src={frontImage}
+                  alt="Normal Card Back"
+                  onLoad={() => setImageLoaded(true)}
+                />
                 <div className="shine" ref={shineRef}></div>
                 <div className="glare" ref={glareRef}></div>
                 <div className="grain"></div>
